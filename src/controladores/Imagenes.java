@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
-import modelos.DadoDefecto.Estado;
+import modelos.Dado.Valor;
 
 public class Imagenes {
 
@@ -22,18 +22,18 @@ public class Imagenes {
         return imagenes;
     }
 
-    public final static HashMap<Estado, ImageIcon> imagenesDado = imagenesEstadosDado();
+    public final static HashMap<Valor, ImageIcon> imagenesDado = imagenesEstadosDado();
 
-    private static HashMap<Estado, ImageIcon> imagenesEstadosDado() {
-        HashMap<Estado, ImageIcon> coleccion = new HashMap<>();
-        coleccion.put(Estado.VACIO, new ImageIcon());
-        coleccion.put(Estado.UNO, new ImageIcon(imagenesRepositorio.get(0)));
-        coleccion.put(Estado.DOS, new ImageIcon(imagenesRepositorio.get(1)));
-        coleccion.put(Estado.TRES, new ImageIcon(imagenesRepositorio.get(2)));
-        coleccion.put(Estado.CUATRO, new ImageIcon(imagenesRepositorio.get(3)));
-        coleccion.put(Estado.CINCO, new ImageIcon(imagenesRepositorio.get(4)));
-        coleccion.put(Estado.SEIS, new ImageIcon(imagenesRepositorio.get(5)));
-        coleccion.put(Estado.INTERROGACION, new ImageIcon(imagenesRepositorio.get(6)));
+    private static HashMap<Valor, ImageIcon> imagenesEstadosDado() {
+        HashMap<Valor, ImageIcon> coleccion = new HashMap<>();
+        coleccion.put(Valor.VACIO, new ImageIcon());
+        coleccion.put(Valor.UNO, new ImageIcon(imagenesRepositorio.get(0)));
+        coleccion.put(Valor.DOS, new ImageIcon(imagenesRepositorio.get(1)));
+        coleccion.put(Valor.TRES, new ImageIcon(imagenesRepositorio.get(2)));
+        coleccion.put(Valor.CUATRO, new ImageIcon(imagenesRepositorio.get(3)));
+        coleccion.put(Valor.CINCO, new ImageIcon(imagenesRepositorio.get(4)));
+        coleccion.put(Valor.SEIS, new ImageIcon(imagenesRepositorio.get(5)));
+        coleccion.put(Valor.INTERROGACION, new ImageIcon(imagenesRepositorio.get(6)));
         return coleccion;
     }
 

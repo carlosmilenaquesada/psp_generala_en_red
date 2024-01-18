@@ -6,19 +6,19 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelos.DadoDefecto;
-import modelos.DadoDefecto.Estado;
+import modelos.Dado;
+import modelos.Dado.Valor;
 import modelos.PanelPuntos;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
-    DadoDefecto[] dadosReserva = new DadoDefecto[5];
-    DadoDefecto[] dadosTapete = new DadoDefecto[5];
+    Dado[] dadosReserva = new Dado[5];
+    Dado[] dadosTapete = new Dado[5];
 
     boolean[] conseguidasSuperior = new boolean[6];
     boolean[] conseguidasInferior = new boolean[6];
-    int[] puntosSuperior = new int[6];
-    int[] puntosInferior = new int[6];
+    int[] puntosSuperiorPrevios = new int[6];
+    int[] puntosInferiorPrevios = new int[6];
 
     PanelPuntos panelPuntosSuperior;
     PanelPuntos panelPuntosInferior;
@@ -30,17 +30,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void initConfiguracion() {
-        dadosReserva[0] = new DadoDefecto(Estado.VACIO, jlHuecoCero);
-        dadosReserva[1] = new DadoDefecto(Estado.VACIO, jlHuecoUno);
-        dadosReserva[2] = new DadoDefecto(Estado.VACIO, jlHuecoDos);
-        dadosReserva[3] = new DadoDefecto(Estado.VACIO, jlHuecoTres);
-        dadosReserva[4] = new DadoDefecto(Estado.VACIO, jlHuecoCuatro);
+        dadosReserva[0] = new Dado(Valor.VACIO, jlHuecoCero);
+        dadosReserva[1] = new Dado(Valor.VACIO, jlHuecoUno);
+        dadosReserva[2] = new Dado(Valor.VACIO, jlHuecoDos);
+        dadosReserva[3] = new Dado(Valor.VACIO, jlHuecoTres);
+        dadosReserva[4] = new Dado(Valor.VACIO, jlHuecoCuatro);
 
-        dadosTapete[0] = new DadoDefecto(Estado.SEIS, jlDadoCero);
-        dadosTapete[1] = new DadoDefecto(Estado.SEIS, jlDadoUno);
-        dadosTapete[2] = new DadoDefecto(Estado.SEIS, jlDadoDos);
-        dadosTapete[3] = new DadoDefecto(Estado.SEIS, jlDadoTres);
-        dadosTapete[4] = new DadoDefecto(Estado.SEIS, jlDadoCuatro);
+        dadosTapete[0] = new Dado(Valor.SEIS, jlDadoCero);
+        dadosTapete[1] = new Dado(Valor.SEIS, jlDadoUno);
+        dadosTapete[2] = new Dado(Valor.SEIS, jlDadoDos);
+        dadosTapete[3] = new Dado(Valor.SEIS, jlDadoTres);
+        dadosTapete[4] = new Dado(Valor.SEIS, jlDadoCuatro);
 
         for (int i = 0; i < dadosReserva.length; i++) {
             dadosReserva[i].setDadoEspejo(dadosTapete[i]);
@@ -49,35 +49,59 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 130, 300, 180), 6, 3);
         panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 340, 300, 180), 6, 3);
-        
+
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
     }
 
     public void calcularPrePuntuacion() {
-        //SUPERIOR
-
+        int dadosEnReserva = 0;
+        //CATEGORÍA SUPERIOR Y LIBRE
+        // calcula la suma de puntos en tabla superior
+        puntosSuperiorPrevios = new int[6];
         for (int i = 0; i < dadosReserva.length; i++) {
             int ordinal = dadosReserva[i].getEstado().ordinal();
             if (ordinal >= 1 && ordinal <= 6) {
+                dadosEnReserva++;
                 if (!conseguidasSuperior[ordinal - 1]) {
-                    puntosSuperior[ordinal - 1] += ordinal;
+                    puntosSuperiorPrevios[ordinal - 1] += ordinal;
+                }
+                //Libre
+                if (!conseguidasInferior[0]) {
+                    puntosInferiorPrevios[0] += ordinal;
                 }
             }
         }
-        /*for (int i = 0; i < conseguidasSuperior.length; i++) {
-            this.ppSuperior.getCelda(i, 1).estaEnSeleccion(true);
+
+        //recorre las categorias de la tabla superior, y a las que no tienen puntuación, les pone pre-puntuación
+        for (int i = 0; i < conseguidasSuperior.length; i++) {
             if (!conseguidasSuperior[i]) {
-                this.ppSuperior.setValorEnMatriz(puntosSuperior[i], i, 1);
-                this.ppSuperior.getCelda(i, 1).estaEnPrevioPuntos(true);
+                this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 1);
+                this.panelPuntosSuperior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
         }
-        
-        for (int i = 0; i < conseguidasSuperior.length; i++) {
-           if (!conseguidasSuperior[i]) {
-               puntosSuperior[i] = 0;
-           }
-        }*/
+
+        int contadorPoker = 0;
+        int numActualPoner = 0;
+        //CATEGORÍA INFERIOR
+        puntosInferiorPrevios = new int[6];
+        //Póker y escalera corta
+        if (dadosEnReserva == 4) {
+            //Póker
+            
+        }
+        //Full, escalera larga y generala
+        if (dadosEnReserva == 5) {
+
+        }
+
+        //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
+        for (int i = 0; i < conseguidasInferior.length; i++) {
+            if (!conseguidasInferior[i]) {
+                this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 1);
+                this.panelPuntosInferior.getCelda(i, 1).estaEnPrevioPuntos(true);
+            }
+        }
 
     }
 
@@ -359,11 +383,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private void jbMezclarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMezclarActionPerformed
         for (int i = 0; i < dadosTapete.length; i++) {
-            if (!dadosTapete[i].getEstado().equals(Estado.VACIO)) {
-                dadosTapete[i].cambiarEstado(Estado.INTERROGACION);
+            if (!dadosTapete[i].getEstado().equals(Valor.VACIO)) {
+                dadosTapete[i].cambiarEstado(Valor.INTERROGACION);
                 dadosTapete[i].setClickable(false);
             }
-            if (!dadosReserva[i].getEstado().equals(Estado.VACIO)) {
+            if (!dadosReserva[i].getEstado().equals(Valor.VACIO)) {
                 dadosReserva[i].setClickable(false);
             }
         }
@@ -375,11 +399,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 Logger.getLogger(PrincipalJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             for (int i = 0; i < dadosTapete.length; i++) {
-                if (dadosTapete[i].getEstado().equals(Estado.INTERROGACION)) {
+                if (dadosTapete[i].getEstado().equals(Valor.INTERROGACION)) {
                     dadosTapete[i].setClickable(true);
-                    dadosTapete[i].cambiarEstado(Estado.values()[(int) (Math.random() * 6) + 1]);
+                    dadosTapete[i].cambiarEstado(Valor.values()[(int) (Math.random() * 6) + 1]);
                 }
-                if (!dadosReserva[i].getEstado().equals(Estado.VACIO)) {
+                if (!dadosReserva[i].getEstado().equals(Valor.VACIO)) {
                     dadosReserva[i].setClickable(true);
 
                 }
