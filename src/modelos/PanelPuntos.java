@@ -11,13 +11,6 @@ import javax.swing.*;
 
 public class PanelPuntos extends JPanel {
 
-    public Image[] getIconos() {
-        return iconos;
-    }
-
-    public void setIconos(Image[] iconos) {
-        this.iconos = iconos;
-    }
 
     public static class CeldaLabel extends JLabel {
 
@@ -28,6 +21,7 @@ public class PanelPuntos extends JPanel {
             this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
             this.setBorder(BorderFactory.createLineBorder(Colores.getColor(Colores.MARCO_TABLAS), 2));
             this.setFont(Fuentes.getFont(Fuentes.PUNTOS_EN_TABLA));
+            
             if (celXPos == 0) {
                 Image image = parent.getIconos()[celYPos];
                 this.setIcon(new ImageIcon(image.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
@@ -72,9 +66,15 @@ public class PanelPuntos extends JPanel {
                 this.add(matriz[i][j]);
             }
         }
-        System.out.println("hola");
     }
 
+    public Image[] getIconos() {
+        return iconos;
+    }
+
+    public void setIconos(Image[] iconos) {
+        this.iconos = iconos;
+    }
     public CeldaLabel[][] getMatriz() {
         return matriz;
     }

@@ -18,6 +18,7 @@ public class Imagenes {
         imagenes.add(new ImageIcon("./src/media/dado_cuatro.png").getImage());
         imagenes.add(new ImageIcon("./src/media/dado_cinco.png").getImage());
         imagenes.add(new ImageIcon("./src/media/dado_seis.png").getImage());
+        imagenes.add(new ImageIcon("").getImage());
         imagenes.add(new ImageIcon("./src/media/interrogacion.png").getImage());
         return imagenes;
     }
@@ -26,14 +27,13 @@ public class Imagenes {
 
     private static HashMap<Valor, ImageIcon> imagenesEstadosDado() {
         HashMap<Valor, ImageIcon> coleccion = new HashMap<>();
-        coleccion.put(Valor.VACIO, new ImageIcon());
         coleccion.put(Valor.UNO, new ImageIcon(imagenesRepositorio.get(0)));
         coleccion.put(Valor.DOS, new ImageIcon(imagenesRepositorio.get(1)));
         coleccion.put(Valor.TRES, new ImageIcon(imagenesRepositorio.get(2)));
         coleccion.put(Valor.CUATRO, new ImageIcon(imagenesRepositorio.get(3)));
         coleccion.put(Valor.CINCO, new ImageIcon(imagenesRepositorio.get(4)));
         coleccion.put(Valor.SEIS, new ImageIcon(imagenesRepositorio.get(5)));
-        coleccion.put(Valor.INTERROGACION, new ImageIcon(imagenesRepositorio.get(6)));
+        coleccion.put(Valor.INTERROGACION, new ImageIcon(imagenesRepositorio.get(7)));
         return coleccion;
     }
 

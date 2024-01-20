@@ -1,19 +1,22 @@
 package vistas;
 
 import controladores.Imagenes;
+import controladores.Posiciones.Posicion;
 import controladores.Textos;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 import modelos.Dado;
 import modelos.Dado.Valor;
+
 import modelos.PanelPuntos;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
-    Dado[] dadosReserva = new Dado[5];
-    Dado[] dadosTapete = new Dado[5];
+    Dado[] dados = new Dado[5];
+
+    public ArrayList<Boolean> reservaOcupadas;
+    public ArrayList<Boolean> tapeteOcupadas;
 
     boolean[] conseguidasSuperior = new boolean[6];
     boolean[] conseguidasInferior = new boolean[6];
@@ -30,43 +33,40 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void initConfiguracion() {
-        dadosReserva[0] = new Dado(Valor.VACIO, jlHuecoCero);
-        dadosReserva[1] = new Dado(Valor.VACIO, jlHuecoUno);
-        dadosReserva[2] = new Dado(Valor.VACIO, jlHuecoDos);
-        dadosReserva[3] = new Dado(Valor.VACIO, jlHuecoTres);
-        dadosReserva[4] = new Dado(Valor.VACIO, jlHuecoCuatro);
+        reservaOcupadas = new ArrayList<>();
+        tapeteOcupadas = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            reservaOcupadas.add(false);
+            tapeteOcupadas.add(true);
 
-        dadosTapete[0] = new Dado(Valor.SEIS, jlDadoCero);
-        dadosTapete[1] = new Dado(Valor.SEIS, jlDadoUno);
-        dadosTapete[2] = new Dado(Valor.SEIS, jlDadoDos);
-        dadosTapete[3] = new Dado(Valor.SEIS, jlDadoTres);
-        dadosTapete[4] = new Dado(Valor.SEIS, jlDadoCuatro);
-
-        for (int i = 0; i < dadosReserva.length; i++) {
-            dadosReserva[i].setDadoEspejo(dadosTapete[i]);
-            dadosTapete[i].setDadoEspejo(dadosReserva[i]);
         }
 
-        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 130, 300, 180), 6, 3);
-        panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 340, 300, 180), 6, 3);
+        dados[0] = new Dado(jlDadoCero, Posicion.PRIMERA_TAP);
+        dados[1] = new Dado(jlDadoUno, Posicion.SEGUNDA_TAP);
+        dados[2] = new Dado(jlDadoDos, Posicion.TERCERA_TAP);
+        dados[3] = new Dado(jlDadoTres, Posicion.CUARTA_TAP);
+        dados[4] = new Dado(jlDadoCuatro, Posicion.QUINTA_TAP);
+
+        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 7).toArray(new Image[7]), new Rectangle(20, 130, 300, 210), 7, 3);
+        panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 370, 300, 180), 6, 3);
 
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
     }
 
     public void calcularPrePuntuacion() {
-        int dadosEnReserva = 0;
         //CATEGORÍA SUPERIOR Y LIBRE
         // calcula la suma de puntos en tabla superior
         puntosSuperiorPrevios = new int[6];
-        for (int i = 0; i < dadosReserva.length; i++) {
-            int ordinal = dadosReserva[i].getEstado().ordinal();
+        puntosInferiorPrevios = new int[6];
+        for (int i = 0; i < dados.length; i++) {
+            //Categorías superior
+            int ordinal = dados[i].getValor().ordinal();
             if (ordinal >= 1 && ordinal <= 6) {
-                dadosEnReserva++;
                 if (!conseguidasSuperior[ordinal - 1]) {
                     puntosSuperiorPrevios[ordinal - 1] += ordinal;
                 }
-                //Libre
+                //Categoría libre
                 if (!conseguidasInferior[0]) {
                     puntosInferiorPrevios[0] += ordinal;
                 }
@@ -80,7 +80,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 this.panelPuntosSuperior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
         }
-
+        /*
         int contadorPoker = 0;
         int numActualPoner = 0;
         //CATEGORÍA INFERIOR
@@ -88,13 +88,13 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         //Póker y escalera corta
         if (dadosEnReserva == 4) {
             //Póker
-            
+
         }
         //Full, escalera larga y generala
         if (dadosEnReserva == 5) {
 
         }
-
+*/
         //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
         for (int i = 0; i < conseguidasInferior.length; i++) {
             if (!conseguidasInferior[i]) {
@@ -102,7 +102,31 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 this.panelPuntosInferior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
         }
+         
+    }
 
+    public Posicion primeraPosionLibreReserva() {
+        return Posicion.values()[reservaOcupadas.indexOf(false)];
+    }
+
+    public void ocuparPosicionReserva(Posicion posicion) {
+        reservaOcupadas.set(posicion.ordinal(), true);
+    }
+
+    public void desocuparPosicionReserva(Posicion posicion) {
+        reservaOcupadas.set(posicion.ordinal(), false);
+    }
+
+    public Posicion primeraPosionLibreTapete() {
+        return Posicion.values()[tapeteOcupadas.indexOf(false) + 5];
+    }
+
+    public void ocuparPosicionTapete(Posicion posicion) {
+        tapeteOcupadas.set(posicion.ordinal() - 5, true);
+    }
+
+    public void desocuparPosicionTapete(Posicion posicion) {
+        tapeteOcupadas.set(posicion.ordinal() - 5, false);
     }
 
     @SuppressWarnings("unchecked")
@@ -116,27 +140,23 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jlYo = new javax.swing.JLabel();
         lbRival = new javax.swing.JLabel();
-        jpMesa = new javax.swing.JPanel();
         jpTablero = new javax.swing.JPanel();
-        jpHuecos = new javax.swing.JPanel();
-        jlHuecoCero = new javax.swing.JLabel();
-        jlHuecoUno = new javax.swing.JLabel();
-        jlHuecoDos = new javax.swing.JLabel();
-        jlHuecoTres = new javax.swing.JLabel();
-        jlHuecoCuatro = new javax.swing.JLabel();
-        jpTapete = new javax.swing.JPanel();
-        jpDados = new javax.swing.JPanel();
         jlDadoCero = new javax.swing.JLabel();
         jlDadoUno = new javax.swing.JLabel();
         jlDadoDos = new javax.swing.JLabel();
         jlDadoTres = new javax.swing.JLabel();
         jlDadoCuatro = new javax.swing.JLabel();
         jbMezclar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         JpChat = new javax.swing.JPanel();
+        jlBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(820, 624));
-        setSize(new java.awt.Dimension(750, 600));
+        setMaximumSize(new java.awt.Dimension(860, 639));
+        setMinimumSize(new java.awt.Dimension(860, 639));
+        setPreferredSize(new java.awt.Dimension(860, 639));
+        setResizable(false);
+        setSize(new java.awt.Dimension(860, 639));
         getContentPane().setLayout(null);
 
         jpPuntos.setBackground(new java.awt.Color(232, 232, 220));
@@ -168,7 +188,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Bonus si 1 - 6 supera 63 puntos");
         jpPuntos.add(jLabel1);
-        jLabel1.setBounds(20, 310, 300, 30);
+        jLabel1.setBounds(20, 340, 300, 30);
 
         jlYo.setText("jLabel3");
         jlYo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -183,110 +203,36 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         lbRival.setBounds(245, 20, 75, 110);
 
         getContentPane().add(jpPuntos);
-        jpPuntos.setBounds(0, 0, 340, 570);
-
-        jpMesa.setBackground(new java.awt.Color(184, 153, 107));
+        jpPuntos.setBounds(40, 0, 340, 600);
 
         jpTablero.setBackground(new java.awt.Color(57, 43, 43));
+        jpTablero.setOpaque(false);
+        jpTablero.setLayout(null);
 
-        jpHuecos.setBackground(new java.awt.Color(51, 255, 51));
-
-        jlHuecoCero.setText("RCero");
-        jlHuecoCero.setOpaque(true);
-
-        jlHuecoUno.setText("RUno");
-        jlHuecoUno.setOpaque(true);
-
-        jlHuecoDos.setText("RDos");
-        jlHuecoDos.setOpaque(true);
-
-        jlHuecoTres.setText("RTres");
-        jlHuecoTres.setOpaque(true);
-
-        jlHuecoCuatro.setText("RCuatro");
-        jlHuecoCuatro.setOpaque(true);
-
-        javax.swing.GroupLayout jpHuecosLayout = new javax.swing.GroupLayout(jpHuecos);
-        jpHuecos.setLayout(jpHuecosLayout);
-        jpHuecosLayout.setHorizontalGroup(
-            jpHuecosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpHuecosLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jlHuecoCero, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlHuecoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlHuecoDos, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlHuecoTres, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlHuecoCuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12))
-        );
-        jpHuecosLayout.setVerticalGroup(
-            jpHuecosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpHuecosLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jpHuecosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlHuecoCero, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlHuecoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlHuecoDos, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlHuecoTres, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlHuecoCuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12))
-        );
-
-        jpTapete.setBackground(new java.awt.Color(134, 51, 45));
-        jpTapete.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jpTapete.setPreferredSize(new java.awt.Dimension(409, 409));
-
-        jpDados.setOpaque(false);
-        jpDados.setPreferredSize(new java.awt.Dimension(352, 84));
-
-        jlDadoCero.setText("TCero");
+        jlDadoCero.setText("RCero");
         jlDadoCero.setOpaque(true);
+        jpTablero.add(jlDadoCero);
+        jlDadoCero.setBounds(10, 180, 60, 60);
 
-        jlDadoUno.setText("TDos");
+        jlDadoUno.setText("RUno");
         jlDadoUno.setOpaque(true);
+        jpTablero.add(jlDadoUno);
+        jlDadoUno.setBounds(100, 200, 60, 60);
 
-        jlDadoDos.setText("TTres");
+        jlDadoDos.setText("RDos");
         jlDadoDos.setOpaque(true);
+        jpTablero.add(jlDadoDos);
+        jlDadoDos.setBounds(160, 130, 60, 60);
 
-        jlDadoTres.setText("TCuatro");
+        jlDadoTres.setText("RTres");
         jlDadoTres.setOpaque(true);
+        jpTablero.add(jlDadoTres);
+        jlDadoTres.setBounds(210, 240, 60, 60);
 
-        jlDadoCuatro.setText("TCinco");
+        jlDadoCuatro.setText("RCuatro");
         jlDadoCuatro.setOpaque(true);
-
-        javax.swing.GroupLayout jpDadosLayout = new javax.swing.GroupLayout(jpDados);
-        jpDados.setLayout(jpDadosLayout);
-        jpDadosLayout.setHorizontalGroup(
-            jpDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpDadosLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jlDadoCero, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlDadoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlDadoDos, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlDadoTres, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlDadoCuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12))
-        );
-        jpDadosLayout.setVerticalGroup(
-            jpDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpDadosLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jpDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlDadoCero, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlDadoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlDadoDos, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlDadoTres, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlDadoCuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        jpTablero.add(jlDadoCuatro);
+        jlDadoCuatro.setBounds(280, 140, 60, 60);
 
         jbMezclar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jbMezclar.setText("Mezclar");
@@ -295,79 +241,21 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 jbMezclarActionPerformed(evt);
             }
         });
+        jpTablero.add(jbMezclar);
+        jbMezclar.setBounds(190, 360, 100, 30);
 
-        javax.swing.GroupLayout jpTapeteLayout = new javax.swing.GroupLayout(jpTapete);
-        jpTapete.setLayout(jpTapeteLayout);
-        jpTapeteLayout.setHorizontalGroup(
-            jpTapeteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTapeteLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jbMezclar)
-                .addContainerGap())
-        );
-        jpTapeteLayout.setVerticalGroup(
-            jpTapeteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpTapeteLayout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(jpDados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jbMezclar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(161, Short.MAX_VALUE))
-        );
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/tablero.png"))); // NOI18N
+        jpTablero.add(jLabel3);
+        jLabel3.setBounds(0, 0, 400, 400);
 
-        javax.swing.GroupLayout jpTableroLayout = new javax.swing.GroupLayout(jpTablero);
-        jpTablero.setLayout(jpTableroLayout);
-        jpTableroLayout.setHorizontalGroup(
-            jpTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpTableroLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jpTapete, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jpTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jpTableroLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jpHuecos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        jpTableroLayout.setVerticalGroup(
-            jpTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpTableroLayout.createSequentialGroup()
-                .addGap(110, 110, 110)
-                .addComponent(jpTapete, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(118, Short.MAX_VALUE))
-            .addGroup(jpTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jpTableroLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jpHuecos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(489, Short.MAX_VALUE)))
-        );
-
-        javax.swing.GroupLayout jpMesaLayout = new javax.swing.GroupLayout(jpMesa);
-        jpMesa.setLayout(jpMesaLayout);
-        jpMesaLayout.setHorizontalGroup(
-            jpMesaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpMesaLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jpTablero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
-        );
-        jpMesaLayout.setVerticalGroup(
-            jpMesaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpMesaLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jpTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
-        );
-
-        getContentPane().add(jpMesa);
-        jpMesa.setBounds(340, 0, 414, 624);
+        getContentPane().add(jpTablero);
+        jpTablero.setBounds(420, 40, 400, 400);
 
         javax.swing.GroupLayout JpChatLayout = new javax.swing.GroupLayout(JpChat);
         JpChat.setLayout(JpChatLayout);
         JpChatLayout.setHorizontalGroup(
             JpChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         JpChatLayout.setVerticalGroup(
             JpChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,39 +263,36 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         );
 
         getContentPane().add(JpChat);
-        JpChat.setBounds(770, 160, 100, 100);
+        JpChat.setBounds(420, 480, 400, 100);
+
+        jlBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/background.jpg"))); // NOI18N
+        getContentPane().add(jlBackground);
+        jlBackground.setBounds(0, 0, 860, 600);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbMezclarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMezclarActionPerformed
-        for (int i = 0; i < dadosTapete.length; i++) {
-            if (!dadosTapete[i].getEstado().equals(Valor.VACIO)) {
-                dadosTapete[i].cambiarEstado(Valor.INTERROGACION);
-                dadosTapete[i].setClickable(false);
-            }
-            if (!dadosReserva[i].getEstado().equals(Valor.VACIO)) {
-                dadosReserva[i].setClickable(false);
+        for (int i = 0; i < dados.length; i++) {
+            dados[i].setClickable(false);
+            if (dados[i].getEstado().equals(Dado.Estado.EN_TAPETE)) {
+                dados[i].getjLabel().setIcon(Imagenes.imagenesDado.get(Valor.INTERROGACION));
             }
         }
-
         new Thread(() -> {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(PrincipalJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            for (int i = 0; i < dadosTapete.length; i++) {
-                if (dadosTapete[i].getEstado().equals(Valor.INTERROGACION)) {
-                    dadosTapete[i].setClickable(true);
-                    dadosTapete[i].cambiarEstado(Valor.values()[(int) (Math.random() * 6) + 1]);
+            for (int i = 0; i < dados.length; i++) {
+                if (dados[i].getEstado().equals(Dado.Estado.EN_TAPETE)) {
+                    dados[i].setValor(Valor.values()[(int) (Math.random() * 6) + 1]);
+                    dados[i].getjLabel().setIcon(Imagenes.imagenesDado.get(dados[i].getValor()));
                 }
-                if (!dadosReserva[i].getEstado().equals(Valor.VACIO)) {
-                    dadosReserva[i].setClickable(true);
-
-                }
+                dados[i].setClickable(true);
             }
+            calcularPrePuntuacion();
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 
@@ -447,26 +332,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel JpChat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JButton jbMezclar;
+    private javax.swing.JLabel jlBackground;
     private javax.swing.JLabel jlDadoCero;
     private javax.swing.JLabel jlDadoCuatro;
     private javax.swing.JLabel jlDadoDos;
     private javax.swing.JLabel jlDadoTres;
     private javax.swing.JLabel jlDadoUno;
-    private javax.swing.JLabel jlHuecoCero;
-    private javax.swing.JLabel jlHuecoCuatro;
-    private javax.swing.JLabel jlHuecoDos;
-    private javax.swing.JLabel jlHuecoTres;
-    private javax.swing.JLabel jlHuecoUno;
     private javax.swing.JLabel jlTurno;
     private javax.swing.JLabel jlYo;
-    private javax.swing.JPanel jpDados;
-    private javax.swing.JPanel jpHuecos;
-    private javax.swing.JPanel jpMesa;
     private javax.swing.JPanel jpPuntos;
     private javax.swing.JPanel jpTablero;
-    private javax.swing.JPanel jpTapete;
     private javax.swing.JLabel lbRival;
     // End of variables declaration//GEN-END:variables
+
 }
