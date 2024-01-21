@@ -13,15 +13,15 @@ import modelos.PanelPuntos;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
-    Dado[] dados = new Dado[5];
+    private Dado[] dados = new Dado[5];
 
     public ArrayList<Boolean> reservaOcupadas;
     public ArrayList<Boolean> tapeteOcupadas;
 
-    boolean[] conseguidasSuperior = new boolean[6];
-    boolean[] conseguidasInferior = new boolean[6];
-    int[] puntosSuperiorPrevios = new int[6];
-    int[] puntosInferiorPrevios = new int[6];
+    private boolean[] conseguidasSuperior = new boolean[6];
+    private boolean[] conseguidasInferior = new boolean[6];
+    private int[] puntosSuperiorPrevios = new int[6];
+    private int[] puntosInferiorPrevios = new int[6];
 
     PanelPuntos panelPuntosSuperior;
     PanelPuntos panelPuntosInferior;
@@ -47,54 +47,119 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         dados[3] = new Dado(jlDadoTres, Posicion.CUARTA_TAP);
         dados[4] = new Dado(jlDadoCuatro, Posicion.QUINTA_TAP);
 
-        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 7).toArray(new Image[7]), new Rectangle(20, 130, 300, 210), 7, 3);
-        panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 370, 300, 180), 6, 3);
+        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 7).toArray(new Image[7]), new Rectangle(20, 130, 300, 210), 7, 3, "superior");
+        panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 370, 300, 180), 6, 3, "inferior");
 
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
     }
+    
+    public void siguienteJugador(){
+    
+    }
 
     public void calcularPrePuntuacion() {
-        //CATEGORÍA SUPERIOR Y LIBRE
-        // calcula la suma de puntos en tabla superior
+        //CALCULAR CATEGORÍA SUPERIOR Y LIBRE-----------------------------------
         puntosSuperiorPrevios = new int[6];
         puntosInferiorPrevios = new int[6];
         for (int i = 0; i < dados.length; i++) {
-            //Categorías superior
+            //Categorías superior (suma de los puntos de los dados, agrapados por número) 
+            int ordinal = dados[i].getValor().ordinal();//el ordinal es el valor del dado
+
+            if (!conseguidasSuperior[ordinal - 1]) {//conseguidasSuperior es una colección de boolean que nos dice si una categoría ya ha puntuado o no
+                puntosSuperiorPrevios[ordinal - 1] += ordinal;
+            }
+            //Categoría libre (la suma de todos los puntos, de cualquier de dados)
+            if (!conseguidasInferior[0]) {
+                puntosInferiorPrevios[0] += ordinal;
+            }
+
+        }
+
+        //CALCULAR CATEGORÍA INFERIOR-------------------------------------------        
+        //Póker (la suma de los puntos de al menos cuatro dados iguales)
+        int[] auxFrecuenciaNumeros = new int[6];
+        for (int i = 0; i < dados.length; i++) {
             int ordinal = dados[i].getValor().ordinal();
-            if (ordinal >= 1 && ordinal <= 6) {
-                if (!conseguidasSuperior[ordinal - 1]) {
-                    puntosSuperiorPrevios[ordinal - 1] += ordinal;
-                }
-                //Categoría libre
-                if (!conseguidasInferior[0]) {
-                    puntosInferiorPrevios[0] += ordinal;
+            auxFrecuenciaNumeros[ordinal - 1]++;
+
+        }
+        for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
+            if (auxFrecuenciaNumeros[i] >= 4) {
+                puntosInferiorPrevios[1] = 4 * (i + 1);
+
+            }
+        }
+        //Full (la suma de los puntos de una pareja de dados de igual número + un trio de dados igual número)
+        auxFrecuenciaNumeros = new int[6];
+        for (int i = 0; i < dados.length; i++) {
+            int ordinal = dados[i].getValor().ordinal();
+            auxFrecuenciaNumeros[ordinal - 1]++;
+        }
+        int pareja = 0;
+        int trio = 0;
+        for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
+            if (auxFrecuenciaNumeros[i] == 2) {
+                pareja = 2 * (i + 1);
+            }
+            if (auxFrecuenciaNumeros[i] == 3) {
+                trio = 3 * (i + 1);
+            }
+        }
+        if (pareja > 0 && trio > 0) {
+            puntosInferiorPrevios[2] = pareja + trio;
+        }
+
+        //escalera corta (una fila de al menos cuatro números sucesivos)
+        auxFrecuenciaNumeros = new int[6];
+        for (int i = 0; i < dados.length; i++) {
+            int ordinal = dados[i].getValor().ordinal();
+
+            auxFrecuenciaNumeros[ordinal - 1]++;
+
+        }
+
+        int contadorSucesivos = 0;
+        for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
+            if (auxFrecuenciaNumeros[i] >= 1) {
+                contadorSucesivos++;
+            } else {
+                if (contadorSucesivos < 4) {
+                    contadorSucesivos = 0;
                 }
             }
         }
+        System.out.println(contadorSucesivos);
+        if (contadorSucesivos >= 4) {
+            puntosInferiorPrevios[3] = 15;
+        }
+        //escalera larga (una fila de cinco números sucesivos)
+        if (contadorSucesivos == 5) {
+            puntosInferiorPrevios[4] = 30;
+        }
 
-        //recorre las categorias de la tabla superior, y a las que no tienen puntuación, les pone pre-puntuación
+        //generala (cinco números iguales)
+        boolean sonIguales = true;
+        int ordinal = dados[0].getValor().ordinal();
+        for (int i = 1; i < dados.length && sonIguales; i++) {
+            if (ordinal != dados[i].getValor().ordinal()) {
+                sonIguales = false;
+            }
+        }
+
+        if (sonIguales) {
+            puntosInferiorPrevios[5] = 50;
+        }
+        //MOSTRAR---------------------------------------------------------------
+        //recorre las categorias de la tabla superior, y a las que no tienen
+        //puntuación, les pone pre-puntuación
         for (int i = 0; i < conseguidasSuperior.length; i++) {
             if (!conseguidasSuperior[i]) {
                 this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 1);
                 this.panelPuntosSuperior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
         }
-        /*
-        int contadorPoker = 0;
-        int numActualPoner = 0;
-        //CATEGORÍA INFERIOR
-        puntosInferiorPrevios = new int[6];
-        //Póker y escalera corta
-        if (dadosEnReserva == 4) {
-            //Póker
 
-        }
-        //Full, escalera larga y generala
-        if (dadosEnReserva == 5) {
-
-        }
-*/
         //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
         for (int i = 0; i < conseguidasInferior.length; i++) {
             if (!conseguidasInferior[i]) {
@@ -102,7 +167,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 this.panelPuntosInferior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
         }
-         
+
     }
 
     public Posicion primeraPosionLibreReserva() {
@@ -282,7 +347,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         }
         new Thread(() -> {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
             }
             for (int i = 0; i < dados.length; i++) {
@@ -347,5 +412,45 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jpTablero;
     private javax.swing.JLabel lbRival;
     // End of variables declaration//GEN-END:variables
+
+    public Dado[] getDados() {
+        return dados;
+    }
+
+    public void setDados(Dado[] dados) {
+        this.dados = dados;
+    }
+
+    public boolean[] getConseguidasSuperior() {
+        return conseguidasSuperior;
+    }
+
+    public void setConseguidasSuperior(boolean[] conseguidasSuperior) {
+        this.conseguidasSuperior = conseguidasSuperior;
+    }
+
+    public boolean[] getConseguidasInferior() {
+        return conseguidasInferior;
+    }
+
+    public void setConseguidasInferior(boolean[] conseguidasInferior) {
+        this.conseguidasInferior = conseguidasInferior;
+    }
+
+    public int[] getPuntosSuperiorPrevios() {
+        return puntosSuperiorPrevios;
+    }
+
+    public void setPuntosSuperiorPrevios(int[] puntosSuperiorPrevios) {
+        this.puntosSuperiorPrevios = puntosSuperiorPrevios;
+    }
+
+    public int[] getPuntosInferiorPrevios() {
+        return puntosInferiorPrevios;
+    }
+
+    public void setPuntosInferiorPrevios(int[] puntosInferiorPrevios) {
+        this.puntosInferiorPrevios = puntosInferiorPrevios;
+    }
 
 }
