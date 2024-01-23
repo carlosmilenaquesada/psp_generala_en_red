@@ -16,10 +16,13 @@ public class CeldaDePanel extends JLabel {
 
     private final int celXPos;
     private final int celYPos;
-
-    CeldaDePanel(int celXPos, int celYPos, PanelPuntos parent) {
+    private boolean estaEnSeleccion;
+    private boolean estaEnPrevioPuntos;
+    CeldaDePanel(int celXPos, int celYPos, PanelPuntos parent) {        
         this.celXPos = celXPos;
         this.celYPos = celYPos;
+        this.estaEnSeleccion = false;
+        this.estaEnPrevioPuntos = false;
         this.setBounds(celYPos < 2 ? (150 * celYPos) : ((75 * celYPos) + 75), 30 * celXPos, 150 / (celYPos == 0 ? 1 : 2), 30);
         this.setVisible(true);
         this.setOpaque(true);
@@ -35,13 +38,12 @@ public class CeldaDePanel extends JLabel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getCelYPos() == 1) {
-
-                    if (parent.getId().equals("superior") && getJugadorLocal().getConseguidasSuperior()[getCelXPos()]) {
+                if (getCelYPos() == 1 ) {
+                    if (parent.getId().equals("superior") && !getJugadorLocal().getConseguidasSuperior()[getCelXPos()]) {
                         getJugadorLocal().setConseguidaSuperior(getCelXPos(), true);
                         getJugadorLocal().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
                     } else {
-                        if (parent.getId().equals("inferior") && getJugadorLocal().getConseguidasInferior()[getCelXPos()]) {
+                        if (parent.getId().equals("inferior") && !getJugadorLocal().getConseguidasInferior()[getCelXPos()]) {
                             getJugadorLocal().setConseguidaInferior(getCelXPos(), true);
                             getJugadorLocal().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
                         }
@@ -61,20 +63,25 @@ public class CeldaDePanel extends JLabel {
         return (PrincipalJFrame) SwingUtilities.getWindowAncestor(this);
     }
 
-    public void estaEnSeleccion(boolean b) {
+    
+    
+    
+    public void setEstaEnSeleccion(boolean b) {
         if (b) {
             this.setBackground(Colores.getColor(Colores.CELDA_SELECCIONADA));
         } else {
             this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
         }
+        this.estaEnSeleccion = b;
     }
 
-    public void estaEnPrevioPuntos(boolean b) {
+    public void setEstaEnPrevioPuntos(boolean b) {
         if (b) {
             this.setForeground(Colores.getColor(Colores.PREVIA_PUNTOS));
         } else {
             this.setForeground(Color.BLACK);
         }
+        this.estaEnPrevioPuntos = b;
 
     }
 
@@ -85,5 +92,17 @@ public class CeldaDePanel extends JLabel {
     public int getCelYPos() {
         return celYPos;
     }
+
+    public boolean estaEnSeleccion() {
+        return estaEnSeleccion;
+    }
+
+    
+
+    public boolean estaEnPrevioPuntos() {
+        return estaEnPrevioPuntos;
+    }
+
+    
 
 }

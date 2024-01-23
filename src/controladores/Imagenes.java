@@ -18,7 +18,6 @@ public class Imagenes {
         imagenes.add(new ImageIcon("./src/media/dado_cuatro.png").getImage());
         imagenes.add(new ImageIcon("./src/media/dado_cinco.png").getImage());
         imagenes.add(new ImageIcon("./src/media/dado_seis.png").getImage());
-        imagenes.add(new ImageIcon("").getImage());
         imagenes.add(new ImageIcon("./src/media/interrogacion.png").getImage());
         return imagenes;
     }
@@ -33,7 +32,7 @@ public class Imagenes {
         coleccion.put(Valor.CUATRO, new ImageIcon(imagenesRepositorio.get(3)));
         coleccion.put(Valor.CINCO, new ImageIcon(imagenesRepositorio.get(4)));
         coleccion.put(Valor.SEIS, new ImageIcon(imagenesRepositorio.get(5)));
-        coleccion.put(Valor.INTERROGACION, new ImageIcon(imagenesRepositorio.get(7)));
+        coleccion.put(Valor.INTERROGACION, new ImageIcon(imagenesRepositorio.get(6)));
         return coleccion;
     }
 

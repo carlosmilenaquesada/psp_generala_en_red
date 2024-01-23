@@ -6,6 +6,7 @@ import controladores.Textos;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import javax.swing.*;
 import modelos.Dado;
 import modelos.Dado.Valor;
 import modelos.Jugador;
@@ -25,6 +26,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private PanelPuntos panelPuntosSuperior;
     private PanelPuntos panelPuntosInferior;
+    private JPanel panelPuntosBonus;
 
     public PrincipalJFrame() {
         initComponents();
@@ -48,11 +50,24 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         dados[3] = new Dado(jlDadoTres, Posicion.CUARTA_TAP);
         dados[4] = new Dado(jlDadoCuatro, Posicion.QUINTA_TAP);
 
-        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 7).toArray(new Image[7]), new Rectangle(20, 130, 300, 210), 7, 3, "superior");
+        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 130, 300, 180), 6, 3, "superior");
         panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 370, 300, 180), 6, 3, "inferior");
+        panelPuntosBonus = crearPanelBonus();
 
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
+        this.jpPuntos.add(panelPuntosBonus);
+    }
+
+    private JPanel crearPanelBonus() {
+        JPanel jp = new JPanel(null);
+        jp.setBounds(
+                panelPuntosSuperior.getX(),
+                panelPuntosSuperior.getY() + panelPuntosSuperior.getHeight(),
+                panelPuntosSuperior.getWidth(), 30);
+        
+        jp.setVisible(true);
+        return jp;
     }
 
     public void calcularPrePuntuacion() {
@@ -152,7 +167,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         for (int i = 0; i < jugadorLocal.getConseguidasSuperior().length; i++) {
             if (!jugadorLocal.getConseguidasSuperior()[i]) {
                 this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 1);
-                this.panelPuntosSuperior.getCelda(i, 1).estaEnPrevioPuntos(true);
+                this.panelPuntosSuperior.getCelda(i, 1).setEstaEnPrevioPuntos(true);
             }
         }
 
@@ -160,7 +175,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         for (int i = 0; i < jugadorLocal.getConseguidasInferior().length; i++) {
             if (!jugadorLocal.getConseguidasInferior()[i]) {
                 this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 1);
-                this.panelPuntosInferior.getCelda(i, 1).estaEnPrevioPuntos(true);
+                this.panelPuntosInferior.getCelda(i, 1).setEstaEnPrevioPuntos(true);
             }
         }
 

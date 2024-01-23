@@ -33,8 +33,8 @@ public class PanelPuntos extends JPanel {
 
     public void procesarPuntuacion(boolean[] coleccionConseguidas) {
         for (int i = 0; i < coleccionConseguidas.length; i++) {
-            this.getCelda(i, 1).estaEnSeleccion(false);
-            this.getCelda(i, 1).estaEnPrevioPuntos(false);
+            this.getCelda(i, 1).setEstaEnSeleccion(false);
+            this.getCelda(i, 1).setEstaEnPrevioPuntos(false);
             if (coleccionConseguidas[i] == false) {
                 this.getCelda(i, 1).setText("");
             }
