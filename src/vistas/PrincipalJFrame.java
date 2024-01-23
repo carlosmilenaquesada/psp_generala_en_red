@@ -20,11 +20,13 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private boolean[] conseguidasSuperior = new boolean[6];
     private boolean[] conseguidasInferior = new boolean[6];
+    private int[] puntosSuperior = new int[6];
+    private int[] puntosInferior = new int[6];
     private int[] puntosSuperiorPrevios = new int[6];
     private int[] puntosInferiorPrevios = new int[6];
 
-    PanelPuntos panelPuntosSuperior;
-    PanelPuntos panelPuntosInferior;
+    private PanelPuntos panelPuntosSuperior;
+    private PanelPuntos panelPuntosInferior;
 
     public PrincipalJFrame() {
         initComponents();
@@ -54,10 +56,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosInferior);
     }
     
-    public void siguienteJugador(){
-    
-    }
-
     public void calcularPrePuntuacion() {
         //CALCULAR CATEGORÍA SUPERIOR Y LIBRE-----------------------------------
         puntosSuperiorPrevios = new int[6];
@@ -129,7 +127,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
             }
         }
-        System.out.println(contadorSucesivos);
         if (contadorSucesivos >= 4) {
             puntosInferiorPrevios[3] = 15;
         }
@@ -339,6 +336,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbMezclarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMezclarActionPerformed
+        this.jbMezclar.setEnabled(false);
         for (int i = 0; i < dados.length; i++) {
             dados[i].setClickable(false);
             if (dados[i].getEstado().equals(Dado.Estado.EN_TAPETE)) {
@@ -358,6 +356,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 dados[i].setClickable(true);
             }
             calcularPrePuntuacion();
+            this.jbMezclar.setEnabled(true);
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 
@@ -425,16 +424,16 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         return conseguidasSuperior;
     }
 
-    public void setConseguidasSuperior(boolean[] conseguidasSuperior) {
-        this.conseguidasSuperior = conseguidasSuperior;
+    public void setConseguidaSuperior(int index, boolean valor) {
+        this.conseguidasSuperior[index] = valor;
     }
 
     public boolean[] getConseguidasInferior() {
         return conseguidasInferior;
     }
 
-    public void setConseguidasInferior(boolean[] conseguidasInferior) {
-        this.conseguidasInferior = conseguidasInferior;
+   public void setConseguidaInferior(int index, boolean valor) {
+        this.conseguidasInferior[index] = valor;
     }
 
     public int[] getPuntosSuperiorPrevios() {
@@ -451,6 +450,30 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public void setPuntosInferiorPrevios(int[] puntosInferiorPrevios) {
         this.puntosInferiorPrevios = puntosInferiorPrevios;
+    }
+
+    public int[] getPuntosSuperior() {
+        return puntosSuperior;
+    }
+
+    public void setPuntoSuperior(int index, int puntos) {
+        this.puntosSuperior[index] = puntos;
+    }
+
+    public int[] getPuntosInferior() {
+        return puntosInferior;
+    }
+
+   public void setPuntoInferior(int index, int puntos) {
+        this.puntosInferior[index] = puntos;
+    }
+
+    public PanelPuntos getPanelPuntosSuperior() {
+        return panelPuntosSuperior;
+    }
+
+    public PanelPuntos getPanelPuntosInferior() {
+        return panelPuntosInferior;
     }
 
 }
