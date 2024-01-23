@@ -1,104 +1,16 @@
 package modelos;
 
 import controladores.Colores;
-import controladores.Fuentes;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 import vistas.PrincipalJFrame;
 
 public class PanelPuntos extends JPanel {
 
-    public static class CeldaLabel extends JLabel {
-
-        private final int celXPos;
-        private final int celYPos;
-
-        CeldaLabel(int celXPos, int celYPos, PanelPuntos parent) {
-            this.celXPos = celXPos;
-            this.celYPos = celYPos;
-            this.setBounds(celYPos < 2 ? (150 * celYPos) : ((75 * celYPos) + 75), 30 * celXPos, 150 / (celYPos == 0 ? 1 : 2), 30);
-            this.setVisible(true);
-            this.setOpaque(true);
-            this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
-            this.setBorder(BorderFactory.createLineBorder(Colores.getColor(Colores.MARCO_TABLAS), 2));
-            this.setFont(Fuentes.getFont(Fuentes.PUNTOS_EN_TABLA));
-
-            if (celYPos == 0) {
-                Image image = parent.getIconos()[celXPos];
-                this.setIcon(new ImageIcon(image.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
-                this.setText(parent.getTextoCeldas()[celXPos]);
-            }
-            this.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    System.out.println(getCelYPos());
-                    if (getCelYPos() == 1) {
-                        if (parent.getId().equals("superior") && !parent.getPrincipalJFrame().getConseguidasSuperior()[getCelXPos()]) {
-                            parent.getPrincipalJFrame().setConseguidaSuperior(getCelXPos(), true);
-                            parent.getPrincipalJFrame().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
-                        } else {
-                            if (parent.getId().equals("inferior") && !parent.getPrincipalJFrame().getConseguidasInferior()[getCelXPos()]) {
-                                parent.getPrincipalJFrame().setConseguidaInferior(getCelXPos(), true);
-                                parent.getPrincipalJFrame().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
-                                
-                            }
-                        }
-
-                        for (int i = 0; i < parent.getPrincipalJFrame().getConseguidasSuperior().length; i++) {
-                            parent.getPrincipalJFrame().getPanelPuntosSuperior().getCelda(i, 1).estaEnSeleccion(false);
-                            parent.getPrincipalJFrame().getPanelPuntosSuperior().getCelda(i, 1).estaEnPrevioPuntos(false);
-                            if (parent.getPrincipalJFrame().getConseguidasSuperior()[i] == false) {
-                                parent.getPrincipalJFrame().getPanelPuntosSuperior().getCelda(i, 1).setText("");
-                            }
-                        }
-                        for (int i = 0; i < parent.getPrincipalJFrame().getConseguidasInferior().length; i++) {
-                            parent.getPrincipalJFrame().getPanelPuntosInferior().getCelda(i, 1).estaEnSeleccion(false);
-                            parent.getPrincipalJFrame().getPanelPuntosInferior().getCelda(i, 1).estaEnPrevioPuntos(false);
-                            
-                            if (parent.getPrincipalJFrame().getConseguidasInferior()[i] == false) {
-                                parent.getPrincipalJFrame().getPanelPuntosInferior().getCelda(i, 1).setText("");
-                            }
-                        }
-                    }
-
-                }
-            });
-
-        }
-
-        public void estaEnSeleccion(boolean b) {
-            if (b) {
-                this.setBackground(Colores.getColor(Colores.CELDA_SELECCIONADA));
-            } else {
-                this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
-            }
-        }
-
-        public void estaEnPrevioPuntos(boolean b) {
-            if (b) {
-                this.setForeground(Colores.getColor(Colores.PREVIA_PUNTOS));
-            } else {
-                this.setForeground(Color.BLACK);
-            }
-
-        }
-
-        public int getCelXPos() {
-            return celXPos;
-        }
-
-        public int getCelYPos() {
-            return celYPos;
-        }
-
-    }
     private String[] textoCeldas;
-    private CeldaLabel[][] matriz;
+    private CeldaDePanel[][] matriz;
     private Image[] iconos;
     private final String id;
 
@@ -110,21 +22,31 @@ public class PanelPuntos extends JPanel {
         this.setBounds(rectangle);
         this.setVisible(true);
         this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
-        this.matriz = new CeldaLabel[filas][columnas];
+        this.matriz = new CeldaDePanel[filas][columnas];
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
-                matriz[i][j] = new CeldaLabel(i, j, this);
+                matriz[i][j] = new CeldaDePanel(i, j, this);
                 this.add(matriz[i][j]);
             }
         }
     }
 
-    public String getId() {
-        return id;
+    public void procesarPuntuacion(boolean[] coleccionConseguidas) {
+        for (int i = 0; i < coleccionConseguidas.length; i++) {
+            this.getCelda(i, 1).estaEnSeleccion(false);
+            this.getCelda(i, 1).estaEnPrevioPuntos(false);
+            if (coleccionConseguidas[i] == false) {
+                this.getCelda(i, 1).setText("");
+            }
+        }
     }
 
-    public PrincipalJFrame getPrincipalJFrame() {
-        return ((PrincipalJFrame) SwingUtilities.getWindowAncestor(this));
+    public Jugador getJugadorLocal() {
+        return ((PrincipalJFrame) SwingUtilities.getWindowAncestor(this)).getJugadorLocal();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Image[] getIconos() {
@@ -135,7 +57,7 @@ public class PanelPuntos extends JPanel {
         this.iconos = iconos;
     }
 
-    public CeldaLabel[][] getMatriz() {
+    public CeldaDePanel[][] getMatriz() {
         return matriz;
     }
 
@@ -143,11 +65,11 @@ public class PanelPuntos extends JPanel {
         this.matriz[fila][columna].setText(String.valueOf(valor));
     }
 
-    public CeldaLabel getCelda(int fila, int columna) {
+    public CeldaDePanel getCelda(int fila, int columna) {
         return this.matriz[fila][columna];
     }
 
-    public void setMatriz(CeldaLabel[][] matriz) {
+    public void setMatriz(CeldaDePanel[][] matriz) {
         this.matriz = matriz;
     }
 

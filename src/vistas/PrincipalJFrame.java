@@ -8,20 +8,18 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import modelos.Dado;
 import modelos.Dado.Valor;
+import modelos.Jugador;
 
 import modelos.PanelPuntos;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
+    private Jugador jugadorLocal;
     private Dado[] dados = new Dado[5];
 
     public ArrayList<Boolean> reservaOcupadas;
     public ArrayList<Boolean> tapeteOcupadas;
 
-    private boolean[] conseguidasSuperior = new boolean[6];
-    private boolean[] conseguidasInferior = new boolean[6];
-    private int[] puntosSuperior = new int[6];
-    private int[] puntosInferior = new int[6];
     private int[] puntosSuperiorPrevios = new int[6];
     private int[] puntosInferiorPrevios = new int[6];
 
@@ -35,6 +33,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void initConfiguracion() {
+        jugadorLocal = new Jugador("JUGADOR 1");
         reservaOcupadas = new ArrayList<>();
         tapeteOcupadas = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -55,7 +54,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
     }
-    
+
     public void calcularPrePuntuacion() {
         //CALCULAR CATEGORÍA SUPERIOR Y LIBRE-----------------------------------
         puntosSuperiorPrevios = new int[6];
@@ -64,11 +63,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             //Categorías superior (suma de los puntos de los dados, agrapados por número) 
             int ordinal = dados[i].getValor().ordinal();//el ordinal es el valor del dado
 
-            if (!conseguidasSuperior[ordinal - 1]) {//conseguidasSuperior es una colección de boolean que nos dice si una categoría ya ha puntuado o no
+            if (!jugadorLocal.getConseguidasSuperior()[ordinal - 1]) {//conseguidasSuperior es una colección de boolean que nos dice si una categoría ya ha puntuado o no
                 puntosSuperiorPrevios[ordinal - 1] += ordinal;
             }
             //Categoría libre (la suma de todos los puntos, de cualquier de dados)
-            if (!conseguidasInferior[0]) {
+            if (!jugadorLocal.getConseguidasInferior()[0]) {
                 puntosInferiorPrevios[0] += ordinal;
             }
 
@@ -150,16 +149,16 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         //MOSTRAR---------------------------------------------------------------
         //recorre las categorias de la tabla superior, y a las que no tienen
         //puntuación, les pone pre-puntuación
-        for (int i = 0; i < conseguidasSuperior.length; i++) {
-            if (!conseguidasSuperior[i]) {
+        for (int i = 0; i < jugadorLocal.getConseguidasSuperior().length; i++) {
+            if (!jugadorLocal.getConseguidasSuperior()[i]) {
                 this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 1);
                 this.panelPuntosSuperior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
         }
 
         //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
-        for (int i = 0; i < conseguidasInferior.length; i++) {
-            if (!conseguidasInferior[i]) {
+        for (int i = 0; i < jugadorLocal.getConseguidasInferior().length; i++) {
+            if (!jugadorLocal.getConseguidasInferior()[i]) {
                 this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 1);
                 this.panelPuntosInferior.getCelda(i, 1).estaEnPrevioPuntos(true);
             }
@@ -420,22 +419,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.dados = dados;
     }
 
-    public boolean[] getConseguidasSuperior() {
-        return conseguidasSuperior;
-    }
-
-    public void setConseguidaSuperior(int index, boolean valor) {
-        this.conseguidasSuperior[index] = valor;
-    }
-
-    public boolean[] getConseguidasInferior() {
-        return conseguidasInferior;
-    }
-
-   public void setConseguidaInferior(int index, boolean valor) {
-        this.conseguidasInferior[index] = valor;
-    }
-
     public int[] getPuntosSuperiorPrevios() {
         return puntosSuperiorPrevios;
     }
@@ -452,28 +435,16 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.puntosInferiorPrevios = puntosInferiorPrevios;
     }
 
-    public int[] getPuntosSuperior() {
-        return puntosSuperior;
-    }
-
-    public void setPuntoSuperior(int index, int puntos) {
-        this.puntosSuperior[index] = puntos;
-    }
-
-    public int[] getPuntosInferior() {
-        return puntosInferior;
-    }
-
-   public void setPuntoInferior(int index, int puntos) {
-        this.puntosInferior[index] = puntos;
-    }
-
     public PanelPuntos getPanelPuntosSuperior() {
         return panelPuntosSuperior;
     }
 
     public PanelPuntos getPanelPuntosInferior() {
         return panelPuntosInferior;
+    }
+
+    public Jugador getJugadorLocal() {
+        return jugadorLocal;
     }
 
 }
