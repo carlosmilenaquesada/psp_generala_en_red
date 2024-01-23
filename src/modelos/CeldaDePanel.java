@@ -12,24 +12,15 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import vistas.PrincipalJFrame;
 
-public class CeldaDePanel extends JLabel {
+public class CeldaDePanel extends Celda {
 
-    private final int celXPos;
-    private final int celYPos;
+
     private boolean estaEnSeleccion;
     private boolean estaEnPrevioPuntos;
     CeldaDePanel(int celXPos, int celYPos, PanelPuntos parent) {        
-        this.celXPos = celXPos;
-        this.celYPos = celYPos;
+        super(celXPos, celYPos);
         this.estaEnSeleccion = false;
         this.estaEnPrevioPuntos = false;
-        this.setBounds(celYPos < 2 ? (150 * celYPos) : ((75 * celYPos) + 75), 30 * celXPos, 150 / (celYPos == 0 ? 1 : 2), 30);
-        this.setVisible(true);
-        this.setOpaque(true);
-        this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
-        this.setBorder(BorderFactory.createLineBorder(Colores.getColor(Colores.MARCO_TABLAS), 2));
-        this.setFont(Fuentes.getFont(Fuentes.PUNTOS_EN_TABLA));
-
         if (celYPos == 0) {
             Image image = parent.getIconos()[celXPos];
             this.setIcon(new ImageIcon(image.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
@@ -85,13 +76,7 @@ public class CeldaDePanel extends JLabel {
 
     }
 
-    public int getCelXPos() {
-        return celXPos;
-    }
-
-    public int getCelYPos() {
-        return celYPos;
-    }
+   
 
     public boolean estaEnSeleccion() {
         return estaEnSeleccion;

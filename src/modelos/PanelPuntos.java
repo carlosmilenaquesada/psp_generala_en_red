@@ -1,34 +1,32 @@
 package modelos;
 
-import controladores.Colores;
 import java.awt.Image;
 import java.awt.Rectangle;
 
 import javax.swing.*;
 import vistas.PrincipalJFrame;
 
-public class PanelPuntos extends JPanel {
+public class PanelPuntos extends Panel {
 
-    private String[] textoCeldas;
-    private CeldaDePanel[][] matriz;
     private Image[] iconos;
     private final String id;
 
-    public PanelPuntos(String[] textoCeldas, Image[] iconos, Rectangle rectangle, int filas, int columnas, String id) {
+    public PanelPuntos(String[] textoCeldas, Rectangle rectangle, Image[] iconos, int filas, int columnas, String id) {
+        super(textoCeldas, rectangle, filas, columnas);
         this.id = id;
-        this.textoCeldas = textoCeldas;
-        this.iconos = iconos;
-        this.setLayout(null);
-        this.setBounds(rectangle);
-        this.setVisible(true);
-        this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
-        this.matriz = new CeldaDePanel[filas][columnas];
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
+        this.iconos = iconos;        
+    }
+
+    @Override
+    protected void rellenarMatrizCeldas(int filas, int columnas) {
+        CeldaDePanel[][] matriz = new CeldaDePanel[filas][columnas];
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
                 matriz[i][j] = new CeldaDePanel(i, j, this);
                 this.add(matriz[i][j]);
             }
         }
+        this.matrizCeldas = matriz;
     }
 
     public void procesarPuntuacion(boolean[] coleccionConseguidas) {

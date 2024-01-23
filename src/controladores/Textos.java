@@ -23,5 +23,11 @@ public class Textos {
 
     };
     
+    public final static String[] categoriaBonus = {
+        "BONUS +35",
+        "0/63",
+        "0/63"
+    };
+    
 
 }

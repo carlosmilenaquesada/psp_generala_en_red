@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.*;
+import modelos.Celda;
 import modelos.Dado;
 import modelos.Dado.Valor;
 import modelos.Jugador;
@@ -65,7 +66,9 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 panelPuntosSuperior.getX(),
                 panelPuntosSuperior.getY() + panelPuntosSuperior.getHeight(),
                 panelPuntosSuperior.getWidth(), 30);
-        
+        for (int columna = 0; columna < 3; columna++) {
+            jp.add(new Celda(0, columna).setText(Textos.categoriaBonus[columna]));
+        }
         jp.setVisible(true);
         return jp;
     }
