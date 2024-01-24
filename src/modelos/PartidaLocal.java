@@ -1,21 +1,18 @@
 package modelos;
 
-public class Partida {
-
-    private int[] puntosSuperiorPrevios = new int[6];
-    private int[] puntosInferiorPrevios = new int[6];
+public class PartidaLocal {    
     private Jugador jugadorLocal;
     private Dado[] dados;
 
-    public Partida(Jugador jugadorLocal, Dado[] dados) {
+    public PartidaLocal(Jugador jugadorLocal, Dado[] dados) {
         this.jugadorLocal = jugadorLocal;
         this.dados = dados;
     }
 
-    public void calcularPrePuntuacion() {
-        //CALCULAR CATEGORÍA SUPERIOR Y LIBRE-----------------------------------
-        puntosSuperiorPrevios = new int[6];
-        puntosInferiorPrevios = new int[6];
+    
+
+    public int[] getPuntosSuperiorPrevios() {
+        int[] puntosSuperiorPrevios = new int[6];
         for (int i = 0; i < dados.length; i++) {
             //Categorías superior (suma de los puntos de los dados, agrapados por número) 
             int ordinal = dados[i].getValor().ordinal();//el ordinal es el valor del dado
@@ -23,19 +20,22 @@ public class Partida {
             if (!jugadorLocal.getConseguidasSuperior()[ordinal - 1]) {
                 puntosSuperiorPrevios[ordinal - 1] += ordinal;
             }
-            //Categoría libre (la suma de todos los puntos, de cualquier de dados)
-            if (!jugadorLocal.getConseguidasInferior()[0]) {
-                puntosInferiorPrevios[0] += ordinal;
-            }
         }
+        return puntosSuperiorPrevios;
+    }
 
-        //CALCULAR CATEGORÍA INFERIOR-------------------------------------------        
+    public int[] getPuntosInferiorPrevios() {
+        int[] puntosInferiorPrevios = new int[6];
         //Póker (la suma de los puntos de al menos cuatro dados iguales)
         int[] auxFrecuenciaNumeros = new int[6];
         for (int i = 0; i < dados.length; i++) {
             int ordinal = dados[i].getValor().ordinal();
             auxFrecuenciaNumeros[ordinal - 1]++;
 
+            //Categoría libre (la suma de todos los puntos, de cualquier de dados)
+            if (!jugadorLocal.getConseguidasInferior()[0]) {
+                puntosInferiorPrevios[0] += ordinal;
+            }
         }
         for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
             if (auxFrecuenciaNumeros[i] >= 4) {
@@ -100,14 +100,6 @@ public class Partida {
         if (sonIguales) {
             puntosInferiorPrevios[5] = 50;
         }
-
-    }
-
-    public int[] getPuntosSuperiorPrevios() {
-        return puntosSuperiorPrevios;
-    }
-
-    public int[] getPuntosInferiorPrevios() {
         return puntosInferiorPrevios;
     }
 

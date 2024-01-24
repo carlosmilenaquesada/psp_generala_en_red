@@ -12,10 +12,13 @@ import modelos.Jugador;
 import modelos.Panel;
 
 import modelos.PanelPuntos;
-import modelos.Partida;
+import modelos.PartidaLocal;
+import modelos.conexion.EmisionDatos;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
+    private EmisionDatos emisionDatos;
+    
     private Jugador jugadorLocal;
     private Dado[] dados = new Dado[5];
 
@@ -24,7 +27,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private Panel panelBonus;
 
-    private Partida partida;
+    private PartidaLocal partidaLocal;
 
     public PrincipalJFrame() {
         initComponents();
@@ -66,7 +69,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         jugadorLocal = new Jugador("JUGADOR 1");
         jlNombreJugadorLocal.setText(jugadorLocal.getNombre());
-        partida = new Partida(jugadorLocal, dados);
+        partidaLocal = new PartidaLocal(jugadorLocal, dados);
+        emisionDatos = new EmisionDatos();
     }
 
     public void actualizarPuntosPrevios(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
@@ -234,6 +238,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbMezclarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMezclarActionPerformed
+        
+        
         this.jbMezclar.setEnabled(false);
         for (int i = 0; i < dados.length; i++) {
             dados[i].setClickable(false);
@@ -253,19 +259,16 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 dados[i].setClickable(true);
             }
-            partida.calcularPrePuntuacion();
-            actualizarPuntosPrevios(partida.getPuntosSuperiorPrevios(), partida.getPuntosInferiorPrevios());
+            actualizarPuntosPrevios(partidaLocal.getPuntosSuperiorPrevios(), partidaLocal.getPuntosInferiorPrevios());
             this.jbMezclar.setEnabled(true);
+            
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
+   
+    
+   /*
+    try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -280,16 +283,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PrincipalJFrame().setVisible(true);
-            }
-        });
-    }
+        }      
+    */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpChat;

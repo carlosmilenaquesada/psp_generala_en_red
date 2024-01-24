@@ -1,15 +1,16 @@
 package modelos;
 
 import controladores.Colores;
-import controladores.Fuentes;
+
 import java.awt.Color;
-import java.awt.Image;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import vistas.Main;
 import vistas.PrincipalJFrame;
 
 public class CeldaDePanel extends Celda {
@@ -43,7 +44,7 @@ public class CeldaDePanel extends Celda {
     }
 
     public Jugador getJugadorLocal() {
-        return ((PrincipalJFrame) SwingUtilities.getWindowAncestor(this)).getJugadorLocal();
+        return Main.getPrincipalJFrame().getJugadorLocal();
     }
 
     public PrincipalJFrame getPrincipalJFrame() {
