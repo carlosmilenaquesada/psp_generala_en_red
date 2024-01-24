@@ -62,6 +62,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 6, 3, "superior"
         );
         panelPuntosSuperior.rellenarMatrizCeldas();
+        
         panelPuntosInferior = new PanelPuntos(
                 Textos.categoriasPuntosInferior,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_INFERIOR),
@@ -69,9 +70,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 6, 3, "inferior"
         );
         panelPuntosInferior.rellenarMatrizCeldas();
+        
         panelBonus = new Panel(Textos.categoriaBonus,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_BONUS), 1, 3);
         panelBonus.rellenarMatrizCeldas();
+        
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);

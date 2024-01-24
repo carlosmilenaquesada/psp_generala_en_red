@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class Panel extends JPanel {
 
-    protected String[] textoCeldas;
+    private final String[] textoCeldas;
     protected int filas;
     protected int columnas;
     protected Celda[][] matrizCeldas;
@@ -28,6 +28,7 @@ public class Panel extends JPanel {
             for (int j = 0; j < matriz[0].length; j++) {
                 matriz[i][j] = new Celda(i, j);
                 this.add(matriz[i][j]);
+                matriz[i][j].setText(this.getTextoCeldas()[j]);
             }
         }
         this.matrizCeldas = matriz;
@@ -43,6 +44,10 @@ public class Panel extends JPanel {
 
     public Celda getCelda(int fila, int columna) {
         return this.matrizCeldas[fila][columna];
+    }
+
+    public String[] getTextoCeldas() {
+        return textoCeldas;
     }
 
 }

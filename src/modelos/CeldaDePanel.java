@@ -14,27 +14,23 @@ import vistas.PrincipalJFrame;
 
 public class CeldaDePanel extends Celda {
 
-
     private boolean estaEnSeleccion;
     private boolean estaEnPrevioPuntos;
-    CeldaDePanel(int celXPos, int celYPos, PanelPuntos parent) {        
+
+    CeldaDePanel(int celXPos, int celYPos) {
         super(celXPos, celYPos);
         this.estaEnSeleccion = false;
         this.estaEnPrevioPuntos = false;
-        if (celYPos == 0) {
-            Image image = parent.getIconos()[celXPos];
-            this.setIcon(new ImageIcon(image.getScaledInstance(24, 24, Image.SCALE_SMOOTH)));
-            this.setText(parent.getTextoCeldas()[celXPos]);
-        }
+        
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getCelYPos() == 1 ) {
-                    if (parent.getId().equals("superior") && !getJugadorLocal().getConseguidasSuperior()[getCelXPos()]) {
+                if (getCelYPos() == 1) {
+                    if (((PanelPuntos)getParent()).getId().equals("superior") && !getJugadorLocal().getConseguidasSuperior()[getCelXPos()]) {
                         getJugadorLocal().setConseguidaSuperior(getCelXPos(), true);
                         getJugadorLocal().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
                     } else {
-                        if (parent.getId().equals("inferior") && !getJugadorLocal().getConseguidasInferior()[getCelXPos()]) {
+                        if (((PanelPuntos)getParent()).getId().equals("inferior") && !getJugadorLocal().getConseguidasInferior()[getCelXPos()]) {
                             getJugadorLocal().setConseguidaInferior(getCelXPos(), true);
                             getJugadorLocal().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
                         }
@@ -53,10 +49,8 @@ public class CeldaDePanel extends Celda {
     public PrincipalJFrame getPrincipalJFrame() {
         return (PrincipalJFrame) SwingUtilities.getWindowAncestor(this);
     }
+    
 
-    
-    
-    
     public void setEstaEnSeleccion(boolean b) {
         if (b) {
             this.setBackground(Colores.getColor(Colores.CELDA_SELECCIONADA));
@@ -76,18 +70,12 @@ public class CeldaDePanel extends Celda {
 
     }
 
-   
-
     public boolean estaEnSeleccion() {
         return estaEnSeleccion;
     }
 
-    
-
     public boolean estaEnPrevioPuntos() {
         return estaEnPrevioPuntos;
     }
-
-    
 
 }

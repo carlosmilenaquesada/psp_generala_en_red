@@ -8,8 +8,7 @@ public class Textos {
         "TRESES",
         "CUATROS",
         "CINCOS",
-        "SEISES",
-        "BONUS +35"
+        "SEISES"
 
     };
     

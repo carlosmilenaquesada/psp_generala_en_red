@@ -7,8 +7,8 @@ import javax.swing.JLabel;
 
 public class Celda extends JLabel {
 
-    private final int celXPos;
-    private final int celYPos;
+    protected final int celXPos;
+    protected final int celYPos;
 
     public Celda(int celXPos, int celYPos) {
         this.celXPos = celXPos;
@@ -19,7 +19,6 @@ public class Celda extends JLabel {
         this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
         this.setBorder(BorderFactory.createLineBorder(Colores.getColor(Colores.MARCO_TABLAS), 2));
         this.setFont(Fuentes.getFont(Fuentes.PUNTOS_EN_TABLA));
-        
     }
 
     public int getCelXPos() {
@@ -29,7 +28,5 @@ public class Celda extends JLabel {
     public int getCelYPos() {
         return celYPos;
     }
-    
-    
 
 }
