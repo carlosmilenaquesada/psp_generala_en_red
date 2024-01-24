@@ -128,9 +128,5 @@ public class Jugador {
         this.puntosInferior[index] = puntos;
     }
 
-    @Override
-    public String toString() {
-        return "Jugador{" + "nombre=" + nombre + '}';
-    }
 
 }

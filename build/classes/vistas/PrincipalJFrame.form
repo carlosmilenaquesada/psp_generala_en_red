@@ -122,7 +122,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jlYo">
+        <Component class="javax.swing.JLabel" name="jlNombreJugadorLocal">
           <Properties>
             <Property name="text" type="java.lang.String" value="jLabel3"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -138,7 +138,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="lbRival">
+        <Component class="javax.swing.JLabel" name="jlNombreJugadorRemoto">
           <Properties>
             <Property name="text" type="java.lang.String" value="jLabel3"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

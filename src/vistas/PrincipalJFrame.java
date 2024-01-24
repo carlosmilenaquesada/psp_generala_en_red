@@ -5,10 +5,6 @@ import controladores.Rectangles.*;
 import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import javax.swing.*;
-import modelos.Celda;
 import modelos.CeldaDePanel;
 import modelos.Dado;
 import modelos.Dado.Valor;
@@ -16,22 +12,19 @@ import modelos.Jugador;
 import modelos.Panel;
 
 import modelos.PanelPuntos;
+import modelos.Partida;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
     private Jugador jugadorLocal;
     private Dado[] dados = new Dado[5];
 
-    public ArrayList<Boolean> reservaOcupadas;
-    public ArrayList<Boolean> tapeteOcupadas;
-
-    private int[] puntosSuperiorPrevios = new int[6];
-    private int[] puntosInferiorPrevios = new int[6];
-
     private PanelPuntos panelPuntosSuperior;
     private PanelPuntos panelPuntosInferior;
 
     private Panel panelBonus;
+
+    private Partida partida;
 
     public PrincipalJFrame() {
         initComponents();
@@ -40,14 +33,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void initConfiguracion() {
-        jugadorLocal = new Jugador("JUGADOR 1");
-        reservaOcupadas = new ArrayList<>();
-        tapeteOcupadas = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            reservaOcupadas.add(false);
-            tapeteOcupadas.add(true);
-
-        }
 
         dados[0] = new Dado(jlDadoCero, RectanglesDados.PRIMERA_TAP);
         dados[1] = new Dado(jlDadoUno, RectanglesDados.SEGUNDA_TAP);
@@ -62,7 +47,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 6, 3, "superior"
         );
         panelPuntosSuperior.rellenarMatrizCeldas();
-        
+
         panelPuntosInferior = new PanelPuntos(
                 Textos.categoriasPuntosInferior,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_INFERIOR),
@@ -70,107 +55,21 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 6, 3, "inferior"
         );
         panelPuntosInferior.rellenarMatrizCeldas();
-        
+
         panelBonus = new Panel(Textos.categoriaBonus,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_BONUS), 1, 3);
         panelBonus.rellenarMatrizCeldas();
-        
+
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
+
+        jugadorLocal = new Jugador("JUGADOR 1");
+        jlNombreJugadorLocal.setText(jugadorLocal.getNombre());
+        partida = new Partida(jugadorLocal, dados);
     }
 
-    public void calcularPrePuntuacion() {
-        //CALCULAR CATEGORÍA SUPERIOR Y LIBRE-----------------------------------
-        puntosSuperiorPrevios = new int[6];
-        puntosInferiorPrevios = new int[6];
-        for (int i = 0; i < dados.length; i++) {
-            //Categorías superior (suma de los puntos de los dados, agrapados por número) 
-            int ordinal = dados[i].getValor().ordinal();//el ordinal es el valor del dado
-
-            if (!jugadorLocal.getConseguidasSuperior()[ordinal - 1]) {//conseguidasSuperior es una colección de boolean que nos dice si una categoría ya ha puntuado o no
-                puntosSuperiorPrevios[ordinal - 1] += ordinal;
-            }
-            //Categoría libre (la suma de todos los puntos, de cualquier de dados)
-            if (!jugadorLocal.getConseguidasInferior()[0]) {
-                puntosInferiorPrevios[0] += ordinal;
-            }
-
-        }
-
-        //CALCULAR CATEGORÍA INFERIOR-------------------------------------------        
-        //Póker (la suma de los puntos de al menos cuatro dados iguales)
-        int[] auxFrecuenciaNumeros = new int[6];
-        for (int i = 0; i < dados.length; i++) {
-            int ordinal = dados[i].getValor().ordinal();
-            auxFrecuenciaNumeros[ordinal - 1]++;
-
-        }
-        for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
-            if (auxFrecuenciaNumeros[i] >= 4) {
-                puntosInferiorPrevios[1] = 4 * (i + 1);
-
-            }
-        }
-        //Full (la suma de los puntos de una pareja de dados de igual número + un trio de dados igual número)
-        auxFrecuenciaNumeros = new int[6];
-        for (int i = 0; i < dados.length; i++) {
-            int ordinal = dados[i].getValor().ordinal();
-            auxFrecuenciaNumeros[ordinal - 1]++;
-        }
-        int pareja = 0;
-        int trio = 0;
-        for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
-            if (auxFrecuenciaNumeros[i] == 2) {
-                pareja = 2 * (i + 1);
-            }
-            if (auxFrecuenciaNumeros[i] == 3) {
-                trio = 3 * (i + 1);
-            }
-        }
-        if (pareja > 0 && trio > 0) {
-            puntosInferiorPrevios[2] = pareja + trio;
-        }
-
-        //escalera corta (una fila de al menos cuatro números sucesivos)
-        auxFrecuenciaNumeros = new int[6];
-        for (int i = 0; i < dados.length; i++) {
-            int ordinal = dados[i].getValor().ordinal();
-
-            auxFrecuenciaNumeros[ordinal - 1]++;
-
-        }
-
-        int contadorSucesivos = 0;
-        for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
-            if (auxFrecuenciaNumeros[i] >= 1) {
-                contadorSucesivos++;
-            } else {
-                if (contadorSucesivos < 4) {
-                    contadorSucesivos = 0;
-                }
-            }
-        }
-        if (contadorSucesivos >= 4) {
-            puntosInferiorPrevios[3] = 15;
-        }
-        //escalera larga (una fila de cinco números sucesivos)
-        if (contadorSucesivos == 5) {
-            puntosInferiorPrevios[4] = 30;
-        }
-
-        //generala (cinco números iguales)
-        boolean sonIguales = true;
-        int ordinal = dados[0].getValor().ordinal();
-        for (int i = 1; i < dados.length && sonIguales; i++) {
-            if (ordinal != dados[i].getValor().ordinal()) {
-                sonIguales = false;
-            }
-        }
-
-        if (sonIguales) {
-            puntosInferiorPrevios[5] = 50;
-        }
+    public void actualizarPuntosPrevios(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
         //MOSTRAR---------------------------------------------------------------
         //recorre las categorias de la tabla superior, y a las que no tienen
         //puntuación, les pone pre-puntuación
@@ -188,31 +87,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 ((CeldaDePanel) this.panelPuntosInferior.getCelda(i, 1)).setEstaEnPrevioPuntos(true);
             }
         }
-
-    }
-
-    public RectanglesDados primeraPosionLibreReserva() {
-        return RectanglesDados.values()[reservaOcupadas.indexOf(false)];
-    }
-
-    public void ocuparPosicionReserva(RectanglesDados posicion) {
-        reservaOcupadas.set(posicion.ordinal(), true);
-    }
-
-    public void desocuparPosicionReserva(RectanglesDados posicion) {
-        reservaOcupadas.set(posicion.ordinal(), false);
-    }
-
-    public RectanglesDados primeraPosionLibreTapete() {
-        return RectanglesDados.values()[tapeteOcupadas.indexOf(false) + 5];
-    }
-
-    public void ocuparPosicionTapete(RectanglesDados posicion) {
-        tapeteOcupadas.set(posicion.ordinal() - 5, true);
-    }
-
-    public void desocuparPosicionTapete(RectanglesDados posicion) {
-        tapeteOcupadas.set(posicion.ordinal() - 5, false);
     }
 
     @SuppressWarnings("unchecked")
@@ -224,8 +98,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jlTurno = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jlYo = new javax.swing.JLabel();
-        lbRival = new javax.swing.JLabel();
+        jlNombreJugadorLocal = new javax.swing.JLabel();
+        jlNombreJugadorRemoto = new javax.swing.JLabel();
         jpTablero = new javax.swing.JPanel();
         jlDadoCero = new javax.swing.JLabel();
         jlDadoUno = new javax.swing.JLabel();
@@ -276,17 +150,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jpPuntos.add(jLabel1);
         jLabel1.setBounds(20, 340, 300, 30);
 
-        jlYo.setText("jLabel3");
-        jlYo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jlYo.setOpaque(true);
-        jpPuntos.add(jlYo);
-        jlYo.setBounds(170, 20, 75, 110);
+        jlNombreJugadorLocal.setText("jLabel3");
+        jlNombreJugadorLocal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jlNombreJugadorLocal.setOpaque(true);
+        jpPuntos.add(jlNombreJugadorLocal);
+        jlNombreJugadorLocal.setBounds(170, 20, 75, 110);
 
-        lbRival.setText("jLabel3");
-        lbRival.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        lbRival.setOpaque(true);
-        jpPuntos.add(lbRival);
-        lbRival.setBounds(245, 20, 75, 110);
+        jlNombreJugadorRemoto.setText("jLabel3");
+        jlNombreJugadorRemoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jlNombreJugadorRemoto.setOpaque(true);
+        jpPuntos.add(jlNombreJugadorRemoto);
+        jlNombreJugadorRemoto.setBounds(245, 20, 75, 110);
 
         getContentPane().add(jpPuntos);
         jpPuntos.setBounds(40, 0, 340, 600);
@@ -379,7 +253,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 dados[i].setClickable(true);
             }
-            calcularPrePuntuacion();
+            partida.calcularPrePuntuacion();
+            actualizarPuntosPrevios(partida.getPuntosSuperiorPrevios(), partida.getPuntosInferiorPrevios());
             this.jbMezclar.setEnabled(true);
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
@@ -429,36 +304,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jlDadoDos;
     private javax.swing.JLabel jlDadoTres;
     private javax.swing.JLabel jlDadoUno;
+    private javax.swing.JLabel jlNombreJugadorLocal;
+    private javax.swing.JLabel jlNombreJugadorRemoto;
     private javax.swing.JLabel jlTurno;
-    private javax.swing.JLabel jlYo;
     private javax.swing.JPanel jpPuntos;
     private javax.swing.JPanel jpTablero;
-    private javax.swing.JLabel lbRival;
     // End of variables declaration//GEN-END:variables
 
     public Dado[] getDados() {
         return dados;
     }
 
-    public void setDados(Dado[] dados) {
-        this.dados = dados;
-    }
-
-    public int[] getPuntosSuperiorPrevios() {
-        return puntosSuperiorPrevios;
-    }
-
-    public void setPuntosSuperiorPrevios(int[] puntosSuperiorPrevios) {
-        this.puntosSuperiorPrevios = puntosSuperiorPrevios;
-    }
-
-    public int[] getPuntosInferiorPrevios() {
-        return puntosInferiorPrevios;
-    }
-
-    public void setPuntosInferiorPrevios(int[] puntosInferiorPrevios) {
-        this.puntosInferiorPrevios = puntosInferiorPrevios;
-    }
 
     public PanelPuntos getPanelPuntosSuperior() {
         return panelPuntosSuperior;
