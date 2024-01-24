@@ -3,6 +3,7 @@ package modelos.conexion;
 import static controladores.ClavesEnvio.*;
 import modelos.Dado;
 import modelos.Jugador;
+import vistas.Main;
 
 public class RecepcionDatos {
 
@@ -21,15 +22,13 @@ public class RecepcionDatos {
         switch (clave) {
             case DADOS:
                 Dado[] dados = (Dado[]) this.objetoDato.getValor();
-                
+                Main.getPrincipalJFrame().setDados(dados);
                 break;
-            case PREVIA_PUNTOS_SUPERIOR:
-                int[] puntosSuperiorPrevios = (int[]) this.objetoDato.getValor();
-                
-                break;
-            case PREVIA_PUNTOS_INFERIOR:
-                int[] puntosInferiorPrevios = (int[]) this.objetoDato.getValor();
-                
+            case PREVIA_PUNTOS:
+                int[][] puntosPrevios = (int[][]) this.objetoDato.getValor();                
+                int[] puntosInferiorPrevios = puntosPrevios[0];
+                int[] puntosSuperiorPrevios = puntosPrevios[1];
+                Main.getPrincipalJFrame().actualizarPuntosPreviosRemoto(puntosInferiorPrevios, puntosSuperiorPrevios);
                 break;
             case JUGADOR:
                 Jugador jugador = (Jugador) this.objetoDato.getValor();

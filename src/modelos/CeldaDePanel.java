@@ -6,12 +6,7 @@ import java.awt.Color;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 import vistas.Main;
-import vistas.PrincipalJFrame;
 
 public class CeldaDePanel extends Celda {
 
@@ -36,8 +31,8 @@ public class CeldaDePanel extends Celda {
                             getJugadorLocal().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
                         }
                     }
-                    getPrincipalJFrame().getPanelPuntosSuperior().procesarPuntuacion(getJugadorLocal().getConseguidasSuperior());
-                    getPrincipalJFrame().getPanelPuntosInferior().procesarPuntuacion(getJugadorLocal().getConseguidasInferior());
+                    Main.getPrincipalJFrame().getPanelPuntosSuperior().procesarPuntuacion(getJugadorLocal().getConseguidasSuperior());
+                    Main.getPrincipalJFrame().getPanelPuntosInferior().procesarPuntuacion(getJugadorLocal().getConseguidasInferior());
                 }
             }
         });
@@ -47,10 +42,6 @@ public class CeldaDePanel extends Celda {
         return Main.getPrincipalJFrame().getJugadorLocal();
     }
 
-    public PrincipalJFrame getPrincipalJFrame() {
-        return (PrincipalJFrame) SwingUtilities.getWindowAncestor(this);
-    }
-    
 
     public void setEstaEnSeleccion(boolean b) {
         if (b) {

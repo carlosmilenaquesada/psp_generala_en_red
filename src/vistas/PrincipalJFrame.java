@@ -21,7 +21,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     
     private Jugador jugadorLocal;
     private Dado[] dados = new Dado[5];
-
     private PanelPuntos panelPuntosSuperior;
     private PanelPuntos panelPuntosInferior;
 
@@ -73,7 +72,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         emisionDatos = new EmisionDatos();
     }
 
-    public void actualizarPuntosPrevios(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
+    public void actualizarPuntosPreviosLocal(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
         //MOSTRAR---------------------------------------------------------------
         //recorre las categorias de la tabla superior, y a las que no tienen
         //puntuación, les pone pre-puntuación
@@ -259,7 +258,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 dados[i].setClickable(true);
             }
-            actualizarPuntosPrevios(partidaLocal.getPuntosSuperiorPrevios(), partidaLocal.getPuntosInferiorPrevios());
+            actualizarPuntosPreviosLocal(partidaLocal.getPuntosSuperiorPrevios(), partidaLocal.getPuntosInferiorPrevios());
             this.jbMezclar.setEnabled(true);
             
         }).start();
@@ -321,6 +320,10 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public Jugador getJugadorLocal() {
         return jugadorLocal;
+    }
+
+    public void setDados(Dado[] dados) {
+        this.dados = dados;
     }
 
 }

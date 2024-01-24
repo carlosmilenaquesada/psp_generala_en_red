@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import javax.swing.*;
+import vistas.Main;
 import vistas.PrincipalJFrame;
 
 public class PanelPuntos extends Panel {
@@ -45,7 +46,7 @@ public class PanelPuntos extends Panel {
     }
 
     public Jugador getJugadorLocal() {
-        return ((PrincipalJFrame) SwingUtilities.getWindowAncestor(this)).getJugadorLocal();
+        return Main.getPrincipalJFrame().getJugadorLocal();
     }
 
     public String getId() {

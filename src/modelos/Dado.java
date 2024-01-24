@@ -19,7 +19,6 @@ public class Dado {
         EN_TAPETE, EN_RESERVA;
     }
 
-    private final PrincipalJFrame principalJFrame;
     private static ArrayList<Boolean> reservaOcupadas = rellenarOcupadas(false);
     private static ArrayList<Boolean> tapeteOcupadas = rellenarOcupadas(true);
 
@@ -38,8 +37,7 @@ public class Dado {
     private RectanglesDados posicion;
 
     public Dado(JLabel jLabel, RectanglesDados posicion) {
-        this.jLabel = jLabel;
-        this.principalJFrame = ((PrincipalJFrame) SwingUtilities.getWindowAncestor(this.jLabel));
+        this.jLabel = jLabel;        
         this.valor = Valor.SEIS;
         this.estado = Estado.EN_TAPETE;
         this.posicion = posicion;
