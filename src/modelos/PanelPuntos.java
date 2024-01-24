@@ -18,10 +18,10 @@ public class PanelPuntos extends Panel {
     }
 
     @Override
-    protected void rellenarMatrizCeldas(int filas, int columnas) {
-        CeldaDePanel[][] matriz = new CeldaDePanel[filas][columnas];
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
+    public void rellenarMatrizCeldas() {
+        CeldaDePanel[][] matriz = new CeldaDePanel[this.filas][this.columnas];
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[0].length; j++) {
                 matriz[i][j] = new CeldaDePanel(i, j, this);
                 this.add(matriz[i][j]);
             }
@@ -31,8 +31,8 @@ public class PanelPuntos extends Panel {
 
     public void procesarPuntuacion(boolean[] coleccionConseguidas) {
         for (int i = 0; i < coleccionConseguidas.length; i++) {
-            this.getCelda(i, 1).setEstaEnSeleccion(false);
-            this.getCelda(i, 1).setEstaEnPrevioPuntos(false);
+            ((CeldaDePanel)this.getCelda(i, 1)).setEstaEnSeleccion(false);
+            ((CeldaDePanel)this.getCelda(i, 1)).setEstaEnPrevioPuntos(false);
             if (coleccionConseguidas[i] == false) {
                 this.getCelda(i, 1).setText("");
             }
@@ -55,21 +55,13 @@ public class PanelPuntos extends Panel {
         this.iconos = iconos;
     }
 
-    public CeldaDePanel[][] getMatriz() {
-        return matriz;
-    }
+    
 
-    public void setValorEnMatriz(int valor, int fila, int columna) {
-        this.matriz[fila][columna].setText(String.valueOf(valor));
-    }
+    
 
-    public CeldaDePanel getCelda(int fila, int columna) {
-        return this.matriz[fila][columna];
-    }
+    
 
-    public void setMatriz(CeldaDePanel[][] matriz) {
-        this.matriz = matriz;
-    }
+    
 
     public String[] getTextoCeldas() {
         return textoCeldas;

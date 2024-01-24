@@ -1,16 +1,19 @@
 package vistas;
 
 import controladores.Imagenes;
-import controladores.Posiciones.Posicion;
+import controladores.Rectangles.*;
+import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.*;
 import modelos.Celda;
+import modelos.CeldaDePanel;
 import modelos.Dado;
 import modelos.Dado.Valor;
 import modelos.Jugador;
+import modelos.Panel;
 
 import modelos.PanelPuntos;
 
@@ -27,7 +30,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private PanelPuntos panelPuntosSuperior;
     private PanelPuntos panelPuntosInferior;
-    private JPanel panelPuntosBonus;
+
+    private Panel panelBonus;
 
     public PrincipalJFrame() {
         initComponents();
@@ -45,32 +49,32 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         }
 
-        dados[0] = new Dado(jlDadoCero, Posicion.PRIMERA_TAP);
-        dados[1] = new Dado(jlDadoUno, Posicion.SEGUNDA_TAP);
-        dados[2] = new Dado(jlDadoDos, Posicion.TERCERA_TAP);
-        dados[3] = new Dado(jlDadoTres, Posicion.CUARTA_TAP);
-        dados[4] = new Dado(jlDadoCuatro, Posicion.QUINTA_TAP);
+        dados[0] = new Dado(jlDadoCero, RectanglesDados.PRIMERA_TAP);
+        dados[1] = new Dado(jlDadoUno, RectanglesDados.SEGUNDA_TAP);
+        dados[2] = new Dado(jlDadoDos, RectanglesDados.TERCERA_TAP);
+        dados[3] = new Dado(jlDadoTres, RectanglesDados.CUARTA_TAP);
+        dados[4] = new Dado(jlDadoCuatro, RectanglesDados.QUINTA_TAP);
 
-        panelPuntosSuperior = new PanelPuntos(Textos.categoriasPuntosSuperior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 130, 300, 180), 6, 3, "superior");
-        panelPuntosInferior = new PanelPuntos(Textos.categoriasPuntosInferior, Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]), new Rectangle(20, 370, 300, 180), 6, 3, "inferior");
-        panelPuntosBonus = crearPanelBonus();
-
+        panelPuntosSuperior = new PanelPuntos(
+                Textos.categoriasPuntosSuperior,
+                rectanglesElementos.get(RectanglesElementos.PANEL_CAT_SUPERIOR),
+                Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]),
+                6, 3, "superior"
+        );
+        panelPuntosSuperior.rellenarMatrizCeldas();
+        panelPuntosInferior = new PanelPuntos(
+                Textos.categoriasPuntosInferior,
+                rectanglesElementos.get(RectanglesElementos.PANEL_CAT_INFERIOR),
+                Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]),
+                6, 3, "inferior"
+        );
+        panelPuntosInferior.rellenarMatrizCeldas();
+        panelBonus = new Panel(Textos.categoriaBonus,
+                rectanglesElementos.get(RectanglesElementos.PANEL_CAT_BONUS), 1, 3);
+        panelBonus.rellenarMatrizCeldas();
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
-        this.jpPuntos.add(panelPuntosBonus);
-    }
-
-    private JPanel crearPanelBonus() {
-        JPanel jp = new JPanel(null);
-        jp.setBounds(
-                panelPuntosSuperior.getX(),
-                panelPuntosSuperior.getY() + panelPuntosSuperior.getHeight(),
-                panelPuntosSuperior.getWidth(), 30);
-        for (int columna = 0; columna < 3; columna++) {
-            jp.add(new Celda(0, columna).setText(Textos.categoriaBonus[columna]));
-        }
-        jp.setVisible(true);
-        return jp;
+        this.jpPuntos.add(panelBonus);
     }
 
     public void calcularPrePuntuacion() {
@@ -170,7 +174,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         for (int i = 0; i < jugadorLocal.getConseguidasSuperior().length; i++) {
             if (!jugadorLocal.getConseguidasSuperior()[i]) {
                 this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 1);
-                this.panelPuntosSuperior.getCelda(i, 1).setEstaEnPrevioPuntos(true);
+                ((CeldaDePanel) this.panelPuntosSuperior.getCelda(i, 1)).setEstaEnPrevioPuntos(true);
             }
         }
 
@@ -178,33 +182,33 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         for (int i = 0; i < jugadorLocal.getConseguidasInferior().length; i++) {
             if (!jugadorLocal.getConseguidasInferior()[i]) {
                 this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 1);
-                this.panelPuntosInferior.getCelda(i, 1).setEstaEnPrevioPuntos(true);
+                ((CeldaDePanel) this.panelPuntosInferior.getCelda(i, 1)).setEstaEnPrevioPuntos(true);
             }
         }
 
     }
 
-    public Posicion primeraPosionLibreReserva() {
-        return Posicion.values()[reservaOcupadas.indexOf(false)];
+    public RectanglesDados primeraPosionLibreReserva() {
+        return RectanglesDados.values()[reservaOcupadas.indexOf(false)];
     }
 
-    public void ocuparPosicionReserva(Posicion posicion) {
+    public void ocuparPosicionReserva(RectanglesDados posicion) {
         reservaOcupadas.set(posicion.ordinal(), true);
     }
 
-    public void desocuparPosicionReserva(Posicion posicion) {
+    public void desocuparPosicionReserva(RectanglesDados posicion) {
         reservaOcupadas.set(posicion.ordinal(), false);
     }
 
-    public Posicion primeraPosionLibreTapete() {
-        return Posicion.values()[tapeteOcupadas.indexOf(false) + 5];
+    public RectanglesDados primeraPosionLibreTapete() {
+        return RectanglesDados.values()[tapeteOcupadas.indexOf(false) + 5];
     }
 
-    public void ocuparPosicionTapete(Posicion posicion) {
+    public void ocuparPosicionTapete(RectanglesDados posicion) {
         tapeteOcupadas.set(posicion.ordinal() - 5, true);
     }
 
-    public void desocuparPosicionTapete(Posicion posicion) {
+    public void desocuparPosicionTapete(RectanglesDados posicion) {
         tapeteOcupadas.set(posicion.ordinal() - 5, false);
     }
 

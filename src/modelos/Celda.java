@@ -19,6 +19,7 @@ public class Celda extends JLabel {
         this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
         this.setBorder(BorderFactory.createLineBorder(Colores.getColor(Colores.MARCO_TABLAS), 2));
         this.setFont(Fuentes.getFont(Fuentes.PUNTOS_EN_TABLA));
+        
     }
 
     public int getCelXPos() {

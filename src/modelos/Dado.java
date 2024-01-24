@@ -2,19 +2,19 @@ package modelos;
 
 import javax.swing.*;
 import static controladores.Imagenes.imagenesDado;
-import controladores.Posiciones;
-import controladores.Posiciones.Posicion;
+import controladores.Rectangles;
+import controladores.Rectangles.RectanglesDados;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import vistas.PrincipalJFrame;
 
 public class Dado {
 
-    public Posicion getPosicion() {
+    public RectanglesDados getPosicion() {
         return posicion;
     }
 
-    public void setPosicion(Posicion posicion) {
+    public void setPosicion(RectanglesDados posicion) {
         this.posicion = posicion;
     }
 
@@ -32,15 +32,15 @@ public class Dado {
     private Estado estado;
     private JLabel jLabel;
     private boolean clickable;
-    private Posicion posicion;
+    private RectanglesDados posicion;
 
-    public Dado(JLabel jLabel, Posicion posicion) {
+    public Dado(JLabel jLabel, RectanglesDados posicion) {
         this.jLabel = jLabel;
         this.principalJFrame = ((PrincipalJFrame) SwingUtilities.getWindowAncestor(this.jLabel));
         this.valor = Valor.SEIS;
         this.estado = Estado.EN_TAPETE;
         this.posicion = posicion;
-        this.jLabel.setBounds(Posiciones.posicionesDados.get(this.posicion));
+        this.jLabel.setBounds(Rectangles.rectanglesDados.get(this.posicion));
         this.jLabel.setIcon(imagenesDado.get(this.valor));
         this.clickable = true;
         this.jLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -53,14 +53,14 @@ public class Dado {
                         principalJFrame.desocuparPosicionTapete(getPosicion());
                         setPosicion(principalJFrame.primeraPosionLibreReserva());
                         principalJFrame.ocuparPosicionReserva(getPosicion());
-                        cambiarPosicion(Posiciones.posicionesDados.get(getPosicion()));
+                        cambiarPosicion(Rectangles.rectanglesDados.get(getPosicion()));
 
                     } else {
                         setEstado(Estado.EN_TAPETE);
                         principalJFrame.desocuparPosicionReserva(getPosicion());
                         setPosicion(principalJFrame.primeraPosionLibreTapete());
                         principalJFrame.ocuparPosicionTapete(getPosicion());
-                        cambiarPosicion(Posiciones.posicionesDados.get(getPosicion()));
+                        cambiarPosicion(Rectangles.rectanglesDados.get(getPosicion()));
                     }
                     
                     
