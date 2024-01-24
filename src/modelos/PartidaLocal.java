@@ -2,16 +2,18 @@ package modelos;
 
 public class PartidaLocal {    
     private Jugador jugadorLocal;
+    private Jugador jugadorRemoto;
     private Dado[] dados;
 
-    public PartidaLocal(Jugador jugadorLocal, Dado[] dados) {
+    public PartidaLocal(Jugador jugadorLocal, Jugador jugadorRemoto, Dado[] dados) {
         this.jugadorLocal = jugadorLocal;
+        this.jugadorRemoto = jugadorRemoto;
         this.dados = dados;
     }
 
     
 
-    public int[] getPuntosSuperiorPrevios() {
+    public int[] getPuntosSuperiorPreviosJugadorLocal() {
         int[] puntosSuperiorPrevios = new int[6];
         for (int i = 0; i < dados.length; i++) {
             //Categorías superior (suma de los puntos de los dados, agrapados por número) 
@@ -24,7 +26,7 @@ public class PartidaLocal {
         return puntosSuperiorPrevios;
     }
 
-    public int[] getPuntosInferiorPrevios() {
+    public int[] getPuntosInferiorPreviosJugadorLocal() {
         int[] puntosInferiorPrevios = new int[6];
         //Póker (la suma de los puntos de al menos cuatro dados iguales)
         int[] auxFrecuenciaNumeros = new int[6];

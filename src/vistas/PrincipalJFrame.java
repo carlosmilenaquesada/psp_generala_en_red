@@ -17,9 +17,9 @@ import modelos.conexion.EmisionDatos;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
-    private EmisionDatos emisionDatos;
     
     private Jugador jugadorLocal;
+    private Jugador jugadorRemoto;
     private Dado[] dados = new Dado[5];
     private PanelPuntos panelPuntosSuperior;
     private PanelPuntos panelPuntosInferior;
@@ -67,13 +67,14 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelBonus);
 
         jugadorLocal = new Jugador("JUGADOR 1");
+        jugadorRemoto = new Jugador("JUGADOR 2");
         jlNombreJugadorLocal.setText(jugadorLocal.getNombre());
-        partidaLocal = new PartidaLocal(jugadorLocal, dados);
-        emisionDatos = new EmisionDatos();
+        jlNombreJugadorRemoto.setText(jugadorRemoto.getNombre());
+        partidaLocal = new PartidaLocal(jugadorLocal, jugadorRemoto, dados);
+        
     }
 
-    public void actualizarPuntosPreviosLocal(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
-        //MOSTRAR---------------------------------------------------------------
+    public void actualizarPuntosPreviosJugadorLocal(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
         //recorre las categorias de la tabla superior, y a las que no tienen
         //puntuación, les pone pre-puntuación
         for (int i = 0; i < jugadorLocal.getConseguidasSuperior().length; i++) {
@@ -91,6 +92,28 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             }
         }
     }
+    
+    public void actualizarPuntosPreviosJugadorRemoto(int[] puntosInferiorPrevios, int[] puntosSuperiorPrevios) {
+        //recorre las categorias de la tabla superior, y a las que no tienen
+        //puntuación, les pone pre-puntuación
+        for (int i = 0; i < jugadorRemoto.getConseguidasSuperior().length; i++) {
+            if (!jugadorRemoto.getConseguidasSuperior()[i]) {
+                this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 2);
+                ((CeldaDePanel) this.panelPuntosSuperior.getCelda(i, 2)).setEstaEnPrevioPuntos(true);
+            }
+        }
+
+        //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
+        for (int i = 0; i < jugadorRemoto.getConseguidasInferior().length; i++) {
+            if (!jugadorRemoto.getConseguidasInferior()[i]) {
+                this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 2);
+                ((CeldaDePanel) this.panelPuntosInferior.getCelda(i, 2)).setEstaEnPrevioPuntos(true);
+            }
+        }
+    }
+    
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -258,7 +281,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 dados[i].setClickable(true);
             }
-            actualizarPuntosPreviosLocal(partidaLocal.getPuntosSuperiorPrevios(), partidaLocal.getPuntosInferiorPrevios());
+            actualizarPuntosPreviosJugadorLocal(partidaLocal.getPuntosSuperiorPreviosJugadorLocal(), partidaLocal.getPuntosInferiorPreviosJugadorLocal());
             this.jbMezclar.setEnabled(true);
             
         }).start();
@@ -325,5 +348,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     public void setDados(Dado[] dados) {
         this.dados = dados;
     }
+
+    
 
 }

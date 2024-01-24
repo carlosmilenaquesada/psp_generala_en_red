@@ -28,7 +28,7 @@ public class RecepcionDatos {
                 int[][] puntosPrevios = (int[][]) this.objetoDato.getValor();                
                 int[] puntosInferiorPrevios = puntosPrevios[0];
                 int[] puntosSuperiorPrevios = puntosPrevios[1];
-                Main.getPrincipalJFrame().actualizarPuntosPreviosRemoto(puntosInferiorPrevios, puntosSuperiorPrevios);
+                Main.getPrincipalJFrame().actualizarPuntosPreviosJugadorRemoto(puntosInferiorPrevios, puntosSuperiorPrevios);
                 break;
             case JUGADOR:
                 Jugador jugador = (Jugador) this.objetoDato.getValor();
