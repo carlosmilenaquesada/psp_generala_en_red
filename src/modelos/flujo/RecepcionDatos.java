@@ -1,24 +1,38 @@
 package modelos.flujo;
 
+import controladores.Rectangles;
+import controladores.Rectangles.RectanglesDados;
+import java.awt.Rectangle;
+import modelos.datos.DadosPartida;
+import modelos.gui.Dado.Valor;
+import vistas.Main;
 
 public class RecepcionDatos {
-
-    private ObjetoDato objetoDato;
-
-    public RecepcionDatos() {
-        this.objetoDato = null;
-    }
-
-    public void gestionarDatosRecibidos() {
-        String clave = this.objetoDato.getClave();
+    public static void gestionarDatos(ObjetoDato objetoDato) {
+        System.out.println(objetoDato);
+        String clave = objetoDato.getClave();
         switch (clave) {
             case ObjetoDato.DATOS_PARTIDA:
-                DatosPartida datosPartida = (DatosPartida) this.objetoDato.getValor();
+                SerializacionPartida serializacionPartida = (SerializacionPartida) objetoDato.getValor();
+                //DADOS
+                SerializacionPartida.DadosSerializados dadosSerializados = serializacionPartida.getDadosSerializados();
                 
+                DadosPartida dadosPartida = Main.getPrincipalJFrame().getDadosPartida();
+                for (int i = 0; i < dadosPartida.getDados().size(); i++) {
+                    System.out.println(RectanglesDados.values()[dadosSerializados.getIndexRectanglesEnumDados().get(i)]);
+                    
+                    dadosPartida.getDados().get(i).getjLabel().setBounds(Rectangles.rectanglesDados.get(RectanglesDados.values()[dadosSerializados.getIndexRectanglesEnumDados().get(i)]));
+                    
+                    dadosPartida.getDados().get(i).setValor(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]);NO VA ESTA LÍNEA
+                    
+
+                }
+                Main.getPrincipalJFrame().setDadosPartida(dadosPartida);
+
                 break;
             case ObjetoDato.MENSAJE_CHAT:
-                MensajeChat mensajeChat = (MensajeChat) this.objetoDato.getValor();
-               
+                MensajeChat mensajeChat = (MensajeChat) objetoDato.getValor();
+
                 break;
 
             default:
@@ -27,13 +41,4 @@ public class RecepcionDatos {
 
     }
 
-    public ObjetoDato getObjetoDato() {
-        return objetoDato;
-    }
-
-    public void setObjetoDato(ObjetoDato objetoDato) {
-        this.objetoDato = objetoDato;
-    }
-    
-    
 }

@@ -15,7 +15,7 @@ import modelos.gui.Panel;
 import modelos.gui.PanelPuntos;
 import modelos.datos.PartidaLocal;
 import modelos.datos.PuntosPrevios;
-import modelos.flujo.DatosPartida;
+import modelos.flujo.SerializacionPartida;
 import modelos.flujo.ObjetoDato;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
@@ -36,11 +36,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         initComponents();
 
         initConfiguracion();
-        
+
     }
 
     private void initConfiguracion() {
-        
+
         dadosPartida = new DadosPartida();
         dados = new ArrayList<>() {
             {
@@ -291,7 +291,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             }
             actualizarPuntosPreviosJugadorLocal(partidaLocal.getPuntosPreviosJugadorLocal());
             this.jbMezclar.setEnabled(true);
-            conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new DatosPartida());
+            ArrayList<Integer> indexRectanglesEnumDados = new ArrayList<>();
+            ArrayList<Integer> indexValorEnumDados = new ArrayList<>();
+
+            for (int i = 0; i < dadosPartida.getDados().size(); i++) {
+                indexRectanglesEnumDados.add(dadosPartida.getDados().get(i).getPosicion().ordinal());
+                indexValorEnumDados.add(dadosPartida.getDados().get(i).getValor().ordinal());
+            }
+            conexion.ConexionCliente.objetoDato = new ObjetoDato(
+                    ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(
+                            new SerializacionPartida.DadosSerializados(indexRectanglesEnumDados, indexValorEnumDados)
+                    ));
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 

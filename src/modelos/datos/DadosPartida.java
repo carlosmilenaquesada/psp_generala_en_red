@@ -5,13 +5,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import modelos.gui.Dado;
 
-public class DadosPartida  implements Serializable{
+public class DadosPartida{
 
     private ArrayList<Dado> dados;
     private ArrayList<Boolean> reservaOcupadas;
     private ArrayList<Boolean> tapeteOcupadas;
 
+    
+
     public DadosPartida() {
+
         this.reservaOcupadas = rellenarOcupadas(false);
         this.tapeteOcupadas = rellenarOcupadas(true);
     }

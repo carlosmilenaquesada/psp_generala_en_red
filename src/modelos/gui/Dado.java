@@ -6,6 +6,7 @@ import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 import modelos.datos.DadosPartida;
 
 public class Dado{

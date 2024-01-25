@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.flujo.ObjetoDato;
+import modelos.flujo.RecepcionDatos;
 
 public class ConexionCliente {
 
@@ -56,9 +57,11 @@ public class ConexionCliente {
                         // Recibir objeto del servidor
                         ObjetoDato objetoRecibido;
                         try {
+                            System.out.println("recepcion objeto");
                             objetoRecibido = (ObjetoDato) in.readObject();
                             // Realizar acciones con el objeto recibido
                             System.out.println("Objeto recibido del servidor: " + objetoRecibido);
+                            RecepcionDatos.gestionarDatos(objetoRecibido);
                         } catch (Exception ex) {
                             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
                         }
