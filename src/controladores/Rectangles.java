@@ -1,9 +1,10 @@
 package controladores;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Rectangles {
+public class Rectangles  implements Serializable{
 
     public enum RectanglesDados {
         PRIMERA_RES, SEGUNDA_RES, TERCERA_RES, CUARTA_RES, QUINTA_RES,

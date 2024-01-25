@@ -1,10 +1,11 @@
 package modelos.datos;
 
 import controladores.Rectangles;
+import java.io.Serializable;
 import java.util.ArrayList;
 import modelos.gui.Dado;
 
-public class DadosPartida {
+public class DadosPartida  implements Serializable{
 
     private ArrayList<Dado> dados;
     private ArrayList<Boolean> reservaOcupadas;

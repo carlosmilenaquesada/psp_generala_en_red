@@ -1,8 +1,9 @@
 package modelos.datos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PuntosPrevios {
+public class PuntosPrevios  implements Serializable{
 
     private ArrayList<Integer> puntosSuperiorPrevios;
     private ArrayList<Integer> puntosInferiorPrevios;

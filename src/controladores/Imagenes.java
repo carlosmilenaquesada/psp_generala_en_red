@@ -1,12 +1,13 @@
 package controladores;
 
 import java.awt.Image;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 import modelos.gui.Dado.Valor;
 
-public class Imagenes {
+public class Imagenes{
 
     public final static ArrayList<Image> imagenesRepositorio = crearRepositorioImagenes();
 

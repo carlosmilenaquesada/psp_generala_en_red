@@ -1,6 +1,5 @@
 package vistas;
 
-import static controladores.ClavesEnvio.DADOS_PARTIDA;
 import controladores.Imagenes;
 import controladores.Rectangles.*;
 import static controladores.Rectangles.rectanglesElementos;
@@ -16,6 +15,7 @@ import modelos.gui.Panel;
 import modelos.gui.PanelPuntos;
 import modelos.datos.PartidaLocal;
 import modelos.datos.PuntosPrevios;
+import modelos.flujo.DatosPartida;
 import modelos.flujo.ObjetoDato;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
@@ -291,7 +291,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             }
             actualizarPuntosPreviosJugadorLocal(partidaLocal.getPuntosPreviosJugadorLocal());
             this.jbMezclar.setEnabled(true);
-            conexion.ConexionCliente.objetoDato = new ObjetoDato(DADOS_PARTIDA, "soy un serializable");
+            conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new DatosPartida());
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 

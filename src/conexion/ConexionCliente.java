@@ -58,7 +58,7 @@ public class ConexionCliente {
                         try {
                             objetoRecibido = (ObjetoDato) in.readObject();
                             // Realizar acciones con el objeto recibido
-                            System.out.println("Mensaje recibido del servidor: " + objetoRecibido);
+                            System.out.println("Objeto recibido del servidor: " + objetoRecibido);
                         } catch (Exception ex) {
                             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
                         }

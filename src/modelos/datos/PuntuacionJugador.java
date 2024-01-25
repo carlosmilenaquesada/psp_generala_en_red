@@ -1,8 +1,9 @@
 package modelos.datos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PuntuacionJugador {
+public class PuntuacionJugador  implements Serializable{
 
     private ArrayList<Boolean> conseguidasSuperior;
     private ArrayList<Boolean> conseguidasInferior;

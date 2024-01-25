@@ -2,7 +2,10 @@ package modelos.flujo;
 
 import java.io.Serializable;
 
-public class ObjetoDato implements Serializable{
+public class ObjetoDato implements Serializable {
+
+    public static final String DATOS_PARTIDA = "controladores.ClavesEnvio.DADOS_PARTIDA";
+    public static final String MENSAJE_CHAT = "controladores.ClavesEnvio.PUNTOS_PREVIOS";
 
     private String clave;
     private Object valor;
@@ -33,6 +36,4 @@ public class ObjetoDato implements Serializable{
         return "ObjetoDato{" + "clave=" + clave + ", valor=" + valor + '}';
     }
 
-    
-    
 }

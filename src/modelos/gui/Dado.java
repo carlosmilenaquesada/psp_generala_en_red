@@ -8,7 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import modelos.datos.DadosPartida;
 
-public class Dado {
+public class Dado{
 
     public enum Valor {
         VACIO, UNO, DOS, TRES, CUATRO, CINCO, SEIS, INTERROGACION;

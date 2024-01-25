@@ -1,8 +1,9 @@
 package modelos.datos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PartidaLocal {
+public class PartidaLocal  implements Serializable{
 
     private Jugador jugadorLocal;
     private Jugador jugadorRemoto;
