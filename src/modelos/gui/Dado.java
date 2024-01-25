@@ -1,4 +1,4 @@
-package modelos;
+package modelos.gui;
 
 import javax.swing.*;
 import static controladores.Imagenes.imagenesDado;
@@ -6,8 +6,7 @@ import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import vistas.PrincipalJFrame;
+import modelos.datos.DadosPartida;
 
 public class Dado {
 
@@ -19,29 +18,20 @@ public class Dado {
         EN_TAPETE, EN_RESERVA;
     }
 
-    private static ArrayList<Boolean> reservaOcupadas = rellenarOcupadas(false);
-    private static ArrayList<Boolean> tapeteOcupadas = rellenarOcupadas(true);
-
-    private static ArrayList<Boolean> rellenarOcupadas(boolean valorInicial) {
-        ArrayList<Boolean> arrayOcupadas = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            arrayOcupadas.add(valorInicial);
-        }
-        return arrayOcupadas;
-    }
-
     private Valor valor;
     private Estado estado;
     private JLabel jLabel;
     private boolean clickable;
     private RectanglesDados posicion;
+    private DadosPartida dadosPartida;
 
-    public Dado(JLabel jLabel, RectanglesDados posicion) {
-        this.jLabel = jLabel;        
+    public Dado(JLabel jLabel, RectanglesDados posicion, DadosPartida dadosPartida) {
+        this.jLabel = jLabel;
+        this.posicion = posicion;
+        this.dadosPartida = dadosPartida;
+        this.jLabel.setBounds(Rectangles.rectanglesDados.get(this.posicion));
         this.valor = Valor.SEIS;
         this.estado = Estado.EN_TAPETE;
-        this.posicion = posicion;
-        this.jLabel.setBounds(Rectangles.rectanglesDados.get(this.posicion));
         this.jLabel.setIcon(imagenesDado.get(this.valor));
         this.clickable = true;
         this.jLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -51,16 +41,16 @@ public class Dado {
 
                     if (getEstado().equals(Estado.EN_TAPETE)) {
                         setEstado(Estado.EN_RESERVA);
-                        desocuparPosicionTapete(getPosicion());
-                        setPosicion(primeraPosicionLibreReserva());
-                        ocuparPosicionReserva(getPosicion());
+                        getDadosPartida().desocuparPosicionTapete(getPosicion());
+                        setPosicion(getDadosPartida().primeraPosicionLibreReserva());
+                        getDadosPartida().ocuparPosicionReserva(getPosicion());
                         cambiarPosicion(Rectangles.rectanglesDados.get(getPosicion()));
 
                     } else {
                         setEstado(Estado.EN_TAPETE);
-                        desocuparPosicionReserva(getPosicion());
-                        setPosicion(primeraPosionLibreTapete());
-                        ocuparPosicionTapete(getPosicion());
+                        getDadosPartida().desocuparPosicionReserva(getPosicion());
+                        setPosicion(getDadosPartida().primeraPosionLibreTapete());
+                        getDadosPartida().ocuparPosicionTapete(getPosicion());
                         cambiarPosicion(Rectangles.rectanglesDados.get(getPosicion()));
                     }
 
@@ -68,34 +58,14 @@ public class Dado {
             }
         });
     }
-    
-    
-    public RectanglesDados primeraPosicionLibreReserva() {
-        return RectanglesDados.values()[reservaOcupadas.indexOf(false)];
+
+    public DadosPartida getDadosPartida() {
+        return dadosPartida;
     }
 
-    public void ocuparPosicionReserva(RectanglesDados posicion) {
-        reservaOcupadas.set(posicion.ordinal(), true);
+    public void setDadosPartida(DadosPartida dadosPartida) {
+        this.dadosPartida = dadosPartida;
     }
-
-    public void desocuparPosicionReserva(RectanglesDados posicion) {
-        reservaOcupadas.set(posicion.ordinal(), false);
-    }
-
-    public RectanglesDados primeraPosionLibreTapete() {
-        return RectanglesDados.values()[tapeteOcupadas.indexOf(false) + 5];
-    }
-
-    public void ocuparPosicionTapete(RectanglesDados posicion) {
-        tapeteOcupadas.set(posicion.ordinal() - 5, true);
-    }
-
-    public void desocuparPosicionTapete(RectanglesDados posicion) {
-        tapeteOcupadas.set(posicion.ordinal() - 5, false);
-    }
-    
-    
-    
 
     public Valor getValor() {
         return valor;

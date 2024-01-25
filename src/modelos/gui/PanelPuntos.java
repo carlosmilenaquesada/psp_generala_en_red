@@ -1,9 +1,11 @@
-package modelos;
+package modelos.gui;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import javax.swing.*;
+import modelos.datos.Jugador;
 import vistas.Main;
 import vistas.PrincipalJFrame;
 
@@ -35,11 +37,11 @@ public class PanelPuntos extends Panel {
         this.matrizCeldas = matriz;
     }
 
-    public void procesarPuntuacion(boolean[] coleccionConseguidas) {
-        for (int i = 0; i < coleccionConseguidas.length; i++) {
+    public void procesarPuntuacion(ArrayList<Boolean> coleccionConseguidas) {
+        for (int i = 0; i < coleccionConseguidas.size(); i++) {
             ((CeldaDePanel) this.getCelda(i, 1)).setEstaEnSeleccion(false);
             ((CeldaDePanel) this.getCelda(i, 1)).setEstaEnPrevioPuntos(false);
-            if (coleccionConseguidas[i] == false) {
+            if (coleccionConseguidas.get(i).equals(false)) {
                 this.getCelda(i, 1).setText("");
             }
         }

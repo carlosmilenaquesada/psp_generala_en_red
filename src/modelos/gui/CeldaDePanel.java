@@ -1,4 +1,4 @@
-package modelos;
+package modelos.gui;
 
 import controladores.Colores;
 
@@ -6,6 +6,7 @@ import java.awt.Color;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import modelos.datos.Jugador;
 import vistas.Main;
 
 public class CeldaDePanel extends Celda {
@@ -22,17 +23,17 @@ public class CeldaDePanel extends Celda {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (getCelYPos() == 1) {
-                    if (((PanelPuntos)getParent()).getId().equals("superior") && !getJugadorLocal().getConseguidasSuperior()[getCelXPos()]) {
-                        getJugadorLocal().setConseguidaSuperior(getCelXPos(), true);
-                        getJugadorLocal().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
+                    if (((PanelPuntos)getParent()).getId().equals("superior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior().get(getCelXPos())) {
+                        getJugadorLocal().getPuntuacionJugador().setConseguidaSuperior(getCelXPos(), true);
+                        getJugadorLocal().getPuntuacionJugador().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
                     } else {
-                        if (((PanelPuntos)getParent()).getId().equals("inferior") && !getJugadorLocal().getConseguidasInferior()[getCelXPos()]) {
-                            getJugadorLocal().setConseguidaInferior(getCelXPos(), true);
-                            getJugadorLocal().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
+                        if (((PanelPuntos)getParent()).getId().equals("inferior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasInferior().get(getCelXPos())) {
+                            getJugadorLocal().getPuntuacionJugador().setConseguidaInferior(getCelXPos(), true);
+                            getJugadorLocal().getPuntuacionJugador().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
                         }
                     }
-                    Main.getPrincipalJFrame().getPanelPuntosSuperior().procesarPuntuacion(getJugadorLocal().getConseguidasSuperior());
-                    Main.getPrincipalJFrame().getPanelPuntosInferior().procesarPuntuacion(getJugadorLocal().getConseguidasInferior());
+                    Main.getPrincipalJFrame().getPanelPuntosSuperior().procesarPuntuacion(getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior());
+                    Main.getPrincipalJFrame().getPanelPuntosInferior().procesarPuntuacion(getJugadorLocal().getPuntuacionJugador().getConseguidasInferior());
                 }
             }
         });

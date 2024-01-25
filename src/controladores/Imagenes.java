@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
-import modelos.Dado.Valor;
+import modelos.gui.Dado.Valor;
 
 public class Imagenes {
 

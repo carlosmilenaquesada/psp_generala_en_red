@@ -1,4 +1,4 @@
-package modelos;
+package modelos.gui;
 
 import controladores.Colores;
 import java.awt.Rectangle;

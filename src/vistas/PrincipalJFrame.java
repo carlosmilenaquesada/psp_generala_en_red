@@ -5,28 +5,30 @@ import controladores.Rectangles.*;
 import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
 import java.awt.Image;
-import modelos.CeldaDePanel;
-import modelos.Dado;
-import modelos.Dado.Valor;
-import modelos.Jugador;
-import modelos.Panel;
-
-import modelos.PanelPuntos;
-import modelos.PartidaLocal;
-import modelos.conexion.EmisionDatos;
+import java.util.ArrayList;
+import modelos.datos.DadosPartida;
+import modelos.gui.CeldaDePanel;
+import modelos.gui.Dado;
+import modelos.gui.Dado.Valor;
+import modelos.datos.Jugador;
+import modelos.gui.Panel;
+import modelos.gui.PanelPuntos;
+import modelos.datos.PartidaLocal;
+import modelos.datos.PuntosPrevios;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
-    
     private Jugador jugadorLocal;
     private Jugador jugadorRemoto;
-    private Dado[] dados = new Dado[5];
+    private ArrayList<Dado> dados;
     private PanelPuntos panelPuntosSuperior;
     private PanelPuntos panelPuntosInferior;
 
     private Panel panelBonus;
 
     private PartidaLocal partidaLocal;
+
+    private DadosPartida dadosPartida;
 
     public PrincipalJFrame() {
         initComponents();
@@ -35,12 +37,18 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void initConfiguracion() {
+        dadosPartida = new DadosPartida();
+        dados = new ArrayList<>() {
+            {
+                add(new Dado(jlDadoCero, RectanglesDados.PRIMERA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoUno, RectanglesDados.SEGUNDA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoDos, RectanglesDados.TERCERA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoTres, RectanglesDados.CUARTA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoCuatro, RectanglesDados.QUINTA_TAP, getDadosPartida()));
 
-        dados[0] = new Dado(jlDadoCero, RectanglesDados.PRIMERA_TAP);
-        dados[1] = new Dado(jlDadoUno, RectanglesDados.SEGUNDA_TAP);
-        dados[2] = new Dado(jlDadoDos, RectanglesDados.TERCERA_TAP);
-        dados[3] = new Dado(jlDadoTres, RectanglesDados.CUARTA_TAP);
-        dados[4] = new Dado(jlDadoCuatro, RectanglesDados.QUINTA_TAP);
+            }
+        };
+        dadosPartida.setDados(dados);
 
         panelPuntosSuperior = new PanelPuntos(
                 Textos.categoriasPuntosSuperior,
@@ -70,50 +78,47 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jugadorRemoto = new Jugador("JUGADOR 2");
         jlNombreJugadorLocal.setText(jugadorLocal.getNombre());
         jlNombreJugadorRemoto.setText(jugadorRemoto.getNombre());
-        partidaLocal = new PartidaLocal(jugadorLocal, jugadorRemoto, dados);
-        
+        partidaLocal = new PartidaLocal(jugadorLocal, jugadorRemoto, dadosPartida);
+
     }
 
-    public void actualizarPuntosPreviosJugadorLocal(int[] puntosSuperiorPrevios, int[] puntosInferiorPrevios) {
+    public void actualizarPuntosPreviosJugadorLocal(PuntosPrevios puntosPrevios) {
         //recorre las categorias de la tabla superior, y a las que no tienen
         //puntuación, les pone pre-puntuación
-        for (int i = 0; i < jugadorLocal.getConseguidasSuperior().length; i++) {
-            if (!jugadorLocal.getConseguidasSuperior()[i]) {
-                this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 1);
+        for (int i = 0; i < jugadorLocal.getPuntuacionJugador().getConseguidasSuperior().size(); i++) {
+            if (!jugadorLocal.getPuntuacionJugador().getConseguidasSuperior().get(i)) {
+                this.panelPuntosSuperior.setValorEnMatriz(puntosPrevios.getPuntosSuperiorPrevios().get(i), i, 1);
                 ((CeldaDePanel) this.panelPuntosSuperior.getCelda(i, 1)).setEstaEnPrevioPuntos(true);
             }
         }
 
         //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
-        for (int i = 0; i < jugadorLocal.getConseguidasInferior().length; i++) {
-            if (!jugadorLocal.getConseguidasInferior()[i]) {
-                this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 1);
+        for (int i = 0; i < jugadorLocal.getPuntuacionJugador().getConseguidasInferior().size(); i++) {
+            if (!jugadorLocal.getPuntuacionJugador().getConseguidasInferior().get(i)) {
+                this.panelPuntosInferior.setValorEnMatriz(puntosPrevios.getPuntosInferiorPrevios().get(i), i, 1);
                 ((CeldaDePanel) this.panelPuntosInferior.getCelda(i, 1)).setEstaEnPrevioPuntos(true);
             }
         }
     }
-    
-    public void actualizarPuntosPreviosJugadorRemoto(int[] puntosInferiorPrevios, int[] puntosSuperiorPrevios) {
+
+    public void actualizarPuntosPreviosJugadorRemoto(PuntosPrevios puntosPrevios) {
         //recorre las categorias de la tabla superior, y a las que no tienen
         //puntuación, les pone pre-puntuación
-        for (int i = 0; i < jugadorRemoto.getConseguidasSuperior().length; i++) {
-            if (!jugadorRemoto.getConseguidasSuperior()[i]) {
-                this.panelPuntosSuperior.setValorEnMatriz(puntosSuperiorPrevios[i], i, 2);
+        for (int i = 0; i < jugadorRemoto.getPuntuacionJugador().getConseguidasSuperior().size(); i++) {
+            if (!jugadorRemoto.getPuntuacionJugador().getConseguidasSuperior().get(i)) {
+                this.panelPuntosSuperior.setValorEnMatriz(puntosPrevios.getPuntosSuperiorPrevios().get(i), i, 2);
                 ((CeldaDePanel) this.panelPuntosSuperior.getCelda(i, 2)).setEstaEnPrevioPuntos(true);
             }
         }
 
         //recorre las categorias de la tabla inferior, y a las que no tienen puntuación, les pone pre-puntuación
-        for (int i = 0; i < jugadorRemoto.getConseguidasInferior().length; i++) {
-            if (!jugadorRemoto.getConseguidasInferior()[i]) {
-                this.panelPuntosInferior.setValorEnMatriz(puntosInferiorPrevios[i], i, 2);
+        for (int i = 0; i < jugadorRemoto.getPuntuacionJugador().getConseguidasInferior().size(); i++) {
+            if (!jugadorRemoto.getPuntuacionJugador().getConseguidasInferior().get(i)) {
+                this.panelPuntosInferior.setValorEnMatriz(puntosPrevios.getPuntosInferiorPrevios().get(i), i, 2);
                 ((CeldaDePanel) this.panelPuntosInferior.getCelda(i, 2)).setEstaEnPrevioPuntos(true);
             }
         }
     }
-    
-    
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -260,13 +265,12 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbMezclarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMezclarActionPerformed
-        
-        
+
         this.jbMezclar.setEnabled(false);
-        for (int i = 0; i < dados.length; i++) {
-            dados[i].setClickable(false);
-            if (dados[i].getEstado().equals(Dado.Estado.EN_TAPETE)) {
-                dados[i].getjLabel().setIcon(Imagenes.imagenesDado.get(Valor.INTERROGACION));
+        for (int i = 0; i < dadosPartida.getDados().size(); i++) {
+            dadosPartida.getDados().get(i).setClickable(false);
+            if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
+                dadosPartida.getDados().get(i).getjLabel().setIcon(Imagenes.imagenesDado.get(Valor.INTERROGACION));
             }
         }
         new Thread(() -> {
@@ -274,22 +278,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
             }
-            for (int i = 0; i < dados.length; i++) {
-                if (dados[i].getEstado().equals(Dado.Estado.EN_TAPETE)) {
-                    dados[i].setValor(Valor.values()[(int) (Math.random() * 6) + 1]);
-                    dados[i].getjLabel().setIcon(Imagenes.imagenesDado.get(dados[i].getValor()));
+            for (int i = 0; i < dadosPartida.getDados().size(); i++) {
+                if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
+                    dadosPartida.getDados().get(i).setValor(Valor.values()[(int) (Math.random() * 6) + 1]);
+                    dadosPartida.getDados().get(i).getjLabel().setIcon(Imagenes.imagenesDado.get(dadosPartida.getDados().get(i).getValor()));
                 }
-                dados[i].setClickable(true);
+                dadosPartida.getDados().get(i).setClickable(true);
             }
-            actualizarPuntosPreviosJugadorLocal(partidaLocal.getPuntosSuperiorPreviosJugadorLocal(), partidaLocal.getPuntosInferiorPreviosJugadorLocal());
+            actualizarPuntosPreviosJugadorLocal(partidaLocal.getPuntosPreviosJugadorLocal());
             this.jbMezclar.setEnabled(true);
-            
+
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 
-   
-    
-   /*
+    /*
     try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -306,7 +308,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }      
-    */
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpChat;
@@ -328,11 +330,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jpTablero;
     // End of variables declaration//GEN-END:variables
 
-    public Dado[] getDados() {
-        return dados;
-    }
-
-
     public PanelPuntos getPanelPuntosSuperior() {
         return panelPuntosSuperior;
     }
@@ -345,10 +342,12 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         return jugadorLocal;
     }
 
-    public void setDados(Dado[] dados) {
-        this.dados = dados;
+    public DadosPartida getDadosPartida() {
+        return dadosPartida;
     }
 
-    
+    public void setDadosPartida(DadosPartida dadosPartida) {
+        this.dadosPartida = dadosPartida;
+    }
 
 }

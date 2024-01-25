@@ -1,8 +1,10 @@
 package modelos.conexion;
 
+import modelos.datos.DadosPartida;
 import static controladores.ClavesEnvio.*;
-import modelos.Dado;
-import modelos.Jugador;
+import modelos.datos.Jugador;
+import modelos.datos.PuntosPrevios;
+import modelos.datos.PuntuacionJugador;
 import vistas.Main;
 
 public class RecepcionDatos {
@@ -20,19 +22,21 @@ public class RecepcionDatos {
     public void gestionarDatosRecibidos() {
         String clave = this.objetoDato.getClave();
         switch (clave) {
-            case DADOS:
-                Dado[] dados = (Dado[]) this.objetoDato.getValor();
-                Main.getPrincipalJFrame().setDados(dados);
+            case DADOS_PARTIDA:
+                DadosPartida dadosPartida = (DadosPartida) this.objetoDato.getValor();
+                Main.getPrincipalJFrame().setDadosPartida(dadosPartida);
                 break;
-            case PREVIA_PUNTOS:
-                int[][] puntosPrevios = (int[][]) this.objetoDato.getValor();                
-                int[] puntosInferiorPrevios = puntosPrevios[0];
-                int[] puntosSuperiorPrevios = puntosPrevios[1];
-                Main.getPrincipalJFrame().actualizarPuntosPreviosJugadorRemoto(puntosInferiorPrevios, puntosSuperiorPrevios);
+            case PUNTOS_PREVIOS:
+                PuntosPrevios puntosPrevios = (PuntosPrevios) this.objetoDato.getValor();
+                Main.getPrincipalJFrame().actualizarPuntosPreviosJugadorRemoto(puntosPrevios);
+                break;
+            case PUNTUACION_JUGADOR:
+                PuntuacionJugador puntuacionJugador = (PuntuacionJugador) this.objetoDato.getValor();
+
                 break;
             case JUGADOR:
                 Jugador jugador = (Jugador) this.objetoDato.getValor();
-                
+
                 break;
             default:
                 throw new AssertionError();
