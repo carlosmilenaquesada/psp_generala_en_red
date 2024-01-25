@@ -6,11 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelos.flujo.EmisionDatos;
+import modelos.flujo.ObjetoDato;
 
 public class ConexionCliente {
 
     private static Socket socketCliente = null;
+    public static ObjetoDato objetoDato;
 
     public static void main(String[] args) {
         String hostServidorRemoto = "localhost";
@@ -24,22 +25,47 @@ public class ConexionCliente {
             ObjectOutputStream out = new ObjectOutputStream(socketCliente.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socketCliente.getInputStream());
 
-            // Enviar un mensaje al servidor
-            String mensaje = "Hola, soy el cliente.";
-
             // Código del cliente
-            while (true) {
-                // Enviar objeto al servidor
-                out.writeObject(mensaje);
-                out.flush();
-
-                // Recibir objeto del servidor
-                String objetoRecibido = (String) in.readObject();
-
-                // Realizar acciones con el objeto recibido
-                System.out.println("Mensaje recibido del servidor: " + objetoRecibido);
-                Thread.sleep(1000);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        if (ConexionCliente.objetoDato != null) {
+                            try {
+                                // Enviar objeto al servidor                                
+                                out.writeObject(ConexionCliente.objetoDato);
+                                out.flush();
+                                ConexionCliente.objetoDato = null;
+                            } catch (Exception ex) {
+                                Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        System.out.println("esperando datos");
+                    }
+                }
+            }).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        // Recibir objeto del servidor
+                        ObjetoDato objetoRecibido;
+                        try {
+                            objetoRecibido = (ObjetoDato) in.readObject();
+                            // Realizar acciones con el objeto recibido
+                            System.out.println("Mensaje recibido del servidor: " + objetoRecibido);
+                        } catch (Exception ex) {
+                            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
             }
+            ).start();
 
         } catch (Exception ex) {
             ex.printStackTrace();

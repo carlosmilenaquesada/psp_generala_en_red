@@ -1,6 +1,8 @@
 package modelos.flujo;
 
-public class ObjetoDato {
+import java.io.Serializable;
+
+public class ObjetoDato implements Serializable{
 
     private String clave;
     private Object valor;
