@@ -1,4 +1,4 @@
-package modelos.conexion;
+package modelos.flujo;
 
 public class ObjetoDato {
 
@@ -24,6 +24,11 @@ public class ObjetoDato {
 
     public void setValor(Object valor) {
         this.valor = valor;
+    }
+
+    @Override
+    public String toString() {
+        return "ObjetoDato{" + "clave=" + clave + ", valor=" + valor + '}';
     }
 
     

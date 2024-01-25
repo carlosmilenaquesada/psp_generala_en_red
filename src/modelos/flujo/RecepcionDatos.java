@@ -1,7 +1,12 @@
-package modelos.conexion;
+package modelos.flujo;
 
+import conexion.ConexionCliente;
 import modelos.datos.DadosPartida;
 import static controladores.ClavesEnvio.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelos.datos.Jugador;
 import modelos.datos.PuntosPrevios;
 import modelos.datos.PuntuacionJugador;
@@ -15,9 +20,13 @@ public class RecepcionDatos {
         this.objetoDato = null;
     }
 
-    public void recibirDatos(ObjetoDato objetoDato) {
-        this.objetoDato = objetoDato;
-    }
+    /*public void recibirDatos() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(ConexionCliente.getSocketCliente().getInputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(RecepcionDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 
     public void gestionarDatosRecibidos() {
         String clave = this.objetoDato.getClave();
