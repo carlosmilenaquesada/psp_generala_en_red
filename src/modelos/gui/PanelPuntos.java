@@ -37,15 +37,7 @@ public class PanelPuntos extends Panel {
         this.matrizCeldas = matriz;
     }
 
-    public void procesarPuntuacion(ArrayList<Boolean> coleccionConseguidas) {
-        for (int i = 0; i < coleccionConseguidas.size(); i++) {
-            ((CeldaDePanel) this.getCelda(i, 1)).setEstaEnSeleccion(false);
-            ((CeldaDePanel) this.getCelda(i, 1)).setEstaEnPrevioPuntos(false);
-            if (coleccionConseguidas.get(i).equals(false)) {
-                this.getCelda(i, 1).setText("");
-            }
-        }
-    }
+    
 
     public Jugador getJugadorLocal() {
         return Main.getPrincipalJFrame().getJugadorLocal();

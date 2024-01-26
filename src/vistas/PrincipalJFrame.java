@@ -298,12 +298,34 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 indexRectanglesEnumDados.add(dadosPartida.getDados().get(i).getPosicion().ordinal());
                 indexValorEnumDados.add(dadosPartida.getDados().get(i).getValor().ordinal());
             }
+
             conexion.ConexionCliente.objetoDato = new ObjetoDato(
                     ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(
-                            new SerializacionPartida.DadosSerializados(indexRectanglesEnumDados, indexValorEnumDados)
+                            new SerializacionPartida.DadosSerializados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
+                            partidaLocal.getPuntosPreviosJugadorLocal(), null
                     ));
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
+
+    public void limpiarColumnaDeCeldas(int indexColumna) {
+        Jugador jugador = indexColumna == 1 ? jugadorLocal : jugadorRemoto;
+        for (int i = 0; i < jugador.getPuntuacionJugador().getConseguidasSuperior().size(); i++) {
+            ((CeldaDePanel) panelPuntosSuperior.getCelda(i, indexColumna)).setEstaEnSeleccion(false);
+            ((CeldaDePanel) panelPuntosSuperior.getCelda(i, indexColumna)).setEstaEnPrevioPuntos(false);
+            if (jugador.getPuntuacionJugador().getConseguidasSuperior().get(i).equals(false)) {
+                panelPuntosSuperior.getCelda(i, indexColumna).setText("");
+            }
+        }
+        for (int i = 0; i < jugador.getPuntuacionJugador().getConseguidasInferior().size(); i++) {
+            ((CeldaDePanel) panelPuntosInferior.getCelda(i, indexColumna)).setEstaEnSeleccion(false);
+            ((CeldaDePanel) panelPuntosInferior.getCelda(i, indexColumna)).setEstaEnPrevioPuntos(false);
+            if (jugador.getPuntuacionJugador().getConseguidasInferior().get(i).equals(false)) {
+                panelPuntosInferior.getCelda(i, indexColumna).setText("");
+            }
+        }
+
+    }
+
 
     /*
     try {
@@ -354,6 +376,10 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public Jugador getJugadorLocal() {
         return jugadorLocal;
+    }
+
+    public Jugador getJugadorRemoto() {
+        return jugadorRemoto;
     }
 
     public DadosPartida getDadosPartida() {

@@ -3,7 +3,7 @@ package modelos.datos;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PuntuacionJugador  implements Serializable{
+public class PuntuacionJugador implements Serializable{
 
     private ArrayList<Boolean> conseguidasSuperior;
     private ArrayList<Boolean> conseguidasInferior;
@@ -111,6 +111,11 @@ public class PuntuacionJugador  implements Serializable{
 
     public void setBonus(int bonus) {
         this.bonus = bonus;
+    }
+
+    @Override
+    public String toString() {
+        return "PuntuacionJugador{" + "conseguidasSuperior=" + conseguidasSuperior + ", conseguidasInferior=" + conseguidasInferior + ", puntosSuperior=" + puntosSuperior + ", puntosInferior=" + puntosInferior + ", bonus=" + bonus + '}';
     }
 
 }

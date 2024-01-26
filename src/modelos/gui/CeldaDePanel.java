@@ -6,7 +6,11 @@ import java.awt.Color;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import modelos.datos.Jugador;
+import modelos.datos.PuntuacionJugador;
+import modelos.flujo.ObjetoDato;
+import modelos.flujo.SerializacionPartida;
 import vistas.Main;
 
 public class CeldaDePanel extends Celda {
@@ -18,22 +22,34 @@ public class CeldaDePanel extends Celda {
         super(celXPos, celYPos);
         this.estaEnSeleccion = false;
         this.estaEnPrevioPuntos = false;
-        
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (getCelYPos() == 1) {
-                    if (((PanelPuntos)getParent()).getId().equals("superior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior().get(getCelXPos())) {
+                    if (((PanelPuntos) getParent()).getId().equals("superior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior().get(getCelXPos())) {
                         getJugadorLocal().getPuntuacionJugador().setConseguidaSuperior(getCelXPos(), true);
                         getJugadorLocal().getPuntuacionJugador().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
+
                     } else {
-                        if (((PanelPuntos)getParent()).getId().equals("inferior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasInferior().get(getCelXPos())) {
+                        if (((PanelPuntos) getParent()).getId().equals("inferior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasInferior().get(getCelXPos())) {
                             getJugadorLocal().getPuntuacionJugador().setConseguidaInferior(getCelXPos(), true);
                             getJugadorLocal().getPuntuacionJugador().setPuntoInferior(getCelXPos(), Integer.parseInt(getText()));
                         }
                     }
-                    Main.getPrincipalJFrame().getPanelPuntosSuperior().procesarPuntuacion(getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior());
-                    Main.getPrincipalJFrame().getPanelPuntosInferior().procesarPuntuacion(getJugadorLocal().getPuntuacionJugador().getConseguidasInferior());
+
+                    conexion.ConexionCliente.objetoDato = new ObjetoDato(
+                            ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(null,
+                                    null, new PuntuacionJugador(
+                                            new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior()),
+                                            new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getConseguidasInferior()),
+                                            new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getPuntosSuperior()),
+                                            new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getPuntosInferior()),
+                                            getJugadorLocal().getPuntuacionJugador().getBonus()
+                                    )
+                            ));
+                    Main.getPrincipalJFrame().limpiarColumnaDeCeldas(1);
+
                 }
             }
         });
@@ -42,7 +58,6 @@ public class CeldaDePanel extends Celda {
     public Jugador getJugadorLocal() {
         return Main.getPrincipalJFrame().getJugadorLocal();
     }
-
 
     public void setEstaEnSeleccion(boolean b) {
         if (b) {

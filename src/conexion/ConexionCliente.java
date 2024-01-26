@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.flujo.ObjetoDato;
 import modelos.flujo.RecepcionDatos;
+import modelos.flujo.SerializacionPartida;
 
 public class ConexionCliente {
 
@@ -33,7 +34,8 @@ public class ConexionCliente {
                     while (true) {
                         if (ConexionCliente.objetoDato != null) {
                             try {
-                                // Enviar objeto al servidor                                
+                                // Enviar objeto al servidor    
+                               
                                 out.writeObject(ConexionCliente.objetoDato);
                                 out.flush();
                                 ConexionCliente.objetoDato = null;
@@ -59,7 +61,7 @@ public class ConexionCliente {
                         try {
                             System.out.println("recepcion objeto");
                             objetoRecibido = (ObjetoDato) in.readObject();
-                            // Realizar acciones con el objeto recibido
+                            
                             System.out.println("Objeto recibido del servidor: " + objetoRecibido);
                             RecepcionDatos.gestionarDatos(objetoRecibido);
                         } catch (Exception ex) {
