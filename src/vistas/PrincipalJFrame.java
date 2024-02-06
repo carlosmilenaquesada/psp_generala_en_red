@@ -6,7 +6,9 @@ import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
 import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import modelos.datos.DadosPartida;
 import modelos.gui.CeldaDePanel;
 import modelos.gui.Dado;
@@ -32,17 +34,18 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private PartidaLocal partidaLocal;
 
     private DadosPartida dadosPartida;
-    private EleccionPersonajeJDialog eleccionPersonajeJDialog;
+    private EleccionPersonajeJDialog eleccionPersonajeLocalJDialog;
 
     public PrincipalJFrame() {
-
         initComponents();
         initConfiguracion();
-
     }
 
     private void initConfiguracion() {
-        eleccionPersonajeJDialog = new EleccionPersonajeJDialog(this, true);
+        crearPerfilJugadorLocal();
+        
+        
+        
         dadosPartida = new DadosPartida();
         dados = new ArrayList<>() {
             {
@@ -80,12 +83,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
 
-        jugadorLocal = new Jugador("JUGADOR 1");
-        jugadorRemoto = new Jugador("JUGADOR 2");
-        jlNombreJugadorLocal.setText(jugadorLocal.getNombre());
-        jlNombreJugadorRemoto.setText(jugadorRemoto.getNombre());
         partidaLocal = new PartidaLocal(jugadorLocal, jugadorRemoto, dadosPartida);
 
+    }
+    
+    private void crearPerfilJugadorLocal(){
+        eleccionPersonajeLocalJDialog = new EleccionPersonajeJDialog(this, true);        
+        jugadorLocal = new Jugador(eleccionPersonajeLocalJDialog.getNombreJugador());
+        Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + eleccionPersonajeLocalJDialog.getIdPersonaSeleccionado() + ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
+        jlImagenJugadorLocal.setIcon(new ImageIcon(image));
+        jlNombreJugadorLocal.setText(jugadorLocal.getNombre());    
+    }
+    
+    private void crearPerfilJugadorVisitante(){
+        jugadorRemoto = new Jugador("JUGADOR 2");
     }
 
     public void actualizarPuntosPreviosJugadorLocal(PuntosPrevios puntosPrevios) {
@@ -135,6 +146,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jlTurno = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jlImagenJugadorLocal = new javax.swing.JLabel();
+        jlImagenJugadorRemoto = new javax.swing.JLabel();
         jlNombreJugadorLocal = new javax.swing.JLabel();
         jlNombreJugadorRemoto = new javax.swing.JLabel();
         jpTablero = new javax.swing.JPanel();
@@ -187,17 +200,27 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jpPuntos.add(jLabel1);
         jLabel1.setBounds(20, 340, 300, 30);
 
-        jlNombreJugadorLocal.setText("jLabel3");
-        jlNombreJugadorLocal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jlNombreJugadorLocal.setOpaque(true);
-        jpPuntos.add(jlNombreJugadorLocal);
-        jlNombreJugadorLocal.setBounds(170, 20, 75, 110);
+        jlImagenJugadorLocal.setToolTipText("");
+        jlImagenJugadorLocal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jpPuntos.add(jlImagenJugadorLocal);
+        jlImagenJugadorLocal.setBounds(175, 20, 66, 80);
 
-        jlNombreJugadorRemoto.setText("jLabel3");
+        jlImagenJugadorRemoto.setToolTipText("");
+        jlImagenJugadorRemoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jpPuntos.add(jlImagenJugadorRemoto);
+        jlImagenJugadorRemoto.setBounds(250, 20, 66, 80);
+
+        jlNombreJugadorLocal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlNombreJugadorLocal.setToolTipText("");
+        jlNombreJugadorLocal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jpPuntos.add(jlNombreJugadorLocal);
+        jlNombreJugadorLocal.setBounds(175, 105, 66, 20);
+
+        jlNombreJugadorRemoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jlNombreJugadorRemoto.setToolTipText("");
         jlNombreJugadorRemoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jlNombreJugadorRemoto.setOpaque(true);
         jpPuntos.add(jlNombreJugadorRemoto);
-        jlNombreJugadorRemoto.setBounds(245, 20, 75, 110);
+        jlNombreJugadorRemoto.setBounds(250, 105, 66, 20);
 
         getContentPane().add(jpPuntos);
         jpPuntos.setBounds(40, 0, 340, 600);
@@ -361,6 +384,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jlDadoDos;
     private javax.swing.JLabel jlDadoTres;
     private javax.swing.JLabel jlDadoUno;
+    private javax.swing.JLabel jlImagenJugadorLocal;
+    private javax.swing.JLabel jlImagenJugadorRemoto;
     private javax.swing.JLabel jlNombreJugadorLocal;
     private javax.swing.JLabel jlNombreJugadorRemoto;
     private javax.swing.JLabel jlTurno;

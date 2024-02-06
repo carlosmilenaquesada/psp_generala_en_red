@@ -1,21 +1,28 @@
 package vistas;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.util.ArrayList;
 import javax.swing.*;
+import jdk.dynalink.linker.support.Guards;
 import modelos.gui.CeldaPerfilPersonaje;
 
 public class EleccionPersonajeJDialog extends JDialog {
 
-    private JButton jButton1;
-    private JLabel jLabel2;
-    private JPanel jPanel1;
-    private JTextField jTextField1;
-    private JLabel jlEligePerfil;
-
+    private int idPersonaSeleccionado;
+    private String nombreJugador;
     private CeldaPerfilPersonaje[] celdaPerfilPersonajes;
 
-    private int idPersonaSeleccionado;
-    private String nombreUsuario;
+    private JLabel jlEligePerfil;
+    private JLabel jlIntroduceNombre;
+    private JTextField jtfNombreJugador;
+    private JButton jbComenzar;
 
     public EleccionPersonajeJDialog(Frame parent, boolean modal) {
         super(parent, modal);
@@ -24,63 +31,70 @@ public class EleccionPersonajeJDialog extends JDialog {
 
     private void initComponents() {
         this.idPersonaSeleccionado = -1;
-        this.nombreUsuario = "";
+        this.nombreJugador = "";
         celdaPerfilPersonajes = new CeldaPerfilPersonaje[10];
-        jPanel1 = new JPanel();
-        jPanel1.setLayout(null);
-        jlEligePerfil = new JLabel();
-        this.setVisible(true);
-        
         for (int i = 0; i < celdaPerfilPersonajes.length; i++) {
-            celdaPerfilPersonajes[i] = new CeldaPerfilPersonaje(i, new ImageIcon(getClass().getResource("/media/perfiles/" + i + ".jpg")));
-            jPanel1.add(celdaPerfilPersonajes[i]);
+            celdaPerfilPersonajes[i] = new CeldaPerfilPersonaje(new ImageIcon(getClass().getResource("/media/perfiles/" + i + ".jpg")), i, this);
+            celdaPerfilPersonajes[i].setBackground(Color.ORANGE);
+            this.add(celdaPerfilPersonajes[i]);
             if (i < 5) {
-                celdaPerfilPersonajes[i].setBounds((i * 100) + 20, 70, 80, 100);
+                celdaPerfilPersonajes[i].setBounds((i * 100) + 20, 70, 90, 110);
             } else {
-                celdaPerfilPersonajes[i].setBounds(((i - 5) * 100) + 20, 120 + 70, 80, 100);
+                celdaPerfilPersonajes[i].setBounds(((i - 5) * 100) + 20, 120 + 70, 90, 110);
             }
             celdaPerfilPersonajes[i].setVisible(true);
-
         }
-        jTextField1 = new JTextField();
-        jButton1 = new JButton();
-        jLabel2 = new JLabel();
+
+        jlEligePerfil = new JLabel("Elige tu perfil");
+        jlEligePerfil.setFont(new Font("Tahoma", Font.BOLD, 14));
+        jlEligePerfil.setForeground(Color.WHITE);
+        jlEligePerfil.setBounds(20, 20, 140, 30);
+        this.add(jlEligePerfil);
+
+        jlIntroduceNombre = new JLabel("Introduce tu nombre");
+        jlIntroduceNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
+        jlIntroduceNombre.setForeground(Color.WHITE);
+        jlIntroduceNombre.setBounds(20, 310, 150, 30);
+        this.add(jlIntroduceNombre);
+
+        jtfNombreJugador = new JTextField();
+        jtfNombreJugador.setFont(new Font("Tahoma", 0, 14));
+        jtfNombreJugador.setBounds(180, 310, 200, 30);
+        this.add(jtfNombreJugador);
+
+        jbComenzar = new JButton("Comenzar");
+        jbComenzar.setFont(new Font("Tahoma", 0, 14));
+        jbComenzar.setBounds(400, 310, 100, 30);
+        this.add(jbComenzar);
+        jbComenzar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                ArrayList<String> errores = new ArrayList<>();
+                if (getIdPersonaSeleccionado() == -1) {
+                    errores.add("Seleccione un personaje.");
+                }
+                String nombreJugadorAux = jtfNombreJugador.getText();
+                if (nombreJugadorAux.length() > 8 || nombreJugadorAux.length() < 3) {
+                    errores.add("Introduce un nombre de jugador válido (de 3 a 8 caracteres)");
+                }
+                if (!errores.isEmpty()) {
+                    JOptionPane.showMessageDialog(jbComenzar.getParent(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    setNombreJugador(nombreJugadorAux);
+                    dispose();
+                }
+            }
+        });
+        this.setResizable(false);
+        this.setSize(540, 400);
+        this.setLocation(getParent().getX() + ((getParent().getWidth() - this.getWidth()) / 2), getParent().getY() + ((getParent().getHeight() - this.getHeight()) / 2));
+        this.add(new JLabel(new ImageIcon(getClass().getResource("/media/perfiles/personajes_background.png"))));
+        this.setVisible(true);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jlEligePerfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jlEligePerfil.setText("Elige tu perfil");
-        jPanel1.add(jlEligePerfil);
-        jlEligePerfil.setBounds(20, 20, 140, 30);
-
-
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(170, 310, 210, 30);
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Comenzar");
-        jPanel1.add(jButton1);
-        jButton1.setBounds(400, 310, 100, 30);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Introduce tu nombre");
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 310, 140, 30);
-
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-        );
-
         pack();
-    }// </editor-fold>                        
+    }
 
     public int getIdPersonaSeleccionado() {
         return idPersonaSeleccionado;
@@ -88,6 +102,21 @@ public class EleccionPersonajeJDialog extends JDialog {
 
     public void setIdPersonaSeleccionado(int idPersonaSeleccionado) {
         this.idPersonaSeleccionado = idPersonaSeleccionado;
+    }
+
+    public String getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+
+    public void resetBordeImagenes() {
+        for (int i = 0; i < celdaPerfilPersonajes.length; i++) {
+            celdaPerfilPersonajes[i].setOpaque(false);
+            this.repaint();
+        }
     }
 
 }
