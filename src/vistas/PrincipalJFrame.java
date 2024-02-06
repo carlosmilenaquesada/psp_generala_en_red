@@ -6,6 +6,7 @@ import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
 import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.JDialog;
 import modelos.datos.DadosPartida;
 import modelos.gui.CeldaDePanel;
 import modelos.gui.Dado;
@@ -31,16 +32,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private PartidaLocal partidaLocal;
 
     private DadosPartida dadosPartida;
+    private EleccionPersonajeJDialog eleccionPersonajeJDialog;
 
     public PrincipalJFrame() {
-        initComponents();
 
+        initComponents();
         initConfiguracion();
 
     }
 
     private void initConfiguracion() {
-
+        eleccionPersonajeJDialog = new EleccionPersonajeJDialog(this, true);
         dadosPartida = new DadosPartida();
         dados = new ArrayList<>() {
             {
