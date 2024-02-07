@@ -1,11 +1,16 @@
-package modelos.flujo;
+package modelos.flujo.recepcion;
 
 import static controladores.Imagenes.imagenesDado;
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import modelos.datos.DadosPartida;
+import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
 import modelos.datos.PuntuacionJugador;
+import modelos.flujo.serializaciones.SerializacionMensajeChat;
+import modelos.flujo.ObjetoDato;
+import modelos.flujo.serializaciones.SerializacionDados;
+import modelos.flujo.serializaciones.SerializacionPartida;
 import modelos.gui.CeldaDePanel;
 import modelos.gui.Dado.Valor;
 import vistas.Main;
@@ -19,7 +24,7 @@ public class RecepcionDatos {
             case ObjetoDato.DATOS_PARTIDA:
                 SerializacionPartida serializacionPartida = (SerializacionPartida) objetoDato.getValor();
                 //DADOS---------------------------------------------------------
-                SerializacionPartida.DadosSerializados dadosSerializados = serializacionPartida.getDadosSerializados();
+                SerializacionDados dadosSerializados = serializacionPartida.getDadosSerializados();
                 if (dadosSerializados != null) {
 
                     DadosPartida dadosPartida = Main.getPrincipalJFrame().getDadosPartida();
@@ -35,11 +40,11 @@ public class RecepcionDatos {
                 if (puntosPrevios != null) {
                     Main.getPrincipalJFrame().actualizarPuntosPreviosJugadorRemoto(puntosPrevios);
                 }
-                //PUNTUACIÓN JUGADOR
+                //PUNTUACIÓN JUGADOR--------------------------------------------
                 PuntuacionJugador puntuacionJugador = serializacionPartida.getPuntuacionJugador();
                 if (puntuacionJugador != null) {
                     Main.getPrincipalJFrame().getJugadorRemoto().setPuntuacionJugador(puntuacionJugador);
-                    
+
                     for (int i = 0; i < puntuacionJugador.getConseguidasSuperior().size(); i++) {
                         if (puntuacionJugador.getConseguidasSuperior().get(i).equals(true)) {
                             ((CeldaDePanel) Main.getPrincipalJFrame().getPanelPuntosSuperior().getCelda(i, 2)).setText(
@@ -54,13 +59,18 @@ public class RecepcionDatos {
                             );
                         }
                     }
-
                     Main.getPrincipalJFrame().limpiarColumnaDeCeldas(2);
                 }
 
+                //PERFIL JUGADOR------------------------------------------------
+                PerfilJugador perfilJugador = serializacionPartida.getPerfilJugador();
+                if (perfilJugador != null) {
+                    Main.getPrincipalJFrame().crearPerfilJugadorRemoto(perfilJugador);
+                    
+                }
                 break;
             case ObjetoDato.MENSAJE_CHAT:
-                MensajeChat mensajeChat = (MensajeChat) objetoDato.getValor();
+                SerializacionMensajeChat mensajeChat = (SerializacionMensajeChat) objetoDato.getValor();
 
                 break;
 

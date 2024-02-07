@@ -11,6 +11,9 @@ import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
 import javax.swing.*;
 import jdk.dynalink.linker.support.Guards;
+import modelos.datos.PerfilJugador;
+import modelos.flujo.ObjetoDato;
+import modelos.flujo.serializaciones.SerializacionPartida;
 import modelos.gui.CeldaPerfilPersonaje;
 
 public class EleccionPersonajeJDialog extends JDialog {
@@ -81,6 +84,11 @@ public class EleccionPersonajeJDialog extends JDialog {
                     JOptionPane.showMessageDialog(jbComenzar.getParent(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
                 } else {
                     setNombreJugador(nombreJugadorAux);
+                    conexion.ConexionCliente.objetoDato = new ObjetoDato(
+                        ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(
+                                null, null, null, new PerfilJugador(getIdPersonaSeleccionado(), nombreJugadorAux)
+                        )
+                    );
                     dispose();
                 }
             }

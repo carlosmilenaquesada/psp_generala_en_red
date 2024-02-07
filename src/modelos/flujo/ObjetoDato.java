@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class ObjetoDato implements Serializable {
 
-    public static final String DATOS_PARTIDA = "controladores.ClavesEnvio.DADOS_PARTIDA";
-    public static final String MENSAJE_CHAT = "controladores.ClavesEnvio.PUNTOS_PREVIOS";
+    public static final String DATOS_PARTIDA = "controladores.ClavesEnvio.DATOS_PARTIDA";
+    public static final String MENSAJE_CHAT = "controladores.ClavesEnvio.MENSAJE_CHAT";
 
     private String clave;
     private Object valor;

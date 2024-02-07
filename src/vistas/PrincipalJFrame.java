@@ -17,9 +17,11 @@ import modelos.datos.Jugador;
 import modelos.gui.Panel;
 import modelos.gui.PanelPuntos;
 import modelos.datos.PartidaLocal;
+import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
-import modelos.flujo.SerializacionPartida;
+import modelos.flujo.serializaciones.SerializacionPartida;
 import modelos.flujo.ObjetoDato;
+import modelos.flujo.serializaciones.SerializacionDados;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
@@ -95,8 +97,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jlNombreJugadorLocal.setText(jugadorLocal.getNombre());    
     }
     
-    private void crearPerfilJugadorVisitante(){
-        jugadorRemoto = new Jugador("JUGADOR 2");
+    public void crearPerfilJugadorRemoto(PerfilJugador perfilJugadorRemoto){
+        jugadorRemoto = new Jugador(perfilJugadorRemoto.getNombreJugador());
+        Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + perfilJugadorRemoto.getIdImagenPerfil()+ ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
+        jlImagenJugadorRemoto.setIcon(new ImageIcon(image));
+        jlNombreJugadorRemoto.setText(jugadorRemoto.getNombre());    
     }
 
     public void actualizarPuntosPreviosJugadorLocal(PuntosPrevios puntosPrevios) {
@@ -326,8 +331,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
             conexion.ConexionCliente.objetoDato = new ObjetoDato(
                     ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(
-                            new SerializacionPartida.DadosSerializados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
-                            partidaLocal.getPuntosPreviosJugadorLocal(), null
+                            new SerializacionDados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
+                            partidaLocal.getPuntosPreviosJugadorLocal(), null, null
                     ));
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
@@ -351,25 +356,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     }
 
-
-    /*
-    try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PrincipalJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }      
-     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpChat;

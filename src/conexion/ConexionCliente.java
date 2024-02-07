@@ -7,8 +7,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.flujo.ObjetoDato;
-import modelos.flujo.RecepcionDatos;
-import modelos.flujo.SerializacionPartida;
+import modelos.flujo.recepcion.RecepcionDatos;
 
 public class ConexionCliente {
 
@@ -23,7 +22,7 @@ public class ConexionCliente {
             socketCliente = new Socket(hostServidorRemoto, puertoServidorRemoto);
             System.out.println("Conexión establecida con el servidor.");
 
-            // Streams de objetos para enviar y recibir mensajes
+            // Streams de objetos para enviar y recibir objetos
             ObjectOutputStream out = new ObjectOutputStream(socketCliente.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socketCliente.getInputStream());
 
@@ -34,8 +33,7 @@ public class ConexionCliente {
                     while (true) {
                         if (ConexionCliente.objetoDato != null) {
                             try {
-                                // Enviar objeto al servidor    
-                               
+                                // Enviar objeto al servidor 
                                 out.writeObject(ConexionCliente.objetoDato);
                                 out.flush();
                                 ConexionCliente.objetoDato = null;
@@ -61,7 +59,7 @@ public class ConexionCliente {
                         try {
                             System.out.println("recepcion objeto");
                             objetoRecibido = (ObjetoDato) in.readObject();
-                            
+
                             System.out.println("Objeto recibido del servidor: " + objetoRecibido);
                             RecepcionDatos.gestionarDatos(objetoRecibido);
                         } catch (Exception ex) {
