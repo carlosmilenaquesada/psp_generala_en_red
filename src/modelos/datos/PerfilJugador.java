@@ -11,6 +11,12 @@ public class PerfilJugador implements Serializable{
         this.nombreJugador = nombreJugador;
     }
 
+    public PerfilJugador() {
+        this.idImagenPerfil = -1;
+        this.nombreJugador = "";
+    }
+    
+
     public int getIdImagenPerfil() {
         return idImagenPerfil;
     }
@@ -25,6 +31,11 @@ public class PerfilJugador implements Serializable{
 
     public void setNombreJugador(String nombreJugador) {
         this.nombreJugador = nombreJugador;
+    }
+
+    @Override
+    public String toString() {
+        return "PerfilJugador{" + "idImagenPerfil=" + idImagenPerfil + ", nombreJugador=" + nombreJugador + '}';
     }
     
     

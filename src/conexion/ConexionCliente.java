@@ -36,6 +36,7 @@ public class ConexionCliente {
                                 // Enviar objeto al servidor 
                                 out.writeObject(ConexionCliente.objetoDato);
                                 out.flush();
+                                
                                 ConexionCliente.objetoDato = null;
                             } catch (Exception ex) {
                                 Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);

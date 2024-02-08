@@ -3,8 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/Mi%20unidad/GRADOSUPERIOR/SEGUNDO/PSP/TEMA03/TAREAS/JuegoEnRed/src/modelos/datos/Jugador.java</file>
-            <file>file:/G:/Mi%20unidad/GRADOSUPERIOR/SEGUNDO/PSP/TEMA03/TAREAS/JuegoEnRed/src/modelos/gui/PanelPuntos.java</file>
+            <file>file:/G:/Mi%20unidad/GRADOSUPERIOR/SEGUNDO/PSP/TEMA03/TAREAS/JuegoEnRed/src/conexion/ConexionCliente.java</file>
+            <file>file:/G:/Mi%20unidad/GRADOSUPERIOR/SEGUNDO/PSP/TEMA03/TAREAS/JuegoEnRed/src/modelos/flujo/recepcion/RecepcionDatos.java</file>
             <file>file:/G:/Mi%20unidad/GRADOSUPERIOR/SEGUNDO/PSP/TEMA03/TAREAS/JuegoEnRed/src/vistas/EleccionPersonajeJDialog.java</file>
             <file>file:/G:/Mi%20unidad/GRADOSUPERIOR/SEGUNDO/PSP/TEMA03/TAREAS/JuegoEnRed/src/vistas/PrincipalJFrame.java</file>
         </group>

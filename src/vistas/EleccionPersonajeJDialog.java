@@ -1,16 +1,18 @@
 package vistas;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Toolkit;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
-import jdk.dynalink.linker.support.Guards;
+
 import modelos.datos.PerfilJugador;
 import modelos.flujo.ObjetoDato;
 import modelos.flujo.serializaciones.SerializacionPartida;
@@ -18,8 +20,9 @@ import modelos.gui.CeldaPerfilPersonaje;
 
 public class EleccionPersonajeJDialog extends JDialog {
 
-    private int idPersonaSeleccionado;
-    private String nombreJugador;
+    private PerfilJugador perfilJugadorLocal;
+    private PerfilJugador perfilJugadorRemoto;
+
     private CeldaPerfilPersonaje[] celdaPerfilPersonajes;
 
     private JLabel jlEligePerfil;
@@ -33,8 +36,9 @@ public class EleccionPersonajeJDialog extends JDialog {
     }
 
     private void initComponents() {
-        this.idPersonaSeleccionado = -1;
-        this.nombreJugador = "";
+
+        perfilJugadorLocal = new PerfilJugador();
+
         celdaPerfilPersonajes = new CeldaPerfilPersonaje[10];
         for (int i = 0; i < celdaPerfilPersonajes.length; i++) {
             celdaPerfilPersonajes[i] = new CeldaPerfilPersonaje(new ImageIcon(getClass().getResource("/media/perfiles/" + i + ".jpg")), i, this);
@@ -69,27 +73,47 @@ public class EleccionPersonajeJDialog extends JDialog {
         jbComenzar.setFont(new Font("Tahoma", 0, 14));
         jbComenzar.setBounds(400, 310, 100, 30);
         this.add(jbComenzar);
+
         jbComenzar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 ArrayList<String> errores = new ArrayList<>();
-                if (getIdPersonaSeleccionado() == -1) {
-                    errores.add("Seleccione un personaje.");
+                if (getPerfilJugadorLocal().getIdImagenPerfil() == -1) {
+                    errores.add("Debe seleccionar un personaje.");
                 }
                 String nombreJugadorAux = jtfNombreJugador.getText();
                 if (nombreJugadorAux.length() > 8 || nombreJugadorAux.length() < 3) {
-                    errores.add("Introduce un nombre de jugador válido (de 3 a 8 caracteres)");
+                    errores.add("Debe introducir un nombre de jugador válido (de 3 a 8 caracteres)");
                 }
                 if (!errores.isEmpty()) {
-                    JOptionPane.showMessageDialog(jbComenzar.getParent(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getEleccionPersonajeJDialog(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    setNombreJugador(nombreJugadorAux);
-                    conexion.ConexionCliente.objetoDato = new ObjetoDato(
-                        ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(
-                                null, null, null, new PerfilJugador(getIdPersonaSeleccionado(), nombreJugadorAux)
-                        )
-                    );
-                    dispose();
+                    perfilJugadorLocal.setNombreJugador(nombreJugadorAux);
+                    conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(null, null, null, perfilJugadorLocal));
+
+                    JDialog jDialogEspera = new JDialog(getEleccionPersonajeJDialog(), true);
+                    jDialogEspera.add(new JLabel("Esperando al otro jugador...", JLabel.CENTER));
+
+                    jDialogEspera.setResizable(false);
+                    jDialogEspera.setSize(300, 200);
+                    jDialogEspera.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogEspera.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogEspera.getHeight()) / 2));
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (getPerfilJugadorRemoto() == null) {
+                                try {
+                                    Thread.sleep(200);
+                                } catch (InterruptedException ex) {
+                                    Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            dispose();
+                        }
+                    }).start();
+
+                    jDialogEspera.setVisible(true);
+
                 }
             }
         });
@@ -104,27 +128,31 @@ public class EleccionPersonajeJDialog extends JDialog {
         pack();
     }
 
-    public int getIdPersonaSeleccionado() {
-        return idPersonaSeleccionado;
-    }
-
-    public void setIdPersonaSeleccionado(int idPersonaSeleccionado) {
-        this.idPersonaSeleccionado = idPersonaSeleccionado;
-    }
-
-    public String getNombreJugador() {
-        return nombreJugador;
-    }
-
-    public void setNombreJugador(String nombreJugador) {
-        this.nombreJugador = nombreJugador;
-    }
-
     public void resetBordeImagenes() {
         for (int i = 0; i < celdaPerfilPersonajes.length; i++) {
             celdaPerfilPersonajes[i].setOpaque(false);
             this.repaint();
         }
+    }
+
+    public PerfilJugador getPerfilJugadorLocal() {
+        return perfilJugadorLocal;
+    }
+
+    public void setPerfilJugadorLocal(PerfilJugador perfilJugadorLocal) {
+        this.perfilJugadorLocal = perfilJugadorLocal;
+    }
+
+    public PerfilJugador getPerfilJugadorRemoto() {
+        return perfilJugadorRemoto;
+    }
+
+    public void setPerfilJugadorRemoto(PerfilJugador perfilJugadorRemoto) {
+        this.perfilJugadorRemoto = perfilJugadorRemoto;
+    }
+
+    public EleccionPersonajeJDialog getEleccionPersonajeJDialog() {
+        return this;
     }
 
 }

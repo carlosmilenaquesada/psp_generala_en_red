@@ -3,6 +3,8 @@ package modelos.flujo.recepcion;
 import static controladores.Imagenes.imagenesDado;
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
+import java.awt.Window;
+import javax.swing.JDialog;
 import modelos.datos.DadosPartida;
 import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
@@ -13,6 +15,7 @@ import modelos.flujo.serializaciones.SerializacionDados;
 import modelos.flujo.serializaciones.SerializacionPartida;
 import modelos.gui.CeldaDePanel;
 import modelos.gui.Dado.Valor;
+import vistas.EleccionPersonajeJDialog;
 import vistas.Main;
 
 public class RecepcionDatos {
@@ -65,8 +68,13 @@ public class RecepcionDatos {
                 //PERFIL JUGADOR------------------------------------------------
                 PerfilJugador perfilJugador = serializacionPartida.getPerfilJugador();
                 if (perfilJugador != null) {
-                    Main.getPrincipalJFrame().crearPerfilJugadorRemoto(perfilJugador);
-                    
+                    for(Window window: Window.getWindows()){
+                        if(window instanceof EleccionPersonajeJDialog){
+                            System.out.println(perfilJugador);
+                            ((EleccionPersonajeJDialog)window).setPerfilJugadorRemoto(perfilJugador);
+                        }
+                        
+                    }
                 }
                 break;
             case ObjetoDato.MENSAJE_CHAT:

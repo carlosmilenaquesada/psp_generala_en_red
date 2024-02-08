@@ -25,7 +25,7 @@ public class CeldaPerfilPersonaje extends JLabel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                getParent().setIdPersonaSeleccionado(getId());
+                getParent().getPerfilJugadorLocal().setIdImagenPerfil(getId());
                 getParent().resetBordeImagenes();               
                 setOpaque(true);
 

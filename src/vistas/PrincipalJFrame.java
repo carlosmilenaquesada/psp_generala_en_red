@@ -45,7 +45,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private void initConfiguracion() {
         crearPerfilJugadorLocal();
-        
+        crearPerfilJugadorRemoto( eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto());
         
         
         dadosPartida = new DadosPartida();
@@ -91,15 +91,15 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     
     private void crearPerfilJugadorLocal(){
         eleccionPersonajeLocalJDialog = new EleccionPersonajeJDialog(this, true);        
-        jugadorLocal = new Jugador(eleccionPersonajeLocalJDialog.getNombreJugador());
-        Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + eleccionPersonajeLocalJDialog.getIdPersonaSeleccionado() + ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
+        jugadorLocal = new Jugador(eleccionPersonajeLocalJDialog.getPerfilJugadorLocal().getNombreJugador());
+        Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + eleccionPersonajeLocalJDialog.getPerfilJugadorLocal().getIdImagenPerfil() + ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
         jlImagenJugadorLocal.setIcon(new ImageIcon(image));
         jlNombreJugadorLocal.setText(jugadorLocal.getNombre());    
     }
     
     public void crearPerfilJugadorRemoto(PerfilJugador perfilJugadorRemoto){
-        jugadorRemoto = new Jugador(perfilJugadorRemoto.getNombreJugador());
-        Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + perfilJugadorRemoto.getIdImagenPerfil()+ ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
+        jugadorRemoto = new Jugador(eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto().getNombreJugador());
+        Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto().getIdImagenPerfil() + ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
         jlImagenJugadorRemoto.setIcon(new ImageIcon(image));
         jlNombreJugadorRemoto.setText(jugadorRemoto.getNombre());    
     }
@@ -401,6 +401,14 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public void setDadosPartida(DadosPartida dadosPartida) {
         this.dadosPartida = dadosPartida;
+    }
+
+    public EleccionPersonajeJDialog getEleccionPersonajeLocalJDialog() {
+        return eleccionPersonajeLocalJDialog;
+    }
+
+    public void setEleccionPersonajeLocalJDialog(EleccionPersonajeJDialog eleccionPersonajeLocalJDialog) {
+        this.eleccionPersonajeLocalJDialog = eleccionPersonajeLocalJDialog;
     }
 
 }
