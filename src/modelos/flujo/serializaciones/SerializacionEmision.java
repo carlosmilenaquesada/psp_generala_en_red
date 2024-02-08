@@ -1,23 +1,25 @@
 package modelos.flujo.serializaciones;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
 import modelos.datos.PuntuacionJugador;
 
-public class SerializacionPartida implements Serializable {
+public class SerializacionEmision implements Serializable {
 
     private SerializacionDados dadosSerializados;
     private PuntosPrevios puntosPrevios;
     private PuntuacionJugador puntuacionJugador;
     private PerfilJugador perfilJugador;
+    private SerializacionEstadoPartida serializacionEstadoPartida;
 
-    public SerializacionPartida(SerializacionDados dadosSerializados, PuntosPrevios puntosPrevios, PuntuacionJugador puntuacionJugador, PerfilJugador perfilJugador) {
+    public SerializacionEmision(SerializacionDados dadosSerializados, PuntosPrevios puntosPrevios, PuntuacionJugador puntuacionJugador, PerfilJugador perfilJugador, SerializacionEstadoPartida serializacionEstadoPartida) {
         this.dadosSerializados = dadosSerializados;
         this.puntosPrevios = puntosPrevios;
         this.puntuacionJugador = puntuacionJugador;
         this.perfilJugador = perfilJugador;
+        this.serializacionEstadoPartida = serializacionEstadoPartida;
     }
 
     public SerializacionDados getDadosSerializados() {
@@ -51,5 +53,14 @@ public class SerializacionPartida implements Serializable {
     public void setPerfilJugador(PerfilJugador perfilJugador) {
         this.perfilJugador = perfilJugador;
     }
+
+    public SerializacionEstadoPartida getSerializacionEstadoPartida() {
+        return serializacionEstadoPartida;
+    }
+
+    public void setSerializacionEstadoPartida(SerializacionEstadoPartida serializacionEstadoPartida) {
+        this.serializacionEstadoPartida = serializacionEstadoPartida;
+    }
+
 
 }

@@ -19,9 +19,10 @@ import modelos.gui.PanelPuntos;
 import modelos.datos.CalculosJugadorLocal;
 import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
-import modelos.flujo.serializaciones.SerializacionPartida;
+import modelos.flujo.serializaciones.SerializacionEmision;
 import modelos.flujo.ObjetoDato;
 import modelos.flujo.serializaciones.SerializacionDados;
+import modelos.flujo.serializaciones.SerializacionEstadoPartida;
 
 public class PrincipalJFrame extends javax.swing.JFrame {
 
@@ -41,13 +42,19 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     public PrincipalJFrame() {
         initComponents();
         initConfiguracion();
+
+        //En este punto, se inicia la partida, pero hay que determinar quién empieza, por eso se emite un SerializacionEstadoPartida inicial
+        //Hay que determinar qué jugado empieza (compare to de los nombres)
+        String idJugadorEnTurno = jugadorLocal.getIdentificadorJugador().compareTo(jugadorRemoto.getIdentificadorJugador()) > 0 ? jugadorLocal.getIdentificadorJugador() : jugadorRemoto.getIdentificadorJugador();
+        conexion.ConexionCliente.objetoDato = new ObjetoDato(
+                ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, null, new SerializacionEstadoPartida(1, 0,idJugadorEnTurno)));
+
     }
 
     private void initConfiguracion() {
         crearPerfilJugadorLocal();
-        crearPerfilJugadorRemoto( eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto());
-        
-        
+        crearPerfilJugadorRemoto(eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto());
+
         dadosPartida = new DadosPartida();
         dados = new ArrayList<>() {
             {
@@ -88,20 +95,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         partidaLocal = new CalculosJugadorLocal(jugadorLocal, dadosPartida);
 
     }
-    
-    private void crearPerfilJugadorLocal(){
-        eleccionPersonajeLocalJDialog = new EleccionPersonajeJDialog(this, true);        
+
+    private void crearPerfilJugadorLocal() {
+        eleccionPersonajeLocalJDialog = new EleccionPersonajeJDialog(this, true);
         jugadorLocal = new Jugador(eleccionPersonajeLocalJDialog.getPerfilJugadorLocal().getNombreJugador());
         Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + eleccionPersonajeLocalJDialog.getPerfilJugadorLocal().getIdImagenPerfil() + ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
         jlImagenJugadorLocal.setIcon(new ImageIcon(image));
-        jlNombreJugadorLocal.setText(jugadorLocal.getNombre());    
+        jlNombreJugadorLocal.setText(jugadorLocal.getIdentificadorJugador());
     }
-    
-    public void crearPerfilJugadorRemoto(PerfilJugador perfilJugadorRemoto){
+
+    public void crearPerfilJugadorRemoto(PerfilJugador perfilJugadorRemoto) {
         jugadorRemoto = new Jugador(eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto().getNombreJugador());
         Image image = new ImageIcon(getClass().getResource("/media/perfiles/" + eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto().getIdImagenPerfil() + ".jpg")).getImage().getScaledInstance(66, 80, Image.SCALE_SMOOTH);
         jlImagenJugadorRemoto.setIcon(new ImageIcon(image));
-        jlNombreJugadorRemoto.setText(jugadorRemoto.getNombre());    
+        jlNombreJugadorRemoto.setText(jugadorRemoto.getIdentificadorJugador());
     }
 
     public void actualizarPuntosPreviosJugadorLocal(PuntosPrevios puntosPrevios) {
@@ -330,9 +337,9 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             }
 
             conexion.ConexionCliente.objetoDato = new ObjetoDato(
-                    ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(
+                    ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(
                             new SerializacionDados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
-                            partidaLocal.getPuntosPreviosJugadorLocal(), null, null
+                            partidaLocal.getPuntosPreviosJugadorLocal(), null, null, null
                     ));
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed

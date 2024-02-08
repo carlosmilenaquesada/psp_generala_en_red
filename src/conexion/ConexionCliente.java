@@ -20,7 +20,7 @@ public class ConexionCliente {
 
         try {
             socketCliente = new Socket(hostServidorRemoto, puertoServidorRemoto);
-            System.out.println("Conexión establecida con el servidor.");
+            
 
             // Streams de objetos para enviar y recibir objetos
             ObjectOutputStream out = new ObjectOutputStream(socketCliente.getOutputStream());
@@ -47,7 +47,7 @@ public class ConexionCliente {
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        System.out.println("esperando datos");
+                        
                     }
                 }
             }).start();
@@ -58,10 +58,10 @@ public class ConexionCliente {
                         // Recibir objeto del servidor
                         ObjetoDato objetoRecibido;
                         try {
-                            System.out.println("recepcion objeto");
+                            
                             objetoRecibido = (ObjetoDato) in.readObject();
 
-                            System.out.println("Objeto recibido del servidor: " + objetoRecibido);
+                            
                             RecepcionDatos.gestionarDatos(objetoRecibido);
                         } catch (Exception ex) {
                             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);

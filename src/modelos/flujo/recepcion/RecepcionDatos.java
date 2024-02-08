@@ -12,7 +12,8 @@ import modelos.datos.PuntuacionJugador;
 import modelos.flujo.serializaciones.SerializacionMensajeChat;
 import modelos.flujo.ObjetoDato;
 import modelos.flujo.serializaciones.SerializacionDados;
-import modelos.flujo.serializaciones.SerializacionPartida;
+import modelos.flujo.serializaciones.SerializacionEmision;
+import modelos.flujo.serializaciones.SerializacionEstadoPartida;
 import modelos.gui.CeldaDePanel;
 import modelos.gui.Dado.Valor;
 import vistas.EleccionPersonajeJDialog;
@@ -21,13 +22,13 @@ import vistas.Main;
 public class RecepcionDatos {
 
     public static void gestionarDatos(ObjetoDato objetoDato) {
-        System.out.println(objetoDato);
+        
         String clave = objetoDato.getClave();
         switch (clave) {
             case ObjetoDato.DATOS_PARTIDA:
-                SerializacionPartida serializacionPartida = (SerializacionPartida) objetoDato.getValor();
+                SerializacionEmision serializacionEmision = (SerializacionEmision) objetoDato.getValor();
                 //DADOS---------------------------------------------------------
-                SerializacionDados dadosSerializados = serializacionPartida.getDadosSerializados();
+                SerializacionDados dadosSerializados = serializacionEmision.getDadosSerializados();
                 if (dadosSerializados != null) {
 
                     DadosPartida dadosPartida = Main.getPrincipalJFrame().getDadosPartida();
@@ -39,12 +40,12 @@ public class RecepcionDatos {
                     Main.getPrincipalJFrame().setDadosPartida(dadosPartida);
                 }
                 //PUNTOS PREVIOS------------------------------------------------
-                PuntosPrevios puntosPrevios = serializacionPartida.getPuntosPrevios();
+                PuntosPrevios puntosPrevios = serializacionEmision.getPuntosPrevios();
                 if (puntosPrevios != null) {
                     Main.getPrincipalJFrame().actualizarPuntosPreviosJugadorRemoto(puntosPrevios);
                 }
                 //PUNTUACIÓN JUGADOR--------------------------------------------
-                PuntuacionJugador puntuacionJugador = serializacionPartida.getPuntuacionJugador();
+                PuntuacionJugador puntuacionJugador = serializacionEmision.getPuntuacionJugador();
                 if (puntuacionJugador != null) {
                     Main.getPrincipalJFrame().getJugadorRemoto().setPuntuacionJugador(puntuacionJugador);
 
@@ -66,17 +67,25 @@ public class RecepcionDatos {
                 }
 
                 //PERFIL JUGADOR------------------------------------------------
-                PerfilJugador perfilJugador = serializacionPartida.getPerfilJugador();
+                PerfilJugador perfilJugador = serializacionEmision.getPerfilJugador();
+                  
                 if (perfilJugador != null) {
-                    for(Window window: Window.getWindows()){
-                        if(window instanceof EleccionPersonajeJDialog){
-                            System.out.println(perfilJugador);
-                            ((EleccionPersonajeJDialog)window).setPerfilJugadorRemoto(perfilJugador);
+                    for (Window window : Window.getWindows()) {
+                       
+                        if (window instanceof EleccionPersonajeJDialog) {
+                            
+                            ((EleccionPersonajeJDialog) window).setPerfilJugadorRemoto(perfilJugador);
                         }
-                        
+
                     }
                 }
+                //ESTADO PARTIDA
+                SerializacionEstadoPartida serializacionEstadoPartida = serializacionEmision.getSerializacionEstadoPartida();
+                if (serializacionEstadoPartida != null) {
+                    
+                }
                 break;
+
             case ObjetoDato.MENSAJE_CHAT:
                 SerializacionMensajeChat mensajeChat = (SerializacionMensajeChat) objetoDato.getValor();
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import modelos.datos.Jugador;
 import modelos.datos.PuntuacionJugador;
 import modelos.flujo.ObjetoDato;
-import modelos.flujo.serializaciones.SerializacionPartida;
+import modelos.flujo.serializaciones.SerializacionEmision;
 import vistas.Main;
 
 public class CeldaDePanel extends Celda {
@@ -39,14 +39,14 @@ public class CeldaDePanel extends Celda {
                     }
 
                     conexion.ConexionCliente.objetoDato = new ObjetoDato(
-                            ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(null,
+                            ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null,
                                     null, new PuntuacionJugador(
                                             new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior()),
                                             new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getConseguidasInferior()),
                                             new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getPuntosSuperior()),
                                             new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getPuntosInferior()),
                                             getJugadorLocal().getPuntuacionJugador().getBonus()
-                                    ), null
+                                    ), null, null
                             ));
                     Main.getPrincipalJFrame().limpiarColumnaDeCeldas(1);
 

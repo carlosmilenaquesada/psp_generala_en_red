@@ -15,7 +15,7 @@ import javax.swing.*;
 
 import modelos.datos.PerfilJugador;
 import modelos.flujo.ObjetoDato;
-import modelos.flujo.serializaciones.SerializacionPartida;
+import modelos.flujo.serializaciones.SerializacionEmision;
 import modelos.gui.CeldaPerfilPersonaje;
 
 public class EleccionPersonajeJDialog extends JDialog {
@@ -89,15 +89,8 @@ public class EleccionPersonajeJDialog extends JDialog {
                     JOptionPane.showMessageDialog(getEleccionPersonajeJDialog(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
                 } else {
                     perfilJugadorLocal.setNombreJugador(nombreJugadorAux);
-                    conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(null, null, null, perfilJugadorLocal));
+                    conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, perfilJugadorLocal, null));
 
-                    JDialog jDialogInfo = new JDialog(getEleccionPersonajeJDialog(), true);
-                    JLabel jLabelInfo = new JLabel("Esperando al otro jugador..", JLabel.CENTER);
-                    jDialogInfo.add(jLabelInfo);
-                    jDialogInfo.setResizable(false);
-                    jDialogInfo.setSize(300, 200);
-                    jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
-                    
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -107,12 +100,17 @@ public class EleccionPersonajeJDialog extends JDialog {
                                 } catch (InterruptedException ex) {
                                     Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            }           
-                            dispose();
-
+                            }
+                            getEleccionPersonajeJDialog().dispose();
                         }
                     }).start();
 
+                    JDialog jDialogInfo = new JDialog(getEleccionPersonajeJDialog(), true);
+                    JLabel jLabelInfo = new JLabel("Esperando al otro jugador..", JLabel.CENTER);
+                    jDialogInfo.add(jLabelInfo);
+                    jDialogInfo.setResizable(false);
+                    jDialogInfo.setSize(300, 200);
+                    jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
                     jDialogInfo.setVisible(true);
 
                 }
