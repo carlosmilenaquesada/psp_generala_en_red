@@ -51,6 +51,7 @@ public class ConexionCliente {
                     }
                 }
             }).start();
+            
             new Thread(new Runnable() {
                 @Override
                 public void run() {
