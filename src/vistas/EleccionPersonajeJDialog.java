@@ -29,6 +29,8 @@ public class EleccionPersonajeJDialog extends JDialog {
     private JLabel jlIntroduceNombre;
     private JTextField jtfNombreJugador;
     private JButton jbComenzar;
+    
+    private String idJugadorQueInicia;
 
     public EleccionPersonajeJDialog(Frame parent, boolean modal) {
         super(parent, modal);
@@ -89,8 +91,8 @@ public class EleccionPersonajeJDialog extends JDialog {
                     JOptionPane.showMessageDialog(getEleccionPersonajeJDialog(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
                 } else {
                     perfilJugadorLocal.setNombreJugador(nombreJugadorAux);
-                    conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, perfilJugadorLocal, null));
-
+                    conexion.ConexionCliente.enviarObjeto(new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, perfilJugadorLocal, null)));
+                    
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -101,6 +103,9 @@ public class EleccionPersonajeJDialog extends JDialog {
                                     Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
+                            //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.
+                            setIdJugadorQueInicia(perfilJugadorLocal.getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? perfilJugadorLocal.getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
+                            
                             getEleccionPersonajeJDialog().dispose();
                         }
                     }).start();
@@ -152,6 +157,14 @@ public class EleccionPersonajeJDialog extends JDialog {
 
     public EleccionPersonajeJDialog getEleccionPersonajeJDialog() {
         return this;
+    }
+
+    public String getIdJugadorQueInicia() {
+        return idJugadorQueInicia;
+    }
+
+    public void setIdJugadorQueInicia(String idJugadorQueInicia) {
+        this.idJugadorQueInicia = idJugadorQueInicia;
     }
 
 }

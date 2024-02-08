@@ -38,7 +38,7 @@ public class CeldaDePanel extends Celda {
                         }
                     }
 
-                    conexion.ConexionCliente.objetoDato = new ObjetoDato(
+                    conexion.ConexionCliente.enviarObjeto(new ObjetoDato(
                             ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null,
                                     null, new PuntuacionJugador(
                                             new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior()),
@@ -47,7 +47,7 @@ public class CeldaDePanel extends Celda {
                                             new ArrayList<>(getJugadorLocal().getPuntuacionJugador().getPuntosInferior()),
                                             getJugadorLocal().getPuntuacionJugador().getBonus()
                                     ), null, null
-                            ));
+                            )));
                     Main.getPrincipalJFrame().limpiarColumnaDeCeldas(1);
 
                 }

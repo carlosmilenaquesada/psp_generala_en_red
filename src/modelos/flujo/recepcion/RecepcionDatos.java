@@ -22,7 +22,7 @@ import vistas.Main;
 public class RecepcionDatos {
 
     public static void gestionarDatos(ObjetoDato objetoDato) {
-        
+
         String clave = objetoDato.getClave();
         switch (clave) {
             case ObjetoDato.DATOS_PARTIDA:
@@ -68,21 +68,21 @@ public class RecepcionDatos {
 
                 //PERFIL JUGADOR------------------------------------------------
                 PerfilJugador perfilJugador = serializacionEmision.getPerfilJugador();
-                  
+
                 if (perfilJugador != null) {
                     for (Window window : Window.getWindows()) {
-                       
+
                         if (window instanceof EleccionPersonajeJDialog) {
-                            
+
                             ((EleccionPersonajeJDialog) window).setPerfilJugadorRemoto(perfilJugador);
                         }
 
                     }
                 }
-                //ESTADO PARTIDA
+                //ESTADO PARTIDA------------------------------------------------
                 SerializacionEstadoPartida serializacionEstadoPartida = serializacionEmision.getSerializacionEstadoPartida();
                 if (serializacionEstadoPartida != null) {
-                    
+                    Main.getPrincipalJFrame().setSerializacionEstadoPartida(serializacionEstadoPartida);
                 }
                 break;
 

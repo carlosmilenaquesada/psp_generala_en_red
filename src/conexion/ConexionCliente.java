@@ -12,7 +12,19 @@ import modelos.flujo.recepcion.RecepcionDatos;
 public class ConexionCliente {
 
     private static Socket socketCliente = null;
-    public static ObjetoDato objetoDato;
+
+    private static ObjectOutputStream out;
+    private static ObjectInputStream in;
+
+    public static void enviarObjeto(ObjetoDato objetoDato) {
+        try {
+
+            out.writeObject(objetoDato);
+            out.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
 
     public static void main(String[] args) {
         String hostServidorRemoto = "localhost";
@@ -20,14 +32,15 @@ public class ConexionCliente {
 
         try {
             socketCliente = new Socket(hostServidorRemoto, puertoServidorRemoto);
-            
-
             // Streams de objetos para enviar y recibir objetos
-            ObjectOutputStream out = new ObjectOutputStream(socketCliente.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socketCliente.getInputStream());
+            out = new ObjectOutputStream(socketCliente.getOutputStream());
+            in = new ObjectInputStream(socketCliente.getInputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-            // Código del cliente
-            new Thread(new Runnable() {
+        // Código del cliente
+        /*new Thread(new Runnable() {
                 @Override
                 public void run() {
                     while (true) {
@@ -50,31 +63,23 @@ public class ConexionCliente {
                         
                     }
                 }
-            }).start();
-            
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true) {
-                        // Recibir objeto del servidor
-                        ObjetoDato objetoRecibido;
-                        try {
-                            
-                            objetoRecibido = (ObjetoDato) in.readObject();
-
-                            
-                            RecepcionDatos.gestionarDatos(objetoRecibido);
-                        } catch (Exception ex) {
-                            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+            }).start();*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    // Recibir objeto del servidor
+                    ObjetoDato objetoRecibido;
+                    try {
+                        objetoRecibido = (ObjetoDato) in.readObject();
+                        RecepcionDatos.gestionarDatos(objetoRecibido);
+                    } catch (Exception ex) {
+                        Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
-            ).start();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-    }
+        ).start();
 
+    }
 }

@@ -34,20 +34,19 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private Panel panelBonus;
 
-    private CalculosJugadorLocal partidaLocal;
+    private CalculosJugadorLocal calculosJugadorLocal;
 
     private DadosPartida dadosPartida;
     private EleccionPersonajeJDialog eleccionPersonajeLocalJDialog;
+    
+    private SerializacionEstadoPartida serializacionEstadoPartida;
 
     public PrincipalJFrame() {
         initComponents();
         initConfiguracion();
-
-        //En este punto, se inicia la partida, pero hay que determinar quién empieza, por eso se emite un SerializacionEstadoPartida inicial
-        //Hay que determinar qué jugado empieza (compare to de los nombres)
-        String idJugadorEnTurno = jugadorLocal.getIdentificadorJugador().compareTo(jugadorRemoto.getIdentificadorJugador()) > 0 ? jugadorLocal.getIdentificadorJugador() : jugadorRemoto.getIdentificadorJugador();
-        conexion.ConexionCliente.objetoDato = new ObjetoDato(
-                ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, null, new SerializacionEstadoPartida(1, 0,idJugadorEnTurno)));
+        serializacionEstadoPartida = new SerializacionEstadoPartida(eleccionPersonajeLocalJDialog.getIdJugadorQueInicia());
+        
+        System.out.println(serializacionEstadoPartida);
 
     }
 
@@ -92,7 +91,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
 
-        partidaLocal = new CalculosJugadorLocal(jugadorLocal, dadosPartida);
+        calculosJugadorLocal = new CalculosJugadorLocal(jugadorLocal, dadosPartida);
 
     }
 
@@ -326,7 +325,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 dadosPartida.getDados().get(i).setClickable(true);
             }
-            actualizarPuntosPreviosJugadorLocal(partidaLocal.getPuntosPreviosJugadorLocal());
+            actualizarPuntosPreviosJugadorLocal(calculosJugadorLocal.getPuntosPreviosJugadorLocal());
             this.jbMezclar.setEnabled(true);
             ArrayList<Integer> indexRectanglesEnumDados = new ArrayList<>();
             ArrayList<Integer> indexValorEnumDados = new ArrayList<>();
@@ -336,11 +335,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 indexValorEnumDados.add(dadosPartida.getDados().get(i).getValor().ordinal());
             }
 
-            conexion.ConexionCliente.objetoDato = new ObjetoDato(
+            conexion.ConexionCliente.enviarObjeto(new ObjetoDato(
                     ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(
                             new SerializacionDados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
-                            partidaLocal.getPuntosPreviosJugadorLocal(), null, null, null
-                    ));
+                            calculosJugadorLocal.getPuntosPreviosJugadorLocal(), null, null, null
+                    )));
         }).start();
     }//GEN-LAST:event_jbMezclarActionPerformed
 
@@ -416,6 +415,14 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public void setEleccionPersonajeLocalJDialog(EleccionPersonajeJDialog eleccionPersonajeLocalJDialog) {
         this.eleccionPersonajeLocalJDialog = eleccionPersonajeLocalJDialog;
+    }
+
+    public SerializacionEstadoPartida getSerializacionEstadoPartida() {
+        return serializacionEstadoPartida;
+    }
+
+    public void setSerializacionEstadoPartida(SerializacionEstadoPartida serializacionEstadoPartida) {
+        this.serializacionEstadoPartida = serializacionEstadoPartida;
     }
 
 }
