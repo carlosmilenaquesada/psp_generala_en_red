@@ -91,13 +91,13 @@ public class EleccionPersonajeJDialog extends JDialog {
                     perfilJugadorLocal.setNombreJugador(nombreJugadorAux);
                     conexion.ConexionCliente.objetoDato = new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionPartida(null, null, null, perfilJugadorLocal));
 
-                    JDialog jDialogEspera = new JDialog(getEleccionPersonajeJDialog(), true);
-                    jDialogEspera.add(new JLabel("Esperando al otro jugador...", JLabel.CENTER));
-
-                    jDialogEspera.setResizable(false);
-                    jDialogEspera.setSize(300, 200);
-                    jDialogEspera.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogEspera.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogEspera.getHeight()) / 2));
-
+                    JDialog jDialogInfo = new JDialog(getEleccionPersonajeJDialog(), true);
+                    JLabel jLabelInfo = new JLabel("Esperando al otro jugador..", JLabel.CENTER);
+                    jDialogInfo.add(jLabelInfo);
+                    jDialogInfo.setResizable(false);
+                    jDialogInfo.setSize(300, 200);
+                    jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
+                    
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -107,12 +107,13 @@ public class EleccionPersonajeJDialog extends JDialog {
                                 } catch (InterruptedException ex) {
                                     Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            }
+                            }           
                             dispose();
+
                         }
                     }).start();
 
-                    jDialogEspera.setVisible(true);
+                    jDialogInfo.setVisible(true);
 
                 }
             }

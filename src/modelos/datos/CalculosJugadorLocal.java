@@ -3,15 +3,13 @@ package modelos.datos;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PartidaLocal  implements Serializable{
+public class CalculosJugadorLocal{
 
     private Jugador jugadorLocal;
-    private Jugador jugadorRemoto;
     private DadosPartida dadosPartida;
 
-    public PartidaLocal(Jugador jugadorLocal, Jugador jugadorRemoto, DadosPartida dadosPartida) {
+    public CalculosJugadorLocal(Jugador jugadorLocal, DadosPartida dadosPartida) {
         this.jugadorLocal = jugadorLocal;
-        this.jugadorRemoto = jugadorRemoto;
         this.dadosPartida = dadosPartida;
     }
 
@@ -23,7 +21,6 @@ public class PartidaLocal  implements Serializable{
     }
 
     private void calcularPuntosSuperiorPreviosJugadorLocal(ArrayList<Integer> puntosSuperiorPrevios) {
-
         for (int i = 0; i < dadosPartida.getDados().size(); i++) {
             //Categorías superior (suma de los puntos de los dados, agrapados por número) 
             int ordinal = dadosPartida.getDados().get(i).getValor().ordinal();//el ordinal es el valor del dado

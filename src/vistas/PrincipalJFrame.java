@@ -16,7 +16,7 @@ import modelos.gui.Dado.Valor;
 import modelos.datos.Jugador;
 import modelos.gui.Panel;
 import modelos.gui.PanelPuntos;
-import modelos.datos.PartidaLocal;
+import modelos.datos.CalculosJugadorLocal;
 import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
 import modelos.flujo.serializaciones.SerializacionPartida;
@@ -33,7 +33,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private Panel panelBonus;
 
-    private PartidaLocal partidaLocal;
+    private CalculosJugadorLocal partidaLocal;
 
     private DadosPartida dadosPartida;
     private EleccionPersonajeJDialog eleccionPersonajeLocalJDialog;
@@ -85,7 +85,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
 
-        partidaLocal = new PartidaLocal(jugadorLocal, jugadorRemoto, dadosPartida);
+        partidaLocal = new CalculosJugadorLocal(jugadorLocal, dadosPartida);
 
     }
     
