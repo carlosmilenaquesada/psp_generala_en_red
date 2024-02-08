@@ -28,5 +28,14 @@ public class Celda extends JLabel {
     public int getCelYPos() {
         return celYPos;
     }
+    
+    public void setEstaEnSuTurno(boolean b) {
+        if (b) {
+            this.setBackground(Colores.getColor(Colores.CELDA_SELECCIONADA));
+        } else {
+            this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
+        }
+       
+    }
 
 }

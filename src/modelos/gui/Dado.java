@@ -5,9 +5,11 @@ import static controladores.Imagenes.imagenesDado;
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import modelos.datos.DadosPartida;
+import vistas.Main;
 
 public class Dado{
 
@@ -22,7 +24,7 @@ public class Dado{
     private Valor valor;
     private Estado estado;
     private JLabel jLabel;
-    private boolean clickable;
+    private boolean esClickable;
     private RectanglesDados posicion;
     private DadosPartida dadosPartida;
 
@@ -34,11 +36,11 @@ public class Dado{
         this.valor = Valor.SEIS;
         this.estado = Estado.EN_TAPETE;
         this.jLabel.setIcon(imagenesDado.get(this.valor));
-        this.clickable = true;
-        this.jLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        this.esClickable = true;
+        this.jLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getButton() == MouseEvent.BUTTON1 && isClickable()) {
+            public void mouseClicked(MouseEvent evt) {
+                if (esTurnoJugadorLocal() && !esTurnoCero() && evt.getButton() == MouseEvent.BUTTON1 && esClickable()) {
 
                     if (getEstado().equals(Estado.EN_TAPETE)) {
                         setEstado(Estado.EN_RESERVA);
@@ -84,12 +86,12 @@ public class Dado{
         this.jLabel = jLabel;
     }
 
-    public boolean isClickable() {
-        return clickable;
+    public boolean esClickable() {
+        return esClickable;
     }
 
-    public void setClickable(boolean clickable) {
-        this.clickable = clickable;
+    public void setEsClickable(boolean esClickable) {
+        this.esClickable = esClickable;
     }
 
     public Estado getEstado() {
@@ -110,5 +112,14 @@ public class Dado{
 
     public void setPosicion(RectanglesDados posicion) {
         this.posicion = posicion;
+    }
+    
+    private boolean esTurnoJugadorLocal() {
+        return Main.getPrincipalJFrame().esTurnoJugadorLocal();
+    }
+    
+    private boolean esTurnoCero(){
+        return Main.getPrincipalJFrame().getSerializacionEstadoPartida().getTiradasRealizadasEnElTurnoDelJugador() == 0;
+    
     }
 }

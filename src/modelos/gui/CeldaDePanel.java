@@ -15,22 +15,20 @@ import vistas.Main;
 
 public class CeldaDePanel extends Celda {
 
-    private boolean estaEnSeleccion;
     private boolean estaEnPrevioPuntos;
+    private boolean esClickable;
 
     CeldaDePanel(int celXPos, int celYPos) {
         super(celXPos, celYPos);
-        this.estaEnSeleccion = false;
         this.estaEnPrevioPuntos = false;
 
         this.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (getCelYPos() == 1) {
+            public void mouseClicked(MouseEvent evt) {
+                if (esTurnoJugadorLocal() && !esTurnoCero() && evt.getButton() == MouseEvent.BUTTON1 && esClickable() && getCelYPos() == 1) {
                     if (((PanelPuntos) getParent()).getId().equals("superior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior().get(getCelXPos())) {
                         getJugadorLocal().getPuntuacionJugador().setConseguidaSuperior(getCelXPos(), true);
                         getJugadorLocal().getPuntuacionJugador().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));
-
                     } else {
                         if (((PanelPuntos) getParent()).getId().equals("inferior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasInferior().get(getCelXPos())) {
                             getJugadorLocal().getPuntuacionJugador().setConseguidaInferior(getCelXPos(), true);
@@ -49,7 +47,7 @@ public class CeldaDePanel extends Celda {
                                     ), null, null
                             )));
                     Main.getPrincipalJFrame().limpiarColumnaDeCeldas(1);
-
+                    Main.getPrincipalJFrame().cambiarJugadorEnTurno();
                 }
             }
         });
@@ -57,15 +55,6 @@ public class CeldaDePanel extends Celda {
 
     public Jugador getJugadorLocal() {
         return Main.getPrincipalJFrame().getJugadorLocal();
-    }
-
-    public void setEstaEnSeleccion(boolean b) {
-        if (b) {
-            this.setBackground(Colores.getColor(Colores.CELDA_SELECCIONADA));
-        } else {
-            this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
-        }
-        this.estaEnSeleccion = b;
     }
 
     public void setEstaEnPrevioPuntos(boolean b) {
@@ -78,12 +67,24 @@ public class CeldaDePanel extends Celda {
 
     }
 
-    public boolean estaEnSeleccion() {
-        return estaEnSeleccion;
-    }
-
     public boolean estaEnPrevioPuntos() {
         return estaEnPrevioPuntos;
     }
 
+    private boolean esTurnoJugadorLocal() {
+        return Main.getPrincipalJFrame().esTurnoJugadorLocal();
+    }
+
+    private boolean esTurnoCero() {
+        return Main.getPrincipalJFrame().getSerializacionEstadoPartida().getTiradasRealizadasEnElTurnoDelJugador() == 0;
+
+    }
+
+    public boolean esClickable() {
+        return esClickable;
+    }
+
+    public void setEsClickable(boolean esClickable) {
+        this.esClickable = esClickable;
+    }
 }
