@@ -25,7 +25,9 @@ public class CeldaDePanel extends Celda {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+                
                 if (esTurnoJugadorLocal() && !esTurnoCero() && evt.getButton() == MouseEvent.BUTTON1 && esClickable() && getCelYPos() == 1) {
+
                     if (((PanelPuntos) getParent()).getId().equals("superior") && !getJugadorLocal().getPuntuacionJugador().getConseguidasSuperior().get(getCelXPos())) {
                         getJugadorLocal().getPuntuacionJugador().setConseguidaSuperior(getCelXPos(), true);
                         getJugadorLocal().getPuntuacionJugador().setPuntoSuperior(getCelXPos(), Integer.parseInt(getText()));

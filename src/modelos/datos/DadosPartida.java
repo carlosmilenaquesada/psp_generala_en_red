@@ -14,7 +14,6 @@ public class DadosPartida{
     
 
     public DadosPartida() {
-
         this.reservaOcupadas = rellenarOcupadas(false);
         this.tapeteOcupadas = rellenarOcupadas(true);
     }
@@ -69,5 +68,12 @@ public class DadosPartida{
     public void setDados(ArrayList<Dado> dados) {
         this.dados = dados;
     }
+
+    @Override
+    public String toString() {
+        return "DadosPartida{" + "dados=" + dados + ", reservaOcupadas=" + reservaOcupadas + ", tapeteOcupadas=" + tapeteOcupadas + '}';
+    }
+    
+    
 
 }

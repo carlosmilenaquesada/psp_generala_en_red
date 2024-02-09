@@ -3,35 +3,18 @@ package modelos.datos;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CalculosJugadorLocal{
+public class CalculosJugadorLocal {
 
-    private Jugador jugadorLocal;
-    private DadosPartida dadosPartida;
-
-    public CalculosJugadorLocal(Jugador jugadorLocal, DadosPartida dadosPartida) {
-        this.jugadorLocal = jugadorLocal;
-        this.dadosPartida = dadosPartida;
-    }
-
-    public PuntosPrevios getPuntosPreviosJugadorLocal() {
+    public static PuntosPrevios calcularPuntosPreviosJugadorLocal(Jugador jugadorLocal, DadosPartida dadosPartida) {
         PuntosPrevios puntosPrevios = new PuntosPrevios();
-        calcularPuntosSuperiorPreviosJugadorLocal(puntosPrevios.getPuntosSuperiorPrevios());
-        calcularPuntosInferiorPreviosJugadorLocal(puntosPrevios.getPuntosInferiorPrevios());
-        return puntosPrevios;
-    }
-
-    private void calcularPuntosSuperiorPreviosJugadorLocal(ArrayList<Integer> puntosSuperiorPrevios) {
         for (int i = 0; i < dadosPartida.getDados().size(); i++) {
             //Categorías superior (suma de los puntos de los dados, agrapados por número) 
             int ordinal = dadosPartida.getDados().get(i).getValor().ordinal();//el ordinal es el valor del dado
             //conseguidasSuperior es una colección de boolean que nos dice si una categoría ya ha puntuado o no
             if (!jugadorLocal.getPuntuacionJugador().getConseguidasSuperior().get(ordinal - 1)) {
-                puntosSuperiorPrevios.set(ordinal - 1, puntosSuperiorPrevios.get(ordinal - 1) + ordinal);
+                puntosPrevios.getPuntosSuperiorPrevios().set(ordinal - 1, puntosPrevios.getPuntosSuperiorPrevios().get(ordinal - 1) + ordinal);
             }
         }
-    }
-
-    private void calcularPuntosInferiorPreviosJugadorLocal(ArrayList<Integer> puntosInferiorPrevios) {
 
         //Póker (la suma de los puntos de al menos cuatro dados iguales)
         int[] auxFrecuenciaNumeros = new int[6];
@@ -41,12 +24,12 @@ public class CalculosJugadorLocal{
 
             //Categoría libre (la suma de todos los puntos, de cualquier de dados)
             if (!jugadorLocal.getPuntuacionJugador().getConseguidasInferior().get(0)) {
-                puntosInferiorPrevios.set(0, puntosInferiorPrevios.get(0) + ordinal);
+                puntosPrevios.getPuntosInferiorPrevios().set(0, puntosPrevios.getPuntosInferiorPrevios().get(0) + ordinal);
             }
         }
         for (int i = 0; i < auxFrecuenciaNumeros.length; i++) {
             if (auxFrecuenciaNumeros[i] >= 4) {
-                puntosInferiorPrevios.set(1, 4 * (i + 1));
+                puntosPrevios.getPuntosInferiorPrevios().set(1, 4 * (i + 1));
 
             }
         }
@@ -67,7 +50,7 @@ public class CalculosJugadorLocal{
             }
         }
         if (pareja > 0 && trio > 0) {
-            puntosInferiorPrevios.set(2, pareja + trio);
+            puntosPrevios.getPuntosInferiorPrevios().set(2, pareja + trio);
         }
 
         //escalera corta (una fila de al menos cuatro números sucesivos)
@@ -88,11 +71,11 @@ public class CalculosJugadorLocal{
             }
         }
         if (contadorSucesivos >= 4) {
-            puntosInferiorPrevios.set(3, 15);
+            puntosPrevios.getPuntosInferiorPrevios().set(3, 15);
         }
         //escalera larga (una fila de cinco números sucesivos)
         if (contadorSucesivos == 5) {
-            puntosInferiorPrevios.set(4, 30);
+            puntosPrevios.getPuntosInferiorPrevios().set(4, 30);
         }
 
         //generala (cinco números iguales)
@@ -105,9 +88,8 @@ public class CalculosJugadorLocal{
         }
 
         if (sonIguales) {
-            puntosInferiorPrevios.set(5, 50);
+            puntosPrevios.getPuntosInferiorPrevios().set(5, 50);
         }
-
+        return puntosPrevios;
     }
-
 }

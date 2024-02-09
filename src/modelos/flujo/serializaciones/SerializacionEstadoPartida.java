@@ -59,5 +59,10 @@ public class SerializacionEstadoPartida implements Serializable {
         this.idJugadorEnTurno = idJugadorEnTurno;
     }
 
+    @Override
+    public String toString() {
+        return "SerializacionEstadoPartida{" + "rondaActual=" + rondaActual + ", tiradasRealizadasEnElTurnoDelJugador=" + tiradasRealizadasEnElTurnoDelJugador + ", turnoDeLaRonda=" + turnoDeLaRonda + ", idJugadorEnTurno=" + idJugadorEnTurno + '}';
+    }
+
 
 }

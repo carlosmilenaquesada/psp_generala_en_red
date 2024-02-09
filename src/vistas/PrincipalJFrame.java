@@ -33,8 +33,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private Panel panelBonus;
 
-    private CalculosJugadorLocal calculosJugadorLocal;
-
     private DadosPartida dadosPartida;
     private EleccionPersonajeJDialog eleccionPersonajeLocalJDialog;
 
@@ -50,19 +48,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         crearPerfilJugadorLocal();
         serializacionEstadoPartida = new SerializacionEstadoPartida(eleccionPersonajeLocalJDialog.getIdJugadorQueInicia());
         crearPerfilJugadorRemoto(eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto());
-
-        dadosPartida = new DadosPartida();
-        dados = new ArrayList<>() {
-            {
-                add(new Dado(jlDadoCero, RectanglesDados.PRIMERA_TAP, getDadosPartida()));
-                add(new Dado(jlDadoUno, RectanglesDados.SEGUNDA_TAP, getDadosPartida()));
-                add(new Dado(jlDadoDos, RectanglesDados.TERCERA_TAP, getDadosPartida()));
-                add(new Dado(jlDadoTres, RectanglesDados.CUARTA_TAP, getDadosPartida()));
-                add(new Dado(jlDadoCuatro, RectanglesDados.QUINTA_TAP, getDadosPartida()));
-
-            }
-        };
-        dadosPartida.setDados(dados);
+        ponerDadosEnPosicionInicial();
 
         panelPuntosSuperior = new PanelPuntos(
                 Textos.categoriasPuntosSuperior,
@@ -87,8 +73,6 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
-
-        calculosJugadorLocal = new CalculosJugadorLocal(jugadorLocal, dadosPartida);
 
     }
 
@@ -162,6 +146,22 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 ((CeldaDePanel) this.panelPuntosInferior.getCelda(i, 2)).setEstaEnPrevioPuntos(true);
             }
         }
+    }
+
+    private void ponerDadosEnPosicionInicial() {
+        dadosPartida = new DadosPartida();
+        dados = new ArrayList<>() {
+            {
+                add(new Dado(jlDadoCero, RectanglesDados.PRIMERA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoUno, RectanglesDados.SEGUNDA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoDos, RectanglesDados.TERCERA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoTres, RectanglesDados.CUARTA_TAP, getDadosPartida()));
+                add(new Dado(jlDadoCuatro, RectanglesDados.QUINTA_TAP, getDadosPartida()));
+
+            }
+        };
+        dadosPartida.setDados(dados);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -333,6 +333,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         for (int i = 0; i < panelPuntosSuperior.getMatriz().length; i++) {
             ((CeldaDePanel) panelPuntosSuperior.getMatriz()[i][1]).setEsClickable(false);
+            ((CeldaDePanel) panelPuntosInferior.getMatriz()[i][1]).setEsClickable(false);
         }
 
         new Thread(() -> {
@@ -347,12 +348,13 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 }
                 dadosPartida.getDados().get(i).setEsClickable(true);
             }
-            actualizarPuntosPreviosJugadorLocal(calculosJugadorLocal.getPuntosPreviosJugadorLocal());
-            if (serializacionEstadoPartida.getTiradasRealizadasEnElTurnoDelJugador() < 3) {
-                this.jbMezclar.setEnabled(true);
-                for (int i = 0; i < panelPuntosSuperior.getMatriz().length; i++) {
-                    ((CeldaDePanel) panelPuntosSuperior.getMatriz()[i][1]).setEsClickable(true);
-                }
+            actualizarPuntosPreviosJugadorLocal(CalculosJugadorLocal.calcularPuntosPreviosJugadorLocal(jugadorLocal, dadosPartida));
+
+            this.jbMezclar.setEnabled(serializacionEstadoPartida.getTiradasRealizadasEnElTurnoDelJugador() < 3);
+
+            for (int i = 0; i < panelPuntosSuperior.getMatriz().length; i++) {
+                ((CeldaDePanel) panelPuntosSuperior.getMatriz()[i][1]).setEsClickable(true);
+                ((CeldaDePanel) panelPuntosInferior.getMatriz()[i][1]).setEsClickable(true);
             }
             ArrayList<Integer> indexRectanglesEnumDados = new ArrayList<>();
             ArrayList<Integer> indexValorEnumDados = new ArrayList<>();
@@ -365,7 +367,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             conexion.ConexionCliente.enviarObjeto(new ObjetoDato(
                     ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(
                             new SerializacionDados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
-                            calculosJugadorLocal.getPuntosPreviosJugadorLocal(), null, null, null
+                            CalculosJugadorLocal.calcularPuntosPreviosJugadorLocal(jugadorLocal, dadosPartida), null, null, null
                     )));
         }).start();
 
@@ -448,22 +450,22 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     public void setSerializacionEstadoPartida(SerializacionEstadoPartida serializacionEstadoPartida) {
+        pintarBackgroundColumnaJugador(serializacionEstadoPartida.getIdJugadorEnTurno().equals(jugadorLocal.getIdentificadorJugador()));
+        jbMezclar.setEnabled(true);
+        ponerDadosEnPosicionInicial();
         this.serializacionEstadoPartida = serializacionEstadoPartida;
     }
 
     public boolean esTurnoJugadorLocal() {
         return serializacionEstadoPartida.getIdJugadorEnTurno().equals(jugadorLocal.getIdentificadorJugador());
+
     }
 
-    public void cambiarJugadorEnTurno() {       
-        if (esTurnoJugadorLocal()) {
-            serializacionEstadoPartida.setIdJugadorEnTurno(jugadorRemoto.getIdentificadorJugador());
-            jbMezclar.setEnabled(false);
-        } else {
-            serializacionEstadoPartida.setIdJugadorEnTurno(jugadorLocal.getIdentificadorJugador());
-            jbMezclar.setEnabled(true);
-        }
-        
+    public void cambiarJugadorEnTurno() {
+
+        serializacionEstadoPartida.setIdJugadorEnTurno(jugadorRemoto.getIdentificadorJugador());
+        jbMezclar.setEnabled(false);
+
         pintarBackgroundColumnaJugador(serializacionEstadoPartida.getIdJugadorEnTurno().equals(jugadorLocal.getIdentificadorJugador()));
 
         serializacionEstadoPartida.setTurnoDeLaRonda((serializacionEstadoPartida.getTurnoDeLaRonda() % 2) + 1);
@@ -474,6 +476,13 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             serializacionEstadoPartida.setRondaActual(serializacionEstadoPartida.getRondaActual() + 1);
             jlNumeroRonda.setText(serializacionEstadoPartida.getRondaActual() + "/12");
         }
+
+        ponerDadosEnPosicionInicial();
+
+        conexion.ConexionCliente.enviarObjeto(new ObjetoDato(
+                ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null,
+                        null, null, null, serializacionEstadoPartida
+                )));
 
     }
 
