@@ -391,6 +391,26 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     }
 
+    private void mostrarGanador() {
+        if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() > jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
+            JOptionPane.showMessageDialog(this, "Ganaste\n"
+                    + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
+                    + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()
+            );
+        } else {
+            if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() < jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
+                JOptionPane.showMessageDialog(this, "Perdiste\n"
+                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
+                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
+            } else {
+                JOptionPane.showMessageDialog(this, "Ocurrió un empate\n"
+                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
+                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
+            }
+        }
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpChat;
@@ -452,26 +472,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     public void setSerializacionEstadoPartida(SerializacionEstadoPartida serializacionEstadoPartida) {
 
-        boolean finPartida = serializacionEstadoPartida.getRondaActual() == 12 && serializacionEstadoPartida.getTurnoDeLaRonda() == 2;
-
-        if (finPartida) {
-            if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() > jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
-                JOptionPane.showMessageDialog(this, "Ganaste\n"
-                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()
-                );
-            } else {
-                if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() < jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
-                    JOptionPane.showMessageDialog(this, "Perdiste\n"
-                            + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                            + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Ocurrió un empate\n"
-                            + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                            + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
-                }
-            }
-
+        if (serializacionEstadoPartida.esFinDePartida()) {
+            mostrarGanador();
         } else {
             pintarBackgroundColumnaJugador(serializacionEstadoPartida.getIdJugadorEnTurno().equals(jugadorLocal.getIdentificadorJugador()));
             jbMezclar.setEnabled(true);
@@ -491,38 +493,31 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     public void cambiarJugadorEnTurno() {
-        serializacionEstadoPartida.setIdJugadorEnTurno(jugadorRemoto.getIdentificadorJugador());
-        pintarBackgroundColumnaJugador(serializacionEstadoPartida.getIdJugadorEnTurno().equals(jugadorLocal.getIdentificadorJugador()));
-        jbMezclar.setEnabled(false);
 
-        serializacionEstadoPartida.setTiradasRealizadasEnElTurnoDelJugador(0);
+        serializacionEstadoPartida.setEsFinDePartida(serializacionEstadoPartida.getRondaActual() == 12 && serializacionEstadoPartida.getTurnoDeLaRonda() == 2);
 
-        boolean finPartida = serializacionEstadoPartida.getRondaActual() == 12 && serializacionEstadoPartida.getTurnoDeLaRonda() == 2;
+        if (serializacionEstadoPartida.esFinDePartida()) {
 
-        if (finPartida) {
-            if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() > jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
-                JOptionPane.showMessageDialog(this, "Ganaste\n"
-                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()
-                );
-            } else {
-                if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() < jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
-                    JOptionPane.showMessageDialog(this, "Perdiste\n"
-                            + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                            + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Ocurrió un empate\n"
-                            + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                            + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
-                }
-            }
-
+            conexion.ConexionCliente.enviarObjeto(
+                    new ObjetoDato(
+                            ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null,
+                                    null, null, null, serializacionEstadoPartida
+                            )));
+            mostrarGanador();
         } else {
+            serializacionEstadoPartida.setIdJugadorEnTurno(jugadorRemoto.getIdentificadorJugador());
+            pintarBackgroundColumnaJugador(serializacionEstadoPartida.getIdJugadorEnTurno().equals(jugadorLocal.getIdentificadorJugador()));
+            jbMezclar.setEnabled(false);
+
+            serializacionEstadoPartida.setTiradasRealizadasEnElTurnoDelJugador(0);
+
             serializacionEstadoPartida.setTurnoDeLaRonda((serializacionEstadoPartida.getTurnoDeLaRonda() % 2) + 1);
+
             if (serializacionEstadoPartida.getTurnoDeLaRonda() == 1) {
                 serializacionEstadoPartida.setRondaActual(serializacionEstadoPartida.getRondaActual() + 1);
                 jlNumeroRonda.setText(serializacionEstadoPartida.getRondaActual() + "/12");
             }
+
             ponerDadosEnPosicionInicial();
             conexion.ConexionCliente.enviarObjeto(
                     new ObjetoDato(

@@ -116,7 +116,9 @@ public class EleccionPersonajeJDialog extends JDialog {
                     jDialogInfo.setResizable(false);
                     jDialogInfo.setSize(300, 200);
                     jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
+                    
                     jDialogInfo.setVisible(true);
+                    
 
                 }
             }

@@ -8,14 +8,17 @@ public class SerializacionEstadoPartida implements Serializable {
     private int tiradasRealizadasEnElTurnoDelJugador;//de 0 a 3 (empieza en cero porque puede que no haya hecho ninguna aún)
     private int turnoDeLaRonda;//de 1 a 2 (1 primer jugador tira hasta 3 veces, 2 segundo jugador tira hasta 3 veces)
     private String idJugadorEnTurno;//la id del jugador al que le toca o le está tocando
+    private boolean esFinDePartida;//será true cuando la partida haya acabado
 
-    public SerializacionEstadoPartida(int rondaActual, int tiradasRealizadasEnElTurnoDelJugador, int turnoDeLaRonda, String idJugadorEnTurno) {
+    public SerializacionEstadoPartida(int rondaActual, int tiradasRealizadasEnElTurnoDelJugador, int turnoDeLaRonda, String idJugadorEnTurno, boolean esFinDePartida) {
         this.rondaActual = rondaActual;
         this.tiradasRealizadasEnElTurnoDelJugador = tiradasRealizadasEnElTurnoDelJugador;
         this.turnoDeLaRonda = turnoDeLaRonda;
         this.idJugadorEnTurno = idJugadorEnTurno;
+        this.esFinDePartida = esFinDePartida;
     }
 
+    
    
 
     //Constructor por defecto para cuando se recién se incie la partida (lo uso cuando
@@ -25,6 +28,7 @@ public class SerializacionEstadoPartida implements Serializable {
         this.tiradasRealizadasEnElTurnoDelJugador = 0;
         this.turnoDeLaRonda = 1;
         this.idJugadorEnTurno = idJugadorEnTurno;
+         this.esFinDePartida = false;
     }
 
     public int getRondaActual() {
@@ -59,10 +63,20 @@ public class SerializacionEstadoPartida implements Serializable {
         this.idJugadorEnTurno = idJugadorEnTurno;
     }
 
+    public boolean esFinDePartida() {
+        return esFinDePartida;
+    }
+
+    public void setEsFinDePartida(boolean esFinDePartida) {
+        this.esFinDePartida = esFinDePartida;
+    }
+
     @Override
     public String toString() {
-        return "SerializacionEstadoPartida{" + "rondaActual=" + rondaActual + ", tiradasRealizadasEnElTurnoDelJugador=" + tiradasRealizadasEnElTurnoDelJugador + ", turnoDeLaRonda=" + turnoDeLaRonda + ", idJugadorEnTurno=" + idJugadorEnTurno + '}';
+        return "SerializacionEstadoPartida{" + "rondaActual=" + rondaActual + ", tiradasRealizadasEnElTurnoDelJugador=" + tiradasRealizadasEnElTurnoDelJugador + ", turnoDeLaRonda=" + turnoDeLaRonda + ", idJugadorEnTurno=" + idJugadorEnTurno + ", esFinDePartida=" + esFinDePartida + '}';
     }
+
+   
 
 
 }
