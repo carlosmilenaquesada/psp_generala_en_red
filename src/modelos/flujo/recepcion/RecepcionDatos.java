@@ -37,12 +37,8 @@ public class RecepcionDatos {
                     DadosPartida dadosPartida = Main.getPrincipalJFrame().getDadosPartida();
                     for (int i = 0; i < dadosPartida.getDados().size(); i++) {
                         dadosPartida.getDados().get(i).getjLabel().setBounds(Rectangles.rectanglesDados.get(RectanglesDados.values()[dadosSerializados.getIndexRectanglesEnumDados().get(i)]));
-                        dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-                        
+                        dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
 
-                        
-                        
-                        
                         dadosPartida.getDados().get(i).setValor(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]);
                     }
                     Main.getPrincipalJFrame().setDadosPartida(dadosPartida);

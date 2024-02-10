@@ -205,52 +205,37 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jlDadoCero">
-          <Properties>
-            <Property name="opaque" type="boolean" value="true"/>
-          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="180" width="40" height="40"/>
+              <AbsoluteConstraints x="70" y="25" width="40" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jlDadoUno">
-          <Properties>
-            <Property name="opaque" type="boolean" value="true"/>
-          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="100" y="200" width="40" height="40"/>
+              <AbsoluteConstraints x="125" y="25" width="40" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jlDadoDos">
-          <Properties>
-            <Property name="opaque" type="boolean" value="true"/>
-          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="160" y="130" width="40" height="40"/>
+              <AbsoluteConstraints x="180" y="25" width="40" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jlDadoTres">
-          <Properties>
-            <Property name="opaque" type="boolean" value="true"/>
-          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="210" y="240" width="40" height="40"/>
+              <AbsoluteConstraints x="235" y="25" width="40" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jlDadoCuatro">
-          <Properties>
-            <Property name="opaque" type="boolean" value="true"/>
-          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="280" y="140" width="40" height="40"/>
+              <AbsoluteConstraints x="290" y="25" width="40" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -266,7 +251,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="360" width="100" height="30"/>
+              <AbsoluteConstraints x="150" y="355" width="100" height="30"/>
             </Constraint>
           </Constraints>
         </Component>

@@ -285,26 +285,16 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jpTablero.setBackground(new java.awt.Color(57, 43, 43));
         jpTablero.setOpaque(false);
         jpTablero.setLayout(null);
-
-        jlDadoCero.setOpaque(true);
         jpTablero.add(jlDadoCero);
-        jlDadoCero.setBounds(10, 180, 40, 40);
-
-        jlDadoUno.setOpaque(true);
+        jlDadoCero.setBounds(70, 25, 40, 40);
         jpTablero.add(jlDadoUno);
-        jlDadoUno.setBounds(100, 200, 40, 40);
-
-        jlDadoDos.setOpaque(true);
+        jlDadoUno.setBounds(125, 25, 40, 40);
         jpTablero.add(jlDadoDos);
-        jlDadoDos.setBounds(160, 130, 40, 40);
-
-        jlDadoTres.setOpaque(true);
+        jlDadoDos.setBounds(180, 25, 40, 40);
         jpTablero.add(jlDadoTres);
-        jlDadoTres.setBounds(210, 240, 40, 40);
-
-        jlDadoCuatro.setOpaque(true);
+        jlDadoTres.setBounds(235, 25, 40, 40);
         jpTablero.add(jlDadoCuatro);
-        jlDadoCuatro.setBounds(280, 140, 40, 40);
+        jlDadoCuatro.setBounds(290, 25, 40, 40);
 
         jbMezclar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jbMezclar.setText("Mezclar");
@@ -314,7 +304,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             }
         });
         jpTablero.add(jbMezclar);
-        jbMezclar.setBounds(190, 360, 100, 30);
+        jbMezclar.setBounds(150, 355, 100, 30);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/tablero.png"))); // NOI18N
         jpTablero.add(jLabel3);
@@ -373,12 +363,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         for (int i = 0; i < dadosPartida.getDados().size(); i++) {
             dadosPartida.getDados().get(i).setEsClickable(false);
             if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
-                //dadosPartida.getDados().get(i).getjLabel().setIcon(Imagenes.imagenesDado.get(Valor.INTERROGACION));
-                
-                dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.INTERROGACION).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)));
-                
-                
-                
+                dadosPartida.getDados().get(i).setValor(Valor.INTERROGACION);
+                dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.INTERROGACION).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
             }
         }
 
@@ -386,6 +372,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             ((CeldaDePanel) panelPuntosSuperior.getMatriz()[i][1]).setEsClickable(false);
             ((CeldaDePanel) panelPuntosInferior.getMatriz()[i][1]).setEsClickable(false);
         }
+
+        ArrayList<Integer> indexRectanglesEnumDados = new ArrayList<>();
+        ArrayList<Integer> indexValorEnumDados = new ArrayList<>();
+
+        for (int i = 0; i < dadosPartida.getDados().size(); i++) {
+            indexRectanglesEnumDados.add(dadosPartida.getDados().get(i).getPosicion().ordinal());
+            indexValorEnumDados.add(dadosPartida.getDados().get(i).getValor().ordinal());
+        }
+
+        conexion.ConexionCliente.enviarObjeto(new ObjetoDato(
+                ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(
+                        new SerializacionDados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
+                        null, null, null, null
+                )));
 
         new Thread(() -> {
             try {
@@ -395,7 +395,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             for (int i = 0; i < dadosPartida.getDados().size(); i++) {
                 if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
                     dadosPartida.getDados().get(i).setValor(Valor.values()[(int) (Math.random() * 6) + 1]);
-                    dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(dadosPartida.getDados().get(i).getValor()).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+                    dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(dadosPartida.getDados().get(i).getValor()).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                 }
                 dadosPartida.getDados().get(i).setEsClickable(true);
             }
@@ -407,17 +407,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 ((CeldaDePanel) panelPuntosSuperior.getMatriz()[i][1]).setEsClickable(true);
                 ((CeldaDePanel) panelPuntosInferior.getMatriz()[i][1]).setEsClickable(true);
             }
-            ArrayList<Integer> indexRectanglesEnumDados = new ArrayList<>();
-            ArrayList<Integer> indexValorEnumDados = new ArrayList<>();
+            ArrayList<Integer> indexRectanglesEnumDadosPostMezcla = new ArrayList<>();
+            ArrayList<Integer> indexValorEnumDadosPostMezcla = new ArrayList<>();
 
             for (int i = 0; i < dadosPartida.getDados().size(); i++) {
-                indexRectanglesEnumDados.add(dadosPartida.getDados().get(i).getPosicion().ordinal());
-                indexValorEnumDados.add(dadosPartida.getDados().get(i).getValor().ordinal());
+                indexRectanglesEnumDadosPostMezcla.add(dadosPartida.getDados().get(i).getPosicion().ordinal());
+                indexValorEnumDadosPostMezcla.add(dadosPartida.getDados().get(i).getValor().ordinal());
             }
 
             conexion.ConexionCliente.enviarObjeto(new ObjetoDato(
                     ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(
-                            new SerializacionDados(new ArrayList<>(indexRectanglesEnumDados), new ArrayList<>(indexValorEnumDados)),
+                            new SerializacionDados(new ArrayList<>(indexRectanglesEnumDadosPostMezcla), new ArrayList<>(indexValorEnumDadosPostMezcla)),
                             CalculosJugadorLocal.calcularPuntosPreviosJugadorLocal(jugadorLocal, dadosPartida), null, null, null
                     )));
         }).start();

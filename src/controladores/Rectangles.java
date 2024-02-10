@@ -14,16 +14,16 @@ public class Rectangles {
 
     private static HashMap<RectanglesDados, Rectangle> rectanglesDados() {
         HashMap<RectanglesDados, Rectangle> rectangles = new HashMap<>();
-        rectangles.put(RectanglesDados.PRIMERA_RES, new Rectangle(0, 0, 60, 60));
-        rectangles.put(RectanglesDados.SEGUNDA_RES, new Rectangle(65, 0, 60, 60));
-        rectangles.put(RectanglesDados.TERCERA_RES, new Rectangle(130, 0, 60, 60));
-        rectangles.put(RectanglesDados.CUARTA_RES, new Rectangle(195, 0, 60, 60));
-        rectangles.put(RectanglesDados.QUINTA_RES, new Rectangle(260, 0, 60, 60));
-        rectangles.put(RectanglesDados.PRIMERA_TAP, new Rectangle(0, 200, 60, 60));
-        rectangles.put(RectanglesDados.SEGUNDA_TAP, new Rectangle(65, 200, 60, 60));
-        rectangles.put(RectanglesDados.TERCERA_TAP, new Rectangle(130, 200, 60, 60));
-        rectangles.put(RectanglesDados.CUARTA_TAP, new Rectangle(195, 200, 60, 60));
-        rectangles.put(RectanglesDados.QUINTA_TAP, new Rectangle(260, 200, 60, 60));
+        rectangles.put(RectanglesDados.PRIMERA_RES, new Rectangle(70, 25, 40, 40));
+        rectangles.put(RectanglesDados.SEGUNDA_RES, new Rectangle(125, 25, 40, 40));
+        rectangles.put(RectanglesDados.TERCERA_RES, new Rectangle(180, 25, 40, 40));
+        rectangles.put(RectanglesDados.CUARTA_RES, new Rectangle(235, 25, 40, 40));
+        rectangles.put(RectanglesDados.QUINTA_RES, new Rectangle(290, 25, 40, 40));
+        rectangles.put(RectanglesDados.PRIMERA_TAP, new Rectangle(100, 110, 40, 40));
+        rectangles.put(RectanglesDados.SEGUNDA_TAP, new Rectangle(100, 270, 40, 40));
+        rectangles.put(RectanglesDados.TERCERA_TAP, new Rectangle(180, 190, 40, 40));
+        rectangles.put(RectanglesDados.CUARTA_TAP, new Rectangle(260, 110, 40, 40));
+        rectangles.put(RectanglesDados.QUINTA_TAP, new Rectangle(260, 270, 40, 40));
 
         return rectangles;
     }
