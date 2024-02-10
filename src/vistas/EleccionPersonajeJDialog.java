@@ -1,5 +1,6 @@
 package vistas;
 
+import controladores.Fuentes;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -55,25 +56,25 @@ public class EleccionPersonajeJDialog extends JDialog {
         }
 
         jlEligePerfil = new JLabel("Elige tu perfil");
-        jlEligePerfil.setFont(new Font("Tahoma", Font.BOLD, 14));
+        jlEligePerfil.setFont(Fuentes.getFont(Fuentes.TEXTOS_ELECCION_PERSONAJE));
         jlEligePerfil.setForeground(Color.WHITE);
         jlEligePerfil.setBounds(20, 20, 140, 30);
         this.add(jlEligePerfil);
 
         jlIntroduceNombre = new JLabel("Introduce tu nombre");
-        jlIntroduceNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
+        jlIntroduceNombre.setFont(Fuentes.getFont(Fuentes.TEXTOS_ELECCION_PERSONAJE));
         jlIntroduceNombre.setForeground(Color.WHITE);
         jlIntroduceNombre.setBounds(20, 310, 150, 30);
         this.add(jlIntroduceNombre);
 
         jtfNombreJugador = new JTextField();
-        jtfNombreJugador.setFont(new Font("Tahoma", 0, 14));
-        jtfNombreJugador.setBounds(180, 310, 200, 30);
+        jtfNombreJugador.setFont(Fuentes.getFont(Fuentes.TEXTOS_ELECCION_PERSONAJE));
+        jtfNombreJugador.setBounds(190, 310, 170, 30);
         this.add(jtfNombreJugador);
 
         jbComenzar = new JButton("Comenzar");
-        jbComenzar.setFont(new Font("Tahoma", 0, 14));
-        jbComenzar.setBounds(400, 310, 100, 30);
+        jbComenzar.setFont(Fuentes.getFont(Fuentes.TEXTOS_ELECCION_PERSONAJE));
+        jbComenzar.setBounds(380, 310, 130, 30);
         this.add(jbComenzar);
 
         jbComenzar.addActionListener(new ActionListener() {
@@ -111,7 +112,8 @@ public class EleccionPersonajeJDialog extends JDialog {
                     }).start();
 
                     JDialog jDialogInfo = new JDialog(getEleccionPersonajeJDialog(), true);
-                    JLabel jLabelInfo = new JLabel("Esperando al otro jugador..", JLabel.CENTER);
+                    JLabel jLabelInfo = new JLabel("Esperando al otro jugador...", JLabel.CENTER);
+                    jLabelInfo.setFont(Fuentes.getFont(Fuentes.TEXTOS_VENTANAS_INFORMACION));
                     jDialogInfo.add(jLabelInfo);
                     jDialogInfo.setResizable(false);
                     jDialogInfo.setSize(300, 200);

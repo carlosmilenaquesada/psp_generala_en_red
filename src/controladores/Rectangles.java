@@ -29,7 +29,7 @@ public class Rectangles {
     }
 
     public enum RectanglesElementos {
-        PANEL_CAT_SUPERIOR, PANEL_CAT_INFERIOR, PANEL_CAT_BONUS;
+        PANEL_CAT_SUPERIOR, PANEL_CAT_INFERIOR, PANEL_CAT_BONUS, PANEL_CAT_TOTALES;
     }
     public static final HashMap<RectanglesElementos, Rectangle> rectanglesElementos = rectanglesElementos();
 
@@ -38,7 +38,7 @@ public class Rectangles {
         rectangles.put(RectanglesElementos.PANEL_CAT_SUPERIOR, new Rectangle(20, 130, 300, 180));
         rectangles.put(RectanglesElementos.PANEL_CAT_BONUS, new Rectangle(20, 310, 300, 30));
         rectangles.put(RectanglesElementos.PANEL_CAT_INFERIOR, new Rectangle(20, 370, 300, 180));
-
+        rectangles.put(RectanglesElementos.PANEL_CAT_TOTALES, new Rectangle(20, 560, 300, 30));
         return rectangles;
     }
 

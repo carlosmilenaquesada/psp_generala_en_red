@@ -28,5 +28,10 @@ public class Textos {
         "0/63"
     };
     
+    public final static String[] categoriaPuntosTotales = {
+        "TOTAL",
+        "0",
+        "0"
+    };
 
 }

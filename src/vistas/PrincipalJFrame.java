@@ -34,6 +34,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private Panel panelBonus;
 
+    private Panel panelPuntosTotales;
+
     private DadosPartida dadosPartida;
     private EleccionPersonajeJDialog eleccionPersonajeLocalJDialog;
 
@@ -71,9 +73,14 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_BONUS), 1, 3);
         panelBonus.rellenarMatrizCeldas();
 
+        panelPuntosTotales = new Panel(Textos.categoriaPuntosTotales,
+                rectanglesElementos.get(RectanglesElementos.PANEL_CAT_TOTALES), 1, 3);
+        panelPuntosTotales.rellenarMatrizCeldas();
+
         this.jpPuntos.add(panelPuntosSuperior);
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
+        this.jpPuntos.add(panelPuntosTotales);
 
     }
 
@@ -90,9 +97,11 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             panelPuntosSuperior.getMatriz()[i][1].setEstaEnSuTurno(esTurnoJugadorLocal);
             panelPuntosInferior.getMatriz()[i][1].setEstaEnSuTurno(esTurnoJugadorLocal);
             panelBonus.getMatriz()[0][1].setEstaEnSuTurno(esTurnoJugadorLocal);
+            panelPuntosTotales.getMatriz()[0][1].setEstaEnSuTurno(esTurnoJugadorLocal);
             panelPuntosSuperior.getMatriz()[i][2].setEstaEnSuTurno(!esTurnoJugadorLocal);
             panelPuntosInferior.getMatriz()[i][2].setEstaEnSuTurno(!esTurnoJugadorLocal);
             panelBonus.getMatriz()[0][2].setEstaEnSuTurno(!esTurnoJugadorLocal);
+            panelPuntosTotales.getMatriz()[0][2].setEstaEnSuTurno(!esTurnoJugadorLocal);
         }
     }
 
@@ -187,7 +196,12 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jbMezclar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         JpChat = new javax.swing.JPanel();
-        jlBackground = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jbBackgroundChat = new javax.swing.JLabel();
+        jlBackgroundMain = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(860, 639));
@@ -298,25 +312,31 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jLabel3.setBounds(0, 0, 400, 400);
 
         getContentPane().add(jpTablero);
-        jpTablero.setBounds(420, 40, 400, 400);
+        jpTablero.setBounds(420, 20, 400, 400);
 
-        javax.swing.GroupLayout JpChatLayout = new javax.swing.GroupLayout(JpChat);
-        JpChat.setLayout(JpChatLayout);
-        JpChatLayout.setHorizontalGroup(
-            JpChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        JpChatLayout.setVerticalGroup(
-            JpChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        JpChat.setLayout(null);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        JpChat.add(jScrollPane1);
+        jScrollPane1.setBounds(10, 10, 380, 90);
+
+        jButton1.setText("Enviar");
+        JpChat.add(jButton1);
+        jButton1.setBounds(300, 110, 90, 30);
+        JpChat.add(jTextField1);
+        jTextField1.setBounds(10, 110, 280, 30);
+        JpChat.add(jbBackgroundChat);
+        jbBackgroundChat.setBounds(0, 0, 400, 150);
 
         getContentPane().add(JpChat);
-        JpChat.setBounds(420, 480, 400, 100);
+        JpChat.setBounds(420, 430, 400, 150);
 
-        jlBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/background.jpg"))); // NOI18N
-        getContentPane().add(jlBackground);
-        jlBackground.setBounds(0, 0, 860, 600);
+        jlBackgroundMain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/background.jpg"))); // NOI18N
+        getContentPane().add(jlBackgroundMain);
+        jlBackgroundMain.setBounds(0, 0, 860, 600);
 
         pack();
         setLocationRelativeTo(null);
@@ -392,20 +412,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void mostrarGanador() {
-        if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() > jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
+        if (jugadorLocal.getPuntuacionJugador().getCalculoPuntosTotales() > jugadorRemoto.getPuntuacionJugador().getCalculoPuntosTotales()) {
             JOptionPane.showMessageDialog(this, "Ganaste\n"
-                    + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                    + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()
+                    + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().getCalculoPuntosTotales() + "\n"
+                    + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().getCalculoPuntosTotales()
             );
         } else {
-            if (jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() < jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales()) {
+            if (jugadorLocal.getPuntuacionJugador().getCalculoPuntosTotales() < jugadorRemoto.getPuntuacionJugador().getCalculoPuntosTotales()) {
                 JOptionPane.showMessageDialog(this, "Perdiste\n"
-                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
+                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().getCalculoPuntosTotales() + "\n"
+                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().getCalculoPuntosTotales());
             } else {
                 JOptionPane.showMessageDialog(this, "Ocurrió un empate\n"
-                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().calcularPuntosTotales() + "\n"
-                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().calcularPuntosTotales());
+                        + jugadorLocal.getIdentificadorJugador() + ": " + jugadorLocal.getPuntuacionJugador().getCalculoPuntosTotales() + "\n"
+                        + jugadorRemoto.getIdentificadorJugador() + ": " + jugadorRemoto.getPuntuacionJugador().getCalculoPuntosTotales());
             }
         }
 
@@ -414,12 +434,17 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpChat;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jbBackgroundChat;
     private javax.swing.JButton jbMezclar;
-    private javax.swing.JLabel jlBackground;
+    private javax.swing.JLabel jlBackgroundMain;
     private javax.swing.JLabel jlDadoCero;
     private javax.swing.JLabel jlDadoCuatro;
     private javax.swing.JLabel jlDadoDos;
@@ -528,5 +553,23 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         }
 
     }
+
+    public Panel getPanelBonus() {
+        return panelBonus;
+    }
+
+    public void setPanelBonus(Panel panelBonus) {
+        this.panelBonus = panelBonus;
+    }
+
+    public Panel getPanelPuntosTotales() {
+        return panelPuntosTotales;
+    }
+
+    public void setPanelPuntosTotales(Panel panelPuntosTotales) {
+        this.panelPuntosTotales = panelPuntosTotales;
+    }
+    
+    
 
 }

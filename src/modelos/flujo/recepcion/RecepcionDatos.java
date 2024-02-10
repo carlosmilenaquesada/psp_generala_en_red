@@ -5,6 +5,8 @@ import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import java.awt.Window;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import modelos.datos.DadosPartida;
 import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
@@ -47,7 +49,9 @@ public class RecepcionDatos {
                 //PUNTUACIÓN JUGADOR--------------------------------------------
                 PuntuacionJugador puntuacionJugador = serializacionEmision.getPuntuacionJugador();
                 if (puntuacionJugador != null) {
+                    int bonusAnterior = Main.getPrincipalJFrame().getJugadorRemoto().getPuntuacionJugador().getBonus();
                     Main.getPrincipalJFrame().getJugadorRemoto().setPuntuacionJugador(puntuacionJugador);
+                    int bonusActual = Main.getPrincipalJFrame().getJugadorRemoto().getPuntuacionJugador().getBonus();
 
                     for (int i = 0; i < puntuacionJugador.getConseguidasSuperior().size(); i++) {
                         if (puntuacionJugador.getConseguidasSuperior().get(i).equals(true)) {
@@ -56,6 +60,15 @@ public class RecepcionDatos {
                             );
                         }
                     }
+                    if (bonusAnterior < 63) {
+                        Main.getPrincipalJFrame().getPanelBonus().getCelda(0, 2).setText(bonusActual + "/63");
+                        if (bonusActual >= 63) {
+                            JLabel jLabelBonus = new JLabel(Main.getPrincipalJFrame().getJugadorRemoto().getIdentificadorJugador() + " consiguió el bonus!\n"
+                                    + "+ 35 puntos!", JLabel.CENTER);
+                            JOptionPane.showMessageDialog(Main.getPrincipalJFrame(), jLabelBonus);
+                        }
+                    }
+
                     for (int i = 0; i < puntuacionJugador.getConseguidasInferior().size(); i++) {
                         if (puntuacionJugador.getConseguidasInferior().get(i).equals(true)) {
                             ((CeldaDePanel) Main.getPrincipalJFrame().getPanelPuntosInferior().getCelda(i, 2)).setText(
@@ -64,6 +77,7 @@ public class RecepcionDatos {
                         }
                     }
                     Main.getPrincipalJFrame().limpiarColumnaDeCeldas(2);
+                    Main.getPrincipalJFrame().getPanelPuntosTotales().getCelda(0, 2).setText(String.valueOf(Main.getPrincipalJFrame().getJugadorRemoto().getPuntuacionJugador().getCalculoPuntosTotales()));
                 }
 
                 //PERFIL JUGADOR------------------------------------------------

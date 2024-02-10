@@ -3,7 +3,7 @@ package modelos.datos;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PuntuacionJugador implements Serializable{
+public class PuntuacionJugador implements Serializable {
 
     private ArrayList<Boolean> conseguidasSuperior;
     private ArrayList<Boolean> conseguidasInferior;
@@ -43,13 +43,14 @@ public class PuntuacionJugador implements Serializable{
         return arrayOcupadas;
     }
 
-    public int calcularPuntosTotales() {
+    public int getCalculoPuntosTotales() {
         int puntosTotales = 0;
         for (int i = 0; i < 6; i++) {
-            puntosTotales += puntosSuperior.get(i);
-            puntosTotales += puntosInferior.get(i);
+            puntosTotales += this.puntosSuperior.get(i);
+            puntosTotales += this.puntosInferior.get(i);
         }
-        puntosTotales += bonus;
+
+        puntosTotales = puntosTotales + (this.bonus >= 63 ? 35 : 0);
         return puntosTotales;
     }
 
@@ -88,6 +89,7 @@ public class PuntuacionJugador implements Serializable{
     }
 
     public void setPuntoSuperior(int index, int valor) {
+
         this.puntosSuperior.set(index, valor);
 
     }
