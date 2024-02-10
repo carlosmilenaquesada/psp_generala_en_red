@@ -3,7 +3,9 @@ package modelos.flujo.recepcion;
 import static controladores.Imagenes.imagenesDado;
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
+import java.awt.Image;
 import java.awt.Window;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,7 +37,12 @@ public class RecepcionDatos {
                     DadosPartida dadosPartida = Main.getPrincipalJFrame().getDadosPartida();
                     for (int i = 0; i < dadosPartida.getDados().size(); i++) {
                         dadosPartida.getDados().get(i).getjLabel().setBounds(Rectangles.rectanglesDados.get(RectanglesDados.values()[dadosSerializados.getIndexRectanglesEnumDados().get(i)]));
-                        dadosPartida.getDados().get(i).getjLabel().setIcon(imagenesDado.get(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]));
+                        dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+                        
+
+                        
+                        
+                        
                         dadosPartida.getDados().get(i).setValor(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]);
                     }
                     Main.getPrincipalJFrame().setDadosPartida(dadosPartida);

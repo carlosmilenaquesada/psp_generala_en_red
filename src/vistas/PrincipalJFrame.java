@@ -1,6 +1,7 @@
 package vistas;
 
 import controladores.Imagenes;
+import static controladores.Imagenes.imagenesDado;
 import controladores.Rectangles.*;
 import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
@@ -285,30 +286,25 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jpTablero.setOpaque(false);
         jpTablero.setLayout(null);
 
-        jlDadoCero.setText("RCero");
         jlDadoCero.setOpaque(true);
         jpTablero.add(jlDadoCero);
-        jlDadoCero.setBounds(10, 180, 60, 60);
+        jlDadoCero.setBounds(10, 180, 40, 40);
 
-        jlDadoUno.setText("RUno");
         jlDadoUno.setOpaque(true);
         jpTablero.add(jlDadoUno);
-        jlDadoUno.setBounds(100, 200, 60, 60);
+        jlDadoUno.setBounds(100, 200, 40, 40);
 
-        jlDadoDos.setText("RDos");
         jlDadoDos.setOpaque(true);
         jpTablero.add(jlDadoDos);
-        jlDadoDos.setBounds(160, 130, 60, 60);
+        jlDadoDos.setBounds(160, 130, 40, 40);
 
-        jlDadoTres.setText("RTres");
         jlDadoTres.setOpaque(true);
         jpTablero.add(jlDadoTres);
-        jlDadoTres.setBounds(210, 240, 60, 60);
+        jlDadoTres.setBounds(210, 240, 40, 40);
 
-        jlDadoCuatro.setText("RCuatro");
         jlDadoCuatro.setOpaque(true);
         jpTablero.add(jlDadoCuatro);
-        jlDadoCuatro.setBounds(280, 140, 60, 60);
+        jlDadoCuatro.setBounds(280, 140, 40, 40);
 
         jbMezclar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jbMezclar.setText("Mezclar");
@@ -377,7 +373,12 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         for (int i = 0; i < dadosPartida.getDados().size(); i++) {
             dadosPartida.getDados().get(i).setEsClickable(false);
             if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
-                dadosPartida.getDados().get(i).getjLabel().setIcon(Imagenes.imagenesDado.get(Valor.INTERROGACION));
+                //dadosPartida.getDados().get(i).getjLabel().setIcon(Imagenes.imagenesDado.get(Valor.INTERROGACION));
+                
+                dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.INTERROGACION).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)));
+                
+                
+                
             }
         }
 
@@ -394,7 +395,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             for (int i = 0; i < dadosPartida.getDados().size(); i++) {
                 if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
                     dadosPartida.getDados().get(i).setValor(Valor.values()[(int) (Math.random() * 6) + 1]);
-                    dadosPartida.getDados().get(i).getjLabel().setIcon(Imagenes.imagenesDado.get(dadosPartida.getDados().get(i).getValor()));
+                    dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(dadosPartida.getDados().get(i).getValor()).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
                 }
                 dadosPartida.getDados().get(i).setEsClickable(true);
             }

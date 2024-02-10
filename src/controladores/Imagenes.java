@@ -19,7 +19,7 @@ public class Imagenes{
         imagenes.add(new ImageIcon("./src/media/dado_cuatro.png").getImage());
         imagenes.add(new ImageIcon("./src/media/dado_cinco.png").getImage());
         imagenes.add(new ImageIcon("./src/media/dado_seis.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/interrogacion.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/interrogacion.gif").getImage());
         return imagenes;
     }
 

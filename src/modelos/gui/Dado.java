@@ -4,6 +4,7 @@ import javax.swing.*;
 import static controladores.Imagenes.imagenesDado;
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,7 +36,7 @@ public class Dado{
         this.jLabel.setBounds(Rectangles.rectanglesDados.get(this.posicion));
         this.valor = Valor.SEIS;
         this.estado = Estado.EN_TAPETE;
-        this.jLabel.setIcon(imagenesDado.get(this.valor));
+        this.jLabel.setIcon(new ImageIcon(imagenesDado.get(this.valor).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
         this.esClickable = true;
         this.jLabel.addMouseListener(new MouseAdapter() {
             @Override

@@ -104,7 +104,7 @@ public class EleccionPersonajeJDialog extends JDialog {
                                     Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
-                            //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.
+                            //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.                            
                             setIdJugadorQueInicia(perfilJugadorLocal.getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? perfilJugadorLocal.getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
                             
                             getEleccionPersonajeJDialog().dispose();
@@ -118,7 +118,7 @@ public class EleccionPersonajeJDialog extends JDialog {
                     jDialogInfo.setResizable(false);
                     jDialogInfo.setSize(300, 200);
                     jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
-                    
+                    jDialogInfo.setUndecorated(true);
                     jDialogInfo.setVisible(true);
                     
 

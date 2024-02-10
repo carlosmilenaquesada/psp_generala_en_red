@@ -18,6 +18,9 @@ public class Celda extends JLabel {
         this.setOpaque(true);
         this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
         this.setBorder(BorderFactory.createLineBorder(Colores.getColor(Colores.MARCO_TABLAS), 2));
+        if (celYPos != 0) {
+            this.setHorizontalAlignment(CENTER);
+        }
         this.setFont(Fuentes.getFont(Fuentes.PUNTOS_EN_TABLA));
     }
 
@@ -28,14 +31,14 @@ public class Celda extends JLabel {
     public int getCelYPos() {
         return celYPos;
     }
-    
+
     public void setEstaEnSuTurno(boolean b) {
         if (b) {
             this.setBackground(Colores.getColor(Colores.CELDA_SELECCIONADA));
         } else {
             this.setBackground(Colores.getColor(Colores.FONDO_TABLAS));
         }
-       
+
     }
 
 }
