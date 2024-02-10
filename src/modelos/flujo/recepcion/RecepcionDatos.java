@@ -11,7 +11,6 @@ import modelos.datos.DadosPartida;
 import modelos.datos.PerfilJugador;
 import modelos.datos.PuntosPrevios;
 import modelos.datos.PuntuacionJugador;
-import modelos.flujo.serializaciones.SerializacionMensajeChat;
 import modelos.flujo.ObjetoDato;
 import modelos.flujo.serializaciones.SerializacionDados;
 import modelos.flujo.serializaciones.SerializacionEmision;
@@ -101,8 +100,8 @@ public class RecepcionDatos {
                 break;
 
             case ObjetoDato.MENSAJE_CHAT:
-                SerializacionMensajeChat mensajeChat = (SerializacionMensajeChat) objetoDato.getValor();
-
+                String mensajeRecibido = (String) objetoDato.getValor();
+                Main.getPrincipalJFrame().escribirEnTextArea(Main.getPrincipalJFrame().getJugadorRemoto().getIdentificadorJugador(), mensajeRecibido);
                 break;
 
             default:

@@ -8,6 +8,9 @@ import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import modelos.datos.DadosPartida;
 import modelos.gui.CeldaDePanel;
@@ -81,6 +84,16 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         this.jpPuntos.add(panelPuntosInferior);
         this.jpPuntos.add(panelBonus);
         this.jpPuntos.add(panelPuntosTotales);
+
+        jtfChat.setDocument(new PlainDocument() {
+            @Override
+            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+                if (this.getLength() + str.length() <= 150) {
+                    super.insertString(offs, str, a);
+                }
+            }
+
+        });
 
     }
 
@@ -197,9 +210,9 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         JpChat = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        jtaChat = new javax.swing.JTextArea();
+        jbEnviarChat = new javax.swing.JButton();
+        jtfChat = new javax.swing.JTextField();
         jbBackgroundChat = new javax.swing.JLabel();
         jlBackgroundMain = new javax.swing.JLabel();
 
@@ -314,20 +327,36 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         getContentPane().add(jpTablero);
         jpTablero.setBounds(420, 20, 400, 400);
 
+        JpChat.setOpaque(false);
         JpChat.setLayout(null);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jScrollPane1.setOpaque(false);
+        jScrollPane1.getViewport().setOpaque(false);
+
+        jtaChat.setEditable(false);
+        jtaChat.setColumns(20);
+        jtaChat.setRows(5);
+        jtaChat.setOpaque(false);
+        jScrollPane1.setViewportView(jtaChat);
 
         JpChat.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 10, 380, 90);
+        jScrollPane1.setBounds(40, 10, 350, 90);
 
-        jButton1.setText("Enviar");
-        JpChat.add(jButton1);
-        jButton1.setBounds(300, 110, 90, 30);
-        JpChat.add(jTextField1);
-        jTextField1.setBounds(10, 110, 280, 30);
+        jbEnviarChat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jbEnviarChat.setText("Enviar");
+        jbEnviarChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEnviarChatActionPerformed(evt);
+            }
+        });
+        JpChat.add(jbEnviarChat);
+        jbEnviarChat.setBounds(300, 110, 90, 30);
+
+        jtfChat.setOpaque(false);
+        JpChat.add(jtfChat);
+        jtfChat.setBounds(40, 110, 250, 30);
+
+        jbBackgroundChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/otros/chat_background.png"))); // NOI18N
         JpChat.add(jbBackgroundChat);
         jbBackgroundChat.setBounds(0, 0, 400, 150);
 
@@ -394,6 +423,20 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jbMezclarActionPerformed
 
+    private void jbEnviarChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEnviarChatActionPerformed
+        String texto = jtfChat.getText();
+        if (!jtfChat.getText().isEmpty() && !jtfChat.getText().isBlank()) {
+            texto = texto + "\n";
+            escribirEnTextArea(jugadorLocal.getIdentificadorJugador(), texto);
+            conexion.ConexionCliente.enviarObjeto(new ObjetoDato(ObjetoDato.MENSAJE_CHAT, texto));
+            jtfChat.setText("");
+        }
+    }//GEN-LAST:event_jbEnviarChatActionPerformed
+
+    public void escribirEnTextArea(String emisor, String textoAEscribir) {
+        this.jtaChat.append(emisor + " -> " + textoAEscribir);
+    }
+
     public void limpiarColumnaDeCeldas(int indexColumna) {
         Jugador jugador = indexColumna == 1 ? jugadorLocal : jugadorRemoto;
         for (int i = 0; i < jugador.getPuntuacionJugador().getConseguidasSuperior().size(); i++) {
@@ -434,15 +477,13 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JpChat;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel jbBackgroundChat;
+    private javax.swing.JButton jbEnviarChat;
     private javax.swing.JButton jbMezclar;
     private javax.swing.JLabel jlBackgroundMain;
     private javax.swing.JLabel jlDadoCero;
@@ -457,6 +498,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jlNumeroRonda;
     private javax.swing.JPanel jpPuntos;
     private javax.swing.JPanel jpTablero;
+    private javax.swing.JTextArea jtaChat;
+    private javax.swing.JTextField jtfChat;
     // End of variables declaration//GEN-END:variables
 
     public PanelPuntos getPanelPuntosSuperior() {
@@ -569,7 +612,5 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     public void setPanelPuntosTotales(Panel panelPuntosTotales) {
         this.panelPuntosTotales = panelPuntosTotales;
     }
-    
-    
 
 }
