@@ -68,7 +68,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         panelPuntosInferior = new PanelPuntos(
                 Textos.categoriasPuntosInferior,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_INFERIOR),
-                Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]),
+                Imagenes.imagenesRepositorio.subList(7, 13).toArray(new Image[6]),
                 6, 3, "inferior"
         );
         panelPuntosInferior.rellenarMatrizCeldas();
@@ -306,7 +306,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jpTablero.add(jbMezclar);
         jbMezclar.setBounds(150, 355, 100, 30);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/tablero.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/otros/tablero.png"))); // NOI18N
         jpTablero.add(jLabel3);
         jLabel3.setBounds(0, 0, 400, 400);
 
@@ -349,7 +349,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         getContentPane().add(JpChat);
         JpChat.setBounds(420, 430, 400, 150);
 
-        jlBackgroundMain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/background.jpg"))); // NOI18N
+        jlBackgroundMain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/otros/background.jpg"))); // NOI18N
         getContentPane().add(jlBackgroundMain);
         jlBackgroundMain.setBounds(0, 0, 860, 600);
 

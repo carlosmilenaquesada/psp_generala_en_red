@@ -13,13 +13,21 @@ public class Imagenes{
 
     private static ArrayList<Image> crearRepositorioImagenes() {
         ArrayList<Image> imagenes = new ArrayList<>();
-        imagenes.add(new ImageIcon("./src/media/dado_uno.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/dado_dos.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/dado_tres.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/dado_cuatro.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/dado_cinco.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/dado_seis.png").getImage());
-        imagenes.add(new ImageIcon("./src/media/interrogacion.gif").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/dado_uno.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/dado_dos.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/dado_tres.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/dado_cuatro.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/dado_cinco.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/dado_seis.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/dados/interrogacion.gif").getImage());
+        imagenes.add(new ImageIcon("./src/media/categorias/libre.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/categorias/poker.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/categorias/full.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/categorias/escalera_corta.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/categorias/escalera_larga.png").getImage());
+        imagenes.add(new ImageIcon("./src/media/categorias/generala.png").getImage());
+
+        
         return imagenes;
     }
 
@@ -36,5 +44,8 @@ public class Imagenes{
         coleccion.put(Valor.INTERROGACION, new ImageIcon(imagenesRepositorio.get(6)));
         return coleccion;
     }
+    
+     
+    
 
 }

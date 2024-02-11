@@ -30,7 +30,7 @@ public class EleccionPersonajeJDialog extends JDialog {
     private JLabel jlIntroduceNombre;
     private JTextField jtfNombreJugador;
     private JButton jbComenzar;
-    
+
     private String idJugadorQueInicia;
 
     public EleccionPersonajeJDialog(Frame parent, boolean modal) {
@@ -88,12 +88,18 @@ public class EleccionPersonajeJDialog extends JDialog {
                 if (nombreJugadorAux.length() > 8 || nombreJugadorAux.length() < 3) {
                     errores.add("Debe introducir un nombre de jugador válido (de 3 a 8 caracteres)");
                 }
+
+                if (getPerfilJugadorRemoto() != null && getPerfilJugadorRemoto().getNombreJugador().equals(nombreJugadorAux)) {
+                    errores.add("El otro jugador ya escogió ese nombre, elija otro");
+                }
                 if (!errores.isEmpty()) {
                     JOptionPane.showMessageDialog(getEleccionPersonajeJDialog(), String.join("\n", errores), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    perfilJugadorLocal.setNombreJugador(nombreJugadorAux);
+
+                    getPerfilJugadorLocal().setNombreJugador(nombreJugadorAux);
+
                     conexion.ConexionCliente.enviarObjeto(new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, perfilJugadorLocal, null)));
-                    
+
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -104,9 +110,10 @@ public class EleccionPersonajeJDialog extends JDialog {
                                     Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
+
                             //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.                            
-                            setIdJugadorQueInicia(perfilJugadorLocal.getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? perfilJugadorLocal.getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
-                            
+                            setIdJugadorQueInicia(getPerfilJugadorLocal().getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? getPerfilJugadorLocal().getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
+
                             getEleccionPersonajeJDialog().dispose();
                         }
                     }).start();
@@ -120,7 +127,6 @@ public class EleccionPersonajeJDialog extends JDialog {
                     jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
                     jDialogInfo.setUndecorated(true);
                     jDialogInfo.setVisible(true);
-                    
 
                 }
             }

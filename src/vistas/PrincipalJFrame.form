@@ -258,7 +258,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/media/tablero.png"/>
+              <Image iconType="3" name="/media/otros/tablero.png"/>
             </Property>
           </Properties>
           <Constraints>
@@ -351,7 +351,7 @@
     <Component class="javax.swing.JLabel" name="jlBackgroundMain">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/media/background.jpg"/>
+          <Image iconType="3" name="/media/otros/background.jpg"/>
         </Property>
       </Properties>
       <Constraints>
