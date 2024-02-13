@@ -83,6 +83,8 @@ public class EleccionPersonajeJDialog extends JDialog {
         jbComenzar.setBounds(380, 310, 130, 30);
         this.add(jbComenzar);
 
+        this.add(new JLabel(new ImageIcon(getClass().getResource("/media/perfiles/personajes_background.png"))));
+
         jbComenzar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -114,10 +116,10 @@ public class EleccionPersonajeJDialog extends JDialog {
                                 Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                        
+
                         //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.
                         setIdJugadorQueInicia(getPerfilJugadorLocal().getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? getPerfilJugadorLocal().getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
-                        
+
                         getEleccionPersonajeJDialog().dispose();
                     }).start();
 
@@ -125,28 +127,36 @@ public class EleccionPersonajeJDialog extends JDialog {
                     JLabel jLabelInfo = new JLabel("Esperando al otro jugador...", JLabel.CENTER);
                     jLabelInfo.setFont(Fuentes.getFont(Fuentes.TEXTOS_VENTANAS_INFORMACION));
                     jDialogInfo.add(jLabelInfo);
+
+                    jDialogInfo.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            ConexionCliente.cerrarPrograma();
+                            getEleccionPersonajeJDialog().dispose();
+                        }
+                    });
                     jDialogInfo.setResizable(false);
                     jDialogInfo.setSize(300, 200);
                     jDialogInfo.setLocation(getEleccionPersonajeJDialog().getX() + ((getEleccionPersonajeJDialog().getWidth() - jDialogInfo.getWidth()) / 2), getEleccionPersonajeJDialog().getY() + ((getEleccionPersonajeJDialog().getHeight() - jDialogInfo.getHeight()) / 2));
-                    jDialogInfo.setUndecorated(true);
+                    jDialogInfo.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                     jDialogInfo.setVisible(true);
 
                 }
             }
         });
-        this.setResizable(false);
-        this.setSize(540, 400);
-        this.setLocation(getParent().getX() + ((getParent().getWidth() - this.getWidth()) / 2), getParent().getY() + ((getParent().getHeight() - this.getHeight()) / 2));
-        this.add(new JLabel(new ImageIcon(getClass().getResource("/media/perfiles/personajes_background.png"))));
-        this.setVisible(true);
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                ConexionCliente.cerrarPrograma();                
+                ConexionCliente.cerrarPrograma();
+
             }
         });
+        this.setResizable(false);
+        this.setSize(540, 400);
+        this.setLocation(getParent().getX() + ((getParent().getWidth() - this.getWidth()) / 2), getParent().getY() + ((getParent().getHeight() - this.getHeight()) / 2));
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setVisible(true);
         pack();
     }
 
