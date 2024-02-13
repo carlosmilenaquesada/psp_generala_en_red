@@ -1,7 +1,7 @@
 package vistas;
 
 import controladores.Imagenes;
-import static controladores.Imagenes.imagenesDado;
+
 import controladores.Rectangles.*;
 import static controladores.Rectangles.rectanglesElementos;
 import controladores.Textos;
@@ -44,7 +44,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     private EleccionPersonajeJDialog eleccionPersonajeLocalJDialog;
 
     private SerializacionEstadoPartida serializacionEstadoPartida;
-
+    private Imagenes imagenes;
     public PrincipalJFrame() {
         initComponents();
         initConfiguracion();
@@ -52,6 +52,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     private void initConfiguracion() {
+        imagenes = new Imagenes();
         crearPerfilJugadorLocal();
         serializacionEstadoPartida = new SerializacionEstadoPartida(eleccionPersonajeLocalJDialog.getIdJugadorQueInicia());
         crearPerfilJugadorRemoto(eleccionPersonajeLocalJDialog.getPerfilJugadorRemoto());
@@ -60,7 +61,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         panelPuntosSuperior = new PanelPuntos(
                 Textos.categoriasPuntosSuperior,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_SUPERIOR),
-                Imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]),
+                imagenes.imagenesRepositorio.subList(0, 6).toArray(new Image[6]),
                 6, 3, "superior"
         );
         panelPuntosSuperior.rellenarMatrizCeldas();
@@ -68,7 +69,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         panelPuntosInferior = new PanelPuntos(
                 Textos.categoriasPuntosInferior,
                 rectanglesElementos.get(RectanglesElementos.PANEL_CAT_INFERIOR),
-                Imagenes.imagenesRepositorio.subList(7, 13).toArray(new Image[6]),
+                imagenes.imagenesRepositorio.subList(7, 13).toArray(new Image[6]),
                 6, 3, "inferior"
         );
         panelPuntosInferior.rellenarMatrizCeldas();
@@ -364,7 +365,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             dadosPartida.getDados().get(i).setEsClickable(false);
             if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
                 dadosPartida.getDados().get(i).setValor(Valor.INTERROGACION);
-                dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.INTERROGACION).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+                dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenes.imagenesDado.get(Valor.INTERROGACION).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
             }
         }
 
@@ -395,7 +396,7 @@ public class PrincipalJFrame extends javax.swing.JFrame {
             for (int i = 0; i < dadosPartida.getDados().size(); i++) {
                 if (dadosPartida.getDados().get(i).getEstado().equals(Dado.Estado.EN_TAPETE)) {
                     dadosPartida.getDados().get(i).setValor(Valor.values()[(int) (Math.random() * 6) + 1]);
-                    dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(dadosPartida.getDados().get(i).getValor()).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                    dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenes.imagenesDado.get(dadosPartida.getDados().get(i).getValor()).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
                 }
                 dadosPartida.getDados().get(i).setEsClickable(true);
             }

@@ -1,7 +1,8 @@
 package modelos.gui;
 
+import controladores.Imagenes;
 import javax.swing.*;
-import static controladores.Imagenes.imagenesDado;
+
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import java.awt.Image;
@@ -40,7 +41,13 @@ public class Dado {
         this.jLabel.setBounds(Rectangles.rectanglesDados.get(this.posicion));
         this.valor = Valor.SEIS;
         this.estado = Estado.EN_TAPETE;
-        this.jLabel.setIcon(new ImageIcon(imagenesDado.get(this.valor).getImage().getScaledInstance(jLabel.getWidth(), jLabel.getHeight(), Image.SCALE_SMOOTH)));
+        
+        this.jLabel.setIcon(
+            new ImageIcon(
+                     
+                new Imagenes().imagenesDado.get(this.valor).getImage().getScaledInstance(jLabel.getWidth(), jLabel.getHeight(), Image.SCALE_SMOOTH)
+            )
+        );
         this.esClickable = true;
         this.jLabel.addMouseListener(new MouseAdapter() {
             @Override

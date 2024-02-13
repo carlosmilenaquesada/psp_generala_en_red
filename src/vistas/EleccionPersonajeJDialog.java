@@ -44,7 +44,15 @@ public class EleccionPersonajeJDialog extends JDialog {
 
         celdaPerfilPersonajes = new CeldaPerfilPersonaje[10];
         for (int i = 0; i < celdaPerfilPersonajes.length; i++) {
-            celdaPerfilPersonajes[i] = new CeldaPerfilPersonaje(new ImageIcon(getClass().getResource("/media/perfiles/" + i + ".jpg")), i, this);
+            
+            
+            celdaPerfilPersonajes[i] = new CeldaPerfilPersonaje(
+                new ImageIcon(
+                        getClass().getResource("/media/perfiles/" + i + ".jpg")
+                ), i, this
+            );
+            
+            
             celdaPerfilPersonajes[i].setBackground(Color.ORANGE);
             this.add(celdaPerfilPersonajes[i]);
             if (i < 5) {

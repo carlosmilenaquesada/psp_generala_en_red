@@ -1,6 +1,6 @@
 package modelos.flujo.recepcion;
 
-import static controladores.Imagenes.imagenesDado;
+import controladores.Imagenes;
 import controladores.Rectangles;
 import controladores.Rectangles.RectanglesDados;
 import java.awt.Image;
@@ -33,11 +33,16 @@ public class RecepcionDatos {
                 //DADOS---------------------------------------------------------
                 SerializacionDados dadosSerializados = serializacionEmision.getDadosSerializados();
                 if (dadosSerializados != null) {
-
+                    int escalado = Image.SCALE_SMOOTH;
                     DadosPartida dadosPartida = Main.getPrincipalJFrame().getDadosPartida();
                     for (int i = 0; i < dadosPartida.getDados().size(); i++) {
                         dadosPartida.getDados().get(i).getjLabel().setBounds(Rectangles.rectanglesDados.get(RectanglesDados.values()[dadosSerializados.getIndexRectanglesEnumDados().get(i)]));
-                        dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(imagenesDado.get(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+                        if (dadosSerializados.getIndexValorEnumDados().get(i) == Valor.INTERROGACION.ordinal()) {
+                            escalado = Image.SCALE_DEFAULT;
+                        } else {
+                            escalado = Image.SCALE_SMOOTH;
+                        }
+                        dadosPartida.getDados().get(i).getjLabel().setIcon(new ImageIcon(new Imagenes().imagenesDado.get(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]).getImage().getScaledInstance(40, 40, escalado)));
 
                         dadosPartida.getDados().get(i).setValor(Valor.values()[dadosSerializados.getIndexValorEnumDados().get(i)]);
                     }
