@@ -1,14 +1,14 @@
 package vistas;
 
+import conexion.ConexionCliente;
 import controladores.Fuentes;
 import java.awt.Color;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Frame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,15 +44,13 @@ public class EleccionPersonajeJDialog extends JDialog {
 
         celdaPerfilPersonajes = new CeldaPerfilPersonaje[10];
         for (int i = 0; i < celdaPerfilPersonajes.length; i++) {
-            
-            
+
             celdaPerfilPersonajes[i] = new CeldaPerfilPersonaje(
-                new ImageIcon(
-                        getClass().getResource("/media/perfiles/" + i + ".jpg")
-                ), i, this
+                    new ImageIcon(
+                            getClass().getResource("/media/perfiles/" + i + ".jpg")
+                    ), i, this
             );
-            
-            
+
             celdaPerfilPersonajes[i].setBackground(Color.ORANGE);
             this.add(celdaPerfilPersonajes[i]);
             if (i < 5) {
@@ -108,22 +106,19 @@ public class EleccionPersonajeJDialog extends JDialog {
 
                     conexion.ConexionCliente.enviarObjeto(new ObjetoDato(ObjetoDato.DATOS_PARTIDA, new SerializacionEmision(null, null, null, perfilJugadorLocal, null)));
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            while (getPerfilJugadorRemoto() == null) {
-                                try {
-                                    Thread.sleep(200);
-                                } catch (InterruptedException ex) {
-                                    Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                    new Thread(() -> {
+                        while (getPerfilJugadorRemoto() == null) {
+                            try {
+                                Thread.sleep(200);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(EleccionPersonajeJDialog.class.getName()).log(Level.SEVERE, null, ex);
                             }
-
-                            //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.                            
-                            setIdJugadorQueInicia(getPerfilJugadorLocal().getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? getPerfilJugadorLocal().getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
-
-                            getEleccionPersonajeJDialog().dispose();
                         }
+                        
+                        //Para determinar qué jugador inicia la partida, simplemente comparo sus nombres (compareTo), el mayor iniciará.
+                        setIdJugadorQueInicia(getPerfilJugadorLocal().getNombreJugador().compareTo(getPerfilJugadorRemoto().getNombreJugador()) > 0 ? getPerfilJugadorLocal().getNombreJugador() : getPerfilJugadorRemoto().getNombreJugador());
+                        
+                        getEleccionPersonajeJDialog().dispose();
                     }).start();
 
                     JDialog jDialogInfo = new JDialog(getEleccionPersonajeJDialog(), true);
@@ -146,7 +141,12 @@ public class EleccionPersonajeJDialog extends JDialog {
         this.setVisible(true);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ConexionCliente.cerrarPrograma();                
+            }
+        });
         pack();
     }
 
